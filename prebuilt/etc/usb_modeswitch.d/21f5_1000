@@ -1,0 +1,16 @@
+########################################################
+# EVDO USB Modem scv
+
+DefaultVendor=  0x21f5
+DefaultProduct= 0x1000
+
+TargetVendor=   0x21f5
+TargetProduct=  0x2008
+
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+CheckSuccess=20
+
+
+
+

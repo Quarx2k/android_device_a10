@@ -46,19 +46,20 @@ BOARD_FLASH_BLOCK_SIZE := 4096
 #EGL stuff
 BOARD_EGL_CFG := device/allwinner/a10/egl.cfg
 USE_OPENGL_RENDERER := true
-#BOARD_USE_SKIA_LCDTEXT := true
+BOARD_USE_SKIA_LCDTEXT := true
 
 #Recovery Stuff
 #TARGET_RECOVERY_UI_LIB := librecovery_ui_generic
 #TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_generic
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/allwinner/a10/recovery_keys.c
 #BOARD_USE_LEGACY_TOUCHSCREEN := true
-# Wifi stuff
 
+# Wifi stuff
 #WPA_SUPPLICANT_VERSION := VER_0_8_X
 #BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 #BOARD_HOSTAPD_DRIVER        := NL80211
 WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/8192cu.ko"
 WIFI_DRIVER_MODULE_NAME     := 8192cu
+
 # Beware: set only prebuilt OR source+config
 TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel

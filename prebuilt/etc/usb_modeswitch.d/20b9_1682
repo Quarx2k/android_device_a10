@@ -1,0 +1,10 @@
+DefaultVendor=  0x20b9
+DefaultProduct= 0x1682
+
+TargetVendor=   0x20b9
+TargetProduct=  0x1682
+
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+
+CheckSuccess=20

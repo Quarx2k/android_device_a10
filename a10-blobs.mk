@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# CM9 bootanimation
-PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/bootanimation.zip:system/media/bootanimation.zip 
-
 # EGL Stuff
 PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/lib/egl/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
@@ -25,12 +21,13 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/lib/hw/gralloc.exDroid.so:system/lib/hw/gralloc.exDroid.so \
 	device/allwinner/a10/prebuilt/lib/hw/hwcomposer.exDroid.so:system/lib/hw/hwcomposer.exDroid.so \
 	device/allwinner/a10/prebuilt/lib/libMali.so:system/lib/libMali.so \
-	device/allwinner/a10/prebuilt/lib/libUMP.so:system/lib/libUMP.so \
+	device/allwinner/a10/prebuilt/lib/libUMP.so:system/lib/libUMP.so 
 
 # Camera
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/hw/camera.a10.so:system/lib/egl/hw/camera.a10.so 
-
+	device/allwinner/a10/prebuilt/lib/hw/camera.a10.so:system/lib/egl/hw/camera.a10.so \
+	device/allwinner/a10/prebuilt/etc/camera.cfg:system/etc/camera.cfg \
+        device/allwinner/a10/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml 
 # Codecs
 PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/lib/libCedarA.so:system/lib/libCedarA.so \
@@ -44,9 +41,21 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/bin/wpa_supplicant:system/bin/wpa_supplicant \
 	device/allwinner/a10/prebuilt/lib/hw/lights.a10.so:system/lib/hw/lights.a10.so \
-	device/allwinner/a10/prebuilt/lib/hw/sensors.a10.so:system/lib/hw/sensors.a10.so 
+	device/allwinner/a10/prebuilt/lib/hw/sensors.a10.so:system/lib/hw/sensors.a10.so \
+	device/allwinner/a10/prebuilt/lib/hw/audio_policy.default.so:system/lib/hw/audio_policy.default.so \
+	device/allwinner/a10/prebuilt/lib/hw/audio.primary.exDroid.so:system/lib/hw/audio.primary.exDroid.so \
 
-# Key maps
+# OTG/3G stuff
+PRODUCT_COPY_FILES += \
+        device/allwinner/a10/prebuilt/bin/u3gmonitor:system/bin/u3gmonitor \
+        device/allwinner/a10/prebuilt/bin/usb_modeswitch:system/bin/usb_modeswitch \
+	device/allwinner/a10/prebuilt/etc/3g_dongle.cfg:system/etc/3g_dongle.cfg \
+
+PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/etc/usb_modeswitch.d && \
+	find device/allwinner/a10/prebuilt/etc/usb_modeswitch.d -name '*' \
+	-printf '%p:system/etc/usb_modeswitch.d/%f ')
+
+# Other stuff
 PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/usr/keylayout/hv_keypad.kl:system/usr/keylayout/hv_keypad.kl \
 	device/allwinner/a10/prebuilt/usr/keylayout/axp20-supplyer.kl:system/usr/keylayout/axp20-supplyer.kl \
@@ -55,6 +64,10 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/usr/idc/gt80x.idc:system/usr/idc/gt80x.idc \
 	device/allwinner/a10/prebuilt/usr/idc/qwerty.idc:system/usr/idc/qwerty.idc \
 	device/allwinner/a10/prebuilt/usr/idc/qwerty2.idc:system/usr/idc/qwerty2.idc \
-	device/allwinner/a10/prebuilt/vendor/firmware/ft5206-1024X600.bin:system/vendor/firmware/ft5206-1024X600.bin 
+	device/allwinner/a10/prebuilt/vendor/firmware/ft5206-1024X600.bin:system/vendor/firmware/ft5206-1024X600.bin \
+	device/allwinner/a10/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
+	device/allwinner/a10/prebuilt/etc/gps.conf:system/etc/gps.conf \
+	device/allwinner/a10/prebuilt/etc/wpa_supplicant.conf:system/etc/wpa_supplicant.conf \
+	device/allwinner/a10/prebuilt/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so 
 
 #end of a10-blobs.mk

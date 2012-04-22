@@ -1,0 +1,13 @@
+########################################################
+# 普创E003
+
+DefaultVendor=  0x20a6
+DefaultProduct= 0x1000
+
+TargetVendor=   0x20a6
+TargetProduct=  0x1105
+
+
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+CheckSuccess=20

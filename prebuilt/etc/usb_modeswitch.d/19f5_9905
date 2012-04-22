@@ -1,0 +1,16 @@
+########################################################
+# Telcom EVDO
+
+DefaultVendor=  0x19f5
+DefaultProduct= 0x9905
+
+TargetVendor=   0x19f5
+TargetProduct=  0x9905
+
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+CheckSuccess=20
+
+
+
+

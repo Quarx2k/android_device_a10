@@ -1,0 +1,19 @@
+## Vold 2.0 fstab for HTC Passion
+#
+## - San Mehat (san@android.com)
+## 
+#######################
+## Regular device mount
+##
+## Format: dev_mount <label> <mount_point> <part> <sysfs_path1...> 
+## label        - Label for the volume
+## mount_point  - Where the volume will be mounted
+## part         - Partition # (1 based), or 'auto' for first usable partition.
+## <sysfs_path> - List of sysfs paths to source devices
+######################
+
+# Mounts the first usable partition of the specified device
+#/devices/platform/awsmc.3/mmc_host for sdio
+dev_mount	sdcard	/mnt/sdcard	auto	/devices/virtual/block/nandi
+dev_mount	extsd	/mnt/extsd	auto	/devices/platform/sunxi-mmc.1/mmc_host	/devices/platform/sunxi-mmc.0/mmc_host
+dev_mount	usbhost1	/mnt/usbhost1	auto	/devices/platform/sw-ehci.1	/devices/platform/sw_hcd_host0	/devices/platform/sw-ehci.2

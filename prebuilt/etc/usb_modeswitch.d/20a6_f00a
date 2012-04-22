@@ -1,0 +1,13 @@
+########################################################
+# 
+
+DefaultVendor=  0x20a6
+DefaultProduct= 0xf00a
+
+TargetVendor=   0x20a6
+TargetProduct=  0x1008
+
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+CheckSuccess=20
+

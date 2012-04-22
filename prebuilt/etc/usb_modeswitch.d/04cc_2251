@@ -1,0 +1,12 @@
+########################################################
+# 普创T002
+
+DefaultVendor=  0x04cc
+DefaultProduct= 0x2251
+
+TargetVendor=   0x04cc
+TargetProduct=  0x2259
+
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+CheckSuccess=20

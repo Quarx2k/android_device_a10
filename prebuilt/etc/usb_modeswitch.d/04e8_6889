@@ -1,0 +1,9 @@
+#######################################################
+# Samsung GT-B3730 (new device after switch needs messages sent to it as well)
+
+DefaultVendor= 0x04e8
+DefaultProduct=0x6889
+
+MessageContent  ="575004000000002000000000"
+MessageContent2 ="575004000000000200f40000"
+

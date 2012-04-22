@@ -1,0 +1,13 @@
+########################################################
+# Vodafone K3715 
+#
+
+DefaultVendor=  0x12d1
+DefaultProduct= 0x140c
+
+TargetClass=    0xff
+
+MessageContent="55534243123456780000000000000011060000000000000000000000000000"
+
+CheckSuccess=20
+
