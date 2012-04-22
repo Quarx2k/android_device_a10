@@ -67,7 +67,7 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/vendor/firmware/ft5206-1024X600.bin:system/vendor/firmware/ft5206-1024X600.bin \
 	device/allwinner/a10/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
 	device/allwinner/a10/prebuilt/etc/gps.conf:system/etc/gps.conf \
-	device/allwinner/a10/prebuilt/etc/wpa_supplicant.conf:system/etc/wpa_supplicant.conf \
+	device/allwinner/a10/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
 	device/allwinner/a10/prebuilt/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so 
 
 #end of a10-blobs.mk
