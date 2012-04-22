@@ -13,6 +13,7 @@ mkdir -p $REPACK/ota/system/etc/terminfo/x
 cp $REPACK/ota/system/etc/terminfo/l/linux $REPACK/ota/system/etc/terminfo/x/xterm
 
 rm -f $REPACK/ota/boot.img
+cp -f $DEVICE_TOP/boot.img $REPACK/ota/boot.img
 
 cp -f $DEVICE_TOP/updater-script $REPACK/ota/META-INF/com/google/android/updater-script
 
