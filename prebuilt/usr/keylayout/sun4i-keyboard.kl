@@ -1,0 +1,6 @@
+key 102   VOLUME_UP              WAKE
+key 1     BACK              WAKE
+key 28	  VOLUME_DOWN         		WAKE_DROPPED
+key 115	  VOLUME_UP
+key 114	  VOLUME_DOWN
+

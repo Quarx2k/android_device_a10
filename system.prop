@@ -1,0 +1,11 @@
+#
+# system.prop for A10
+#
+# The OpenGL ES API level that is natively supported by this device.
+# This is a 16.16 fixed point number
+ro.opengles.version = 131072
+
+# default root acces
+persist.sys.root_access=3
+
+ro.sf.lcd_density=160
