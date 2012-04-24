@@ -52,14 +52,16 @@ BOARD_USE_SKIA_LCDTEXT := true
 #TARGET_RECOVERY_UI_LIB := librecovery_ui_generic
 #TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_generic
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/allwinner/a10/recovery_keys.c
-#BOARD_USE_LEGACY_TOUCHSCREEN := true
+BOARD_USE_LEGACY_TOUCHSCREEN := true
 
 # Wifi stuff
-#WPA_SUPPLICANT_VERSION := VER_0_8_X
+#WPA_SUPPLICANT_VERSION := VER_0_8_X  //Prebuilt
 #BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-#BOARD_HOSTAPD_DRIVER        := NL80211
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/8192cu.ko"
+TARGET_CUSTOM_WIFI := ../../device/allwinner/a10/wifi.c
+WIFI_DRIVER_MODULE_PATH     := "/system/lib/8192cu.ko"
 WIFI_DRIVER_MODULE_NAME     := 8192cu
+WIFI_DRIVER_FW_PATH_STA     := 8192cu
+WIFI_DRIVER_FW_PATH_AP      := 8192cu
 
 # Beware: set only prebuilt OR source+config
 TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel
