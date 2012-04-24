@@ -63,7 +63,7 @@ PRODUCT_PACKAGES += Trebuchet FileManager com.android.future.usb.accessory
 PRODUCT_PACKAGES += make_ext4fs e2fsck
 
 # Audio stuff
-PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa
+PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.default audio.primary.exDroid
 
 # copy all others kernel modules under the "modules" directory to system/lib/modules
 PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/lib/modules && \
