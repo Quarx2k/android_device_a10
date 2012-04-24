@@ -26,10 +26,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	dalvik.vm.dexopt-data-only=1 \
 	ro.vold.umsdirtyratio=20 \
 	net.dns1=8.8.8.8 \
-	net.dns2=8.8.4.4 \
-
-# we have enough storage space to hold precise GC data
-PRODUCT_TAGS += dalvik.gc.type-precise
+	net.dns2=8.8.4.4 
 
 DEVICE_PACKAGE_OVERLAYS := device/allwinner/a10/overlay
 
@@ -41,7 +38,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
 	frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
 	frameworks/base/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-	frameworks/base/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
 	frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
 	frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
 	frameworks/base/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
@@ -55,6 +51,7 @@ PRODUCT_PACKAGES += LiveWallpapers LiveWallpapersPicker MagicSmokeWallpapers Hol
 PRODUCT_PACKAGES += VisualizationWallpapers librs_jni
 
 # Sensors
+PRODUCT_PACKAGES += lights.10 sensors.a10
 
 # ICS Camera
 PRODUCT_PACKAGES += Camera camera.a10
@@ -63,7 +60,7 @@ PRODUCT_PACKAGES += Camera camera.a10
 PRODUCT_PACKAGES += Trebuchet FileManager com.android.future.usb.accessory
 
 # EXT4 Support
-PRODUCT_PACKAGES += make_ext4fs setup_fs e2fsck
+PRODUCT_PACKAGES += make_ext4fs e2fsck
 
 # Audio stuff
 PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa
@@ -74,6 +71,7 @@ PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/lib/modules 
 	-printf '%p:system/lib/modules/%f ')
 
 $(call inherit-product, build/target/product/full_base.mk)
+
 # Should be after the full_base include, which loads languages_full
 PRODUCT_LOCALES += mdpi
 

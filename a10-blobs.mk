@@ -42,8 +42,6 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/bin/wpa_supplicant:system/bin/wpa_supplicant \
 	device/allwinner/a10/prebuilt/lib/hw/lights.a10.so:system/lib/hw/lights.a10.so \
 	device/allwinner/a10/prebuilt/lib/hw/sensors.a10.so:system/lib/hw/sensors.a10.so \
-	device/allwinner/a10/prebuilt/lib/hw/audio_policy.default.so:system/lib/hw/audio_policy.default.so \
-	device/allwinner/a10/prebuilt/lib/hw/audio.primary.exDroid.so:system/lib/hw/audio.primary.exDroid.so \
 
 # OTG/3G stuff
 PRODUCT_COPY_FILES += \
