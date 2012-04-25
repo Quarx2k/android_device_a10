@@ -51,7 +51,7 @@ PRODUCT_PACKAGES += LiveWallpapers LiveWallpapersPicker MagicSmokeWallpapers Hol
 PRODUCT_PACKAGES += VisualizationWallpapers librs_jni
 
 # Sensors
-PRODUCT_PACKAGES += lights.10 sensors.a10
+PRODUCT_PACKAGES += lights.a10 sensors.a10
 
 # ICS Camera
 PRODUCT_PACKAGES += Camera camera.a10

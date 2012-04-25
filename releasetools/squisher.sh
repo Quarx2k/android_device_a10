@@ -6,6 +6,7 @@ rm -f $REPACK/ota/system/app/RomManager.apk
 
 # Remove big videos
 rm -f $REPACK/ota/system/media/video/*.480p.mp4
+rm -f $REPACK/ota/system/lib/hw/*.goldfish.so
 
 cp -f $VENDOR_TOP/app/* $REPACK/ota/system/app/
 
