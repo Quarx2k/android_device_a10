@@ -10,3 +10,7 @@ persist.sys.root_access=3
 
 ro.sf.lcd_density=160
 hwui.render_dirty_regions=false
+
+wifi.interface = wlan0
+wifi.supplicant_scan_interval = 60
+

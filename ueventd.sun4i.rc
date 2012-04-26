@@ -1,0 +1,24 @@
+# disp driver
+/dev/disp                 0777   system     system 
+/dev/g2d             	  0777   system     system 
+/dev/cedar_dev            0666   system     system 
+/dev/ace_dev              0666   system     system 
+/dev/ump		  0777   system	    graphics
+/dev/mali		  0777   system	    graphics
+/dev/ump		  0777   system     graphics
+/dev/video0		  0777   system	    system
+/dev/video1		  0777   system	    system
+/dev/snd/pcmC0D0c 	  0777   system     system
+/dev/snd/pcmC0D0p	  0777   system     system
+/dev/block/nandf	  0660	 system	    system
+/dev/ttyUSB0		  0777   system     system
+/dev/ttyUSB1		  0777   system     system
+/dev/ttyUSB2		  0777   system     system
+/dev/ttyUSB3		  0777   system     system
+
+# sysfs properties, for mma7660 gsensor
+/sys/devices/virtual/input/input*   name        0660  root   input
+/sys/devices/virtual/input/input*   max         0660  root   input
+/sys/devices/virtual/input/input*   min         0660  root   input
+/sys/devices/virtual/input/input*   poll        0666  root   input
+
