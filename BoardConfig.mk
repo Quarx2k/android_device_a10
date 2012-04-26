@@ -31,8 +31,7 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 
 TARGET_CUSTOM_RELEASETOOL := ./device/allwinner/a10/releasetools/squisher
 
-BOARD_HAVE_GPS := false
-BOARD_HAVE_BLUETOOTH := false
+BOARD_HAVE_BLUETOOTH := true
 TARGET_USES_CUSTOM_VIBRATOR_PATH := "/sys/class/timed_output/sun4i-vibrator/enable"
 BOARD_HAS_SDCARD_INTERNAL := true
 
