@@ -1,27 +1,28 @@
 import init.sun4i.usb.rc
 
 on early-init
-	export EXTERNAL_STORAGE /mnt/sdcard
-	mkdir /mnt/sdcard 0000 system system
-	mkdir /mnt/extsd 0000 system system
-	mkdir /mnt/usbhost1 0000 system system
-	symlink /mnt/sdcard /sdcard
+
+        export EXTERNAL_STORAGE /mnt/sdcard
+        mkdir /mnt/sdcard 0000 system system
+        mkdir /mnt/extsd 0000 system system
+        mkdir /mnt/usbhost1 0000 system system
+        symlink /mnt/sdcard /sdcard
 
 on fs
 
-	symlink /dev/block/nandc /dev/block/boot
-	symlink /dev/block/nandd /dev/block/system
-	symlink /dev/block/nande /dev/block/data
-	symlink /dev/block/nandg /dev/block/recovery
-	symlink /dev/block/nandh /dev/block/cache
+        symlink /dev/block/nandc /dev/block/boot
+        symlink /dev/block/nandd /dev/block/system
+        symlink /dev/block/nande /dev/block/data
+        symlink /dev/block/nandg /dev/block/recovery
+        symlink /dev/block/nandh /dev/block/cache
 
-	exec /system/bin/e2fsck -y /dev/block/system 
-	exec /system/bin/e2fsck -y /dev/block/data 
-	exec /system/bin/e2fsck -y /dev/block/cache
+        exec /system/bin/e2fsck -y /dev/block/system 
+        exec /system/bin/e2fsck -y /dev/block/data 
+        exec /system/bin/e2fsck -y /dev/block/cache
 
-	mount ext4 /dev/block/system /system wait ro noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
-	mount ext4 /dev/block/data /data wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
-	mount ext4 /dev/block/cache /cache wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+        mount ext4 /dev/block/system /system wait ro noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+        mount ext4 /dev/block/data /data wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+        mount ext4 /dev/block/cache /cache wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
        
 on boot
 
@@ -42,11 +43,11 @@ on boot
         insmod /system/lib/modules/goodix_touch.ko #Goodix Touchscreen
 
         #for stock roms
-	insmod /system/vendor/modules/sun4i-vibrator.ko #Vibrator
+        insmod /system/vendor/modules/sun4i-vibrator.ko #Vibrator
         insmod /system/vendor/modules/ump.ko #Mail 400M
         insmod /system/vendor/modules/mali.ko #Mail 400M
-	insmod /system/vendor/modules/videobuf-core.ko
-	insmod /system/vendor/modules/videobuf-dma-contig.ko
+        insmod /system/vendor/modules/videobuf-core.ko
+        insmod /system/vendor/modules/videobuf-dma-contig.ko
         insmod /system/vendor/modules/mma7660.ko #Gsensor
         insmod /system/vendor/modules/gt2005.ko
         insmod /system/vendor/modules/sun4i_csi0.ko
@@ -58,7 +59,7 @@ on boot
         insmod /system/vendor/modules/ft5x_ts.ko #Ft5x Touchscreen 
         insmod /system/vendor/modules/goodix_touch.ko #Goodix Touchscreen
 
-	chown system system /sys/class/timed_output/sun4i-vibrator/enable
+        chown system system /sys/class/timed_output/sun4i-vibrator/enable
         write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor fantasy
 
 service wpa_supplicant /system/bin/wpa_supplicant -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf
