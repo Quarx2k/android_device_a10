@@ -14,3 +14,9 @@ hwui.render_dirty_regions=false
 wifi.interface = wlan0
 wifi.supplicant_scan_interval = 60
 
+#Disable StrictMode
+persist.sys.strictmode.visual=0
+persist.sys.strictmode.disable=1
+
+#Default USB Config (Do not change this)
+persist.sys.usb.config=mass_storage,adb
