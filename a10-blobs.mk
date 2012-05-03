@@ -25,7 +25,7 @@ PRODUCT_COPY_FILES += \
 
 # Camera
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/hw/camera.a10.so:system/lib/egl/hw/camera.a10.so \
+	device/allwinner/a10/prebuilt/lib/hw/camera.a10.so:system/lib/hw/camera.a10.so \
 	device/allwinner/a10/prebuilt/etc/camera.cfg:system/etc/camera.cfg \
         device/allwinner/a10/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml 
 # Codecs
