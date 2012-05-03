@@ -65,6 +65,7 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
 	device/allwinner/a10/prebuilt/etc/gps.conf:system/etc/gps.conf \
 	device/allwinner/a10/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-	device/allwinner/a10/prebuilt/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so 
+	device/allwinner/a10/prebuilt/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so \
+	device/allwinner/a10/prebuilt/bin/erase_misc.sh:system/bin/erase_misc.sh
 
 #end of a10-blobs.mk
