@@ -281,6 +281,127 @@ int wifi_unload_driver()
 #endif
 }
 
+int is_wifi_hotspot_driver_loaded() {
+#ifndef WIFI_AP_DRIVER_MODULE_PATH
+    return is_wifi_driver_loaded();
+#else
+    char driver_status[PROPERTY_VALUE_MAX];
+    FILE *proc;
+    char line[sizeof(AP_DRIVER_MODULE_TAG)+10];
+
+    if (!property_get(AP_DRIVER_PROP_NAME, driver_status, NULL)
+            || strcmp(driver_status, "ok") != 0) {
+        return 0;  /* driver not loaded */
+    }
+    /*
+     * If the property says the driver is loaded, check to
+     * make sure that the property setting isn't just left
+     * over from a previous manual shutdown or a runtime
+     * crash.
+     */
+    if ((proc = fopen(MODULE_FILE, "r")) == NULL) {
+        LOGW("Could not open %s: %s", MODULE_FILE, strerror(errno));
+        property_set(AP_DRIVER_PROP_NAME, "unloaded");
+        return 0;
+    }
+    while ((fgets(line, sizeof(line), proc)) != NULL) {
+        if (strncmp(line, AP_DRIVER_MODULE_TAG, strlen(AP_DRIVER_MODULE_TAG)) == 0) {
+            fclose(proc);
+            return 1;
+        }
+    }
+    fclose(proc);
+    property_set(AP_DRIVER_PROP_NAME, "unloaded");
+    return 0;
+#endif
+}
+
+int wifi_load_hotspot_driver()
+{
+#ifndef WIFI_AP_DRIVER_MODULE_PATH
+    return wifi_load_driver();
+#else
+    char driver_status[PROPERTY_VALUE_MAX];
+    int count = 100; /* wait at most 20 seconds for completion */
+    char module_arg[PROPERTY_VALUE_MAX];
+
+    if (is_wifi_hotspot_driver_loaded()) {
+        property_set(AP_DRIVER_PROP_NAME, "ok");
+        return 0;
+    }
+
+    property_set(AP_DRIVER_PROP_NAME, "loading");
+
+#ifdef WIFI_EXT_MODULE_PATH
+    if (insmod(EXT_MODULE_PATH, EXT_MODULE_ARG) < 0)
+        return -1;
+    usleep(200000);
+#endif
+
+    property_get(AP_DRIVER_PROP_MODULE_ARG, module_arg, AP_DRIVER_MODULE_ARG);
+    if (insmod(AP_DRIVER_MODULE_PATH, module_arg) < 0) {
+#ifdef WIFI_EXT_MODULE_NAME
+        rmmod(EXT_MODULE_NAME);
+#endif
+        return -1;
+    }
+
+    if (strcmp(AP_FIRMWARE_LOADER,"") == 0) {
+        /* usleep(WIFI_DRIVER_LOADER_DELAY); */
+        property_set(AP_DRIVER_PROP_NAME, "ok");
+    }
+    else {
+        property_set("ctl.start", AP_FIRMWARE_LOADER);
+    }
+    sched_yield();
+    while (count-- > 0) {
+        if (property_get(AP_DRIVER_PROP_NAME, driver_status, NULL)) {
+            if (strcmp(driver_status, "ok") == 0)
+                return 0;
+            else if (strcmp(AP_DRIVER_PROP_NAME, "failed") == 0) {
+                wifi_unload_hotspot_driver();
+                return -1;
+            }
+        }
+        usleep(200000);
+    }
+    property_set(AP_DRIVER_PROP_NAME, "timeout");
+    wifi_unload_hotspot_driver();
+    return -1;
+#endif
+}
+
+int wifi_unload_hotspot_driver()
+{
+#ifndef WIFI_AP_DRIVER_MODULE_PATH
+    return wifi_unload_driver();
+#else
+    if (!is_wifi_hotspot_driver_loaded()) {
+        return 0;
+    }
+    usleep(200000); /* allow to finish interface down */
+    if (rmmod(AP_DRIVER_MODULE_NAME) == 0) {
+        int count = 20; /* wait at most 10 seconds for completion */
+        while (count-- > 0) {
+            if (!is_wifi_hotspot_driver_loaded())
+                break;
+            usleep(500000);
+        }
+        usleep(500000); /* allow card removal */
+        if (count) {
+#ifdef WIFI_EXT_MODULE_NAME
+            if (rmmod(EXT_MODULE_NAME) == 0)
+#endif
+            return 0;
+        }
+        return -1;
+    } else
+        return -1;
+#endif
+}
+
+
+
 int ensure_entropy_file_exists()
 {
     int ret;
