@@ -115,7 +115,5 @@ set_perm(0, 2000, 0550, "/system/etc/init.goldfish.sh");
 set_perm(0, 0, 06755, "/system/xbin/su");
 symlink("/system/xbin/su", "/system/bin/su");
 ui_print("Updating BOOT");
-assert(package_extract_file("boot.img", "/tmp/boot.img"),
-       write_raw_image("/tmp/boot.img", "/dev/block/nandc"),
-       delete("/tmp/boot.img"));
+package_extract_file("boot.img", "/dev/block/nandc");
 unmount("/system");
