@@ -3,7 +3,7 @@
 /boot		emmc		/dev/block/nandc
 /cache		ext4		/dev/block/nandh
 /data		ext4		/dev/block/nande
-/emmc		vfat		/dev/block/nandi
+/emmc		auto		/dev/block/nandi /dev/block/nandi1
 /sdcard		vfat		/dev/block/mmcblk0p1	/dev/block/mmcblk0
 /sd-ext		auto		/dev/block/mmcblk0p2
 /system		ext4		/dev/block/nandd
