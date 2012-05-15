@@ -19,7 +19,7 @@ $(call inherit-product, device/allwinner/a10/full_a10.mk)
 $(call inherit-product, vendor/cm/config/common_full_tablet_wifionly.mk)
 $(call inherit-product, device/allwinner/a10/a10-blobs.mk)
 
-TARGET_BOOTANIMATION_NAME :=  vertical-600x1024
+#TARGET_BOOTANIMATION_NAME :=  vertical-600x1024
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_NAME := cm_a10
