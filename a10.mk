@@ -38,7 +38,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
 	frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
 	frameworks/base/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-	frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
 	frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
 	frameworks/base/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
 	frameworks/base/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
@@ -50,6 +49,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += LiveWallpapers LiveWallpapersPicker MagicSmokeWallpapers HoloSpiralWallpaper 
 PRODUCT_PACKAGES += VisualizationWallpapers librs_jni
 
+# EGL stuff
+PRODUCT_PACKAGES += gralloc.exDroid hwcomposer.exDroid
+
 # Sensors
 PRODUCT_PACKAGES += lights.a10 sensors.a10
 
@@ -57,7 +59,7 @@ PRODUCT_PACKAGES += lights.a10 sensors.a10
 PRODUCT_PACKAGES += Camera camera.a10
 
 # CM9 apps
-PRODUCT_PACKAGES += Trebuchet FileManager com.android.future.usb.accessory
+PRODUCT_PACKAGES += FileManager com.android.future.usb.accessory
 
 # EXT4 Support
 PRODUCT_PACKAGES += make_ext4fs e2fsck
