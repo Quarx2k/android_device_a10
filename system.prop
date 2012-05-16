@@ -20,3 +20,5 @@ persist.sys.strictmode.disable=1
 
 #Default USB Config (Do not change this)
 persist.sys.usb.config=mass_storage,adb
+
+ro.display.switch = 1
