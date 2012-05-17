@@ -50,6 +50,7 @@ BOARD_USE_SKIA_LCDTEXT := true
 #Recovery Stuff
 #TARGET_RECOVERY_UI_LIB := librecovery_ui_generic
 #TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_generic
+TARGET_RECOVERY_PRE_COMMAND := "echo -n boot-recovery | busybox dd of=/dev/block/nandf count=1 conv=sync; sync"
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/allwinner/a10/recovery_keys.c
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 
