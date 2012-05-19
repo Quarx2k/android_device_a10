@@ -17,7 +17,6 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/lib/egl/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
 	device/allwinner/a10/prebuilt/lib/egl/libGLESv1_CM_mali.so:system/lib/egl/libGLESv1_CM_mali.so \
 	device/allwinner/a10/prebuilt/lib/egl/libGLESv2_mali.so:system/lib/egl/libGLESv2_mali.so \
-	device/allwinner/a10/prebuilt/lib/hw/display.a10.so:system/lib/hw/display.a10.so \
 	device/allwinner/a10/prebuilt/lib/libMali.so:system/lib/libMali.so \
 	device/allwinner/a10/prebuilt/lib/libUMP.so:system/lib/libUMP.so \
 	device/allwinner/a10/prebuilt/lib/libMali.so:obj/lib/libMali.so \

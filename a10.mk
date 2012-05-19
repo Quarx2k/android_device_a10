@@ -50,7 +50,7 @@ PRODUCT_PACKAGES += LiveWallpapers LiveWallpapersPicker MagicSmokeWallpapers Hol
 PRODUCT_PACKAGES += VisualizationWallpapers librs_jni
 
 # EGL stuff
-PRODUCT_PACKAGES += gralloc.exDroid hwcomposer.exDroid
+PRODUCT_PACKAGES += gralloc.exDroid hwcomposer.exDroid display.exDroid
 
 # Sensors
 PRODUCT_PACKAGES += lights.a10 sensors.a10
