@@ -53,10 +53,10 @@ PRODUCT_PACKAGES += VisualizationWallpapers librs_jni
 PRODUCT_PACKAGES += gralloc.exDroid hwcomposer.exDroid display.exDroid
 
 # Sensors
-PRODUCT_PACKAGES += lights.a10 sensors.a10
+PRODUCT_PACKAGES += lights.exDroid sensors.exDroid
 
 # ICS Camera
-PRODUCT_PACKAGES += Camera camera.a10
+PRODUCT_PACKAGES += Camera camera.exDroid
 
 # CM9 apps
 PRODUCT_PACKAGES += FileManager com.android.future.usb.accessory
@@ -65,7 +65,7 @@ PRODUCT_PACKAGES += FileManager com.android.future.usb.accessory
 PRODUCT_PACKAGES += make_ext4fs e2fsck
 
 # Audio stuff
-PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.default audio.primary.exDroid
+PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.exDroid audio.primary.exDroid
 
 # CedarX libraries
 PRODUCT_PACKAGES += libCedarA libCedarX libcedarv libcedarxbase libcedarxosal libswdrm libcedarxsftdemux

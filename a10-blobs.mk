@@ -24,13 +24,13 @@ PRODUCT_COPY_FILES += \
 
 # Camera
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/hw/camera.a10.so:system/lib/hw/camera.a10.so \
+	device/allwinner/a10/prebuilt/lib/hw/camera.a10.so:system/lib/hw/camera.exDroid.so \
 	device/allwinner/a10/prebuilt/etc/camera.cfg:system/etc/camera.cfg \
         device/allwinner/a10/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml 
 
 # will be removed in future
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/hw/gps.a10.so:system/lib/hw/gps.a10.so \
+	device/allwinner/a10/prebuilt/lib/hw/gps.a10.so:system/lib/hw/gps.exDroid.so \
 
 # OTG/3G stuff
 PRODUCT_COPY_FILES += \
