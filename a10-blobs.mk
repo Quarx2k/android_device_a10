@@ -31,8 +31,7 @@ PRODUCT_COPY_FILES += \
 
 # will be removed in future
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/bin/wpa_supplicant:system/bin/wpa_supplicant \
-	device/allwinner/a10/prebuilt/lib/hw/gps.a10.so:system/lib/hw/gps.a10.so
+	device/allwinner/a10/prebuilt/lib/hw/gps.a10.so:system/lib/hw/gps.a10.so \
 
 # OTG/3G stuff
 PRODUCT_COPY_FILES += \
