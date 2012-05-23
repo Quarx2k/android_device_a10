@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 TARGET_BOOTLOADER_BOARD_NAME := a10
-TARGET_BOARD_PLATFORM := exDroid
+TARGET_BOARD_PLATFORM := sun4i
 
 USE_CAMERA_STUB := false
 BOARD_USES_GENERIC_AUDIO := false
