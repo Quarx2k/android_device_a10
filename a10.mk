@@ -50,13 +50,13 @@ PRODUCT_PACKAGES += LiveWallpapers LiveWallpapersPicker MagicSmokeWallpapers Hol
 PRODUCT_PACKAGES += VisualizationWallpapers librs_jni
 
 # EGL stuff
-PRODUCT_PACKAGES += gralloc.exDroid hwcomposer.exDroid display.exDroid
+PRODUCT_PACKAGES += gralloc.sun4i hwcomposer.sun4i display.sun4i
 
 # Sensors
-PRODUCT_PACKAGES += lights.exDroid sensors.exDroid
+PRODUCT_PACKAGES += lights.sun4i sensors.sun4i
 
 # ICS Camera
-PRODUCT_PACKAGES += Camera camera.exDroid
+PRODUCT_PACKAGES += Camera camera.sun4i
 
 # CM9 apps
 PRODUCT_PACKAGES += FileManager com.android.future.usb.accessory
@@ -65,7 +65,7 @@ PRODUCT_PACKAGES += FileManager com.android.future.usb.accessory
 PRODUCT_PACKAGES += make_ext4fs e2fsck
 
 # Audio stuff
-PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.exDroid audio.primary.exDroid
+PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.sun4i audio.primary.sun4i
 
 # CedarX libraries
 PRODUCT_PACKAGES += libCedarA libCedarX libcedarv libcedarxbase libcedarxosal libswdrm libcedarxsftdemux
