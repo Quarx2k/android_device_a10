@@ -34,6 +34,9 @@ TARGET_CUSTOM_RELEASETOOL := ./device/allwinner/a10/releasetools/squisher
 BOARD_HAVE_BLUETOOTH := true
 TARGET_USES_CUSTOM_VIBRATOR_PATH := "/sys/class/timed_output/sun4i-vibrator/enable"
 BOARD_HAS_SDCARD_INTERNAL := true
+TARGET_USE_CUSTOM_LUN_FILE_PATH = "/sys/class/android_usb/android0/f_mass_storage/lun%d/file"
+TARGET_USE_CUSTOM_SECOND_LUN_NUM := 1
+BOARD_VOLD_MAX_PARTITIONS := 20
 
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
