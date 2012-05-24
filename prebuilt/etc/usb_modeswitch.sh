@@ -1,4 +1,4 @@
-#!/system/bin/busybox ash
+#!/sbin/sh
 sleep 2
 #/system/bin/setprop "mode_switch_running" "1"
 
