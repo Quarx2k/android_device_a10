@@ -28,6 +28,7 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_GLOBAL_CFLAGS += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
 ARCH_ARM_HAVE_TLS_REGISTER := true
+TARGET_CPU_SMP := true
 
 TARGET_CUSTOM_RELEASETOOL := ./device/allwinner/a10/releasetools/squisher
 
@@ -55,6 +56,7 @@ BOARD_USE_SKIA_LCDTEXT := true
 #TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_generic
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/allwinner/a10/recovery_keys.c
 BOARD_USE_LEGACY_TOUCHSCREEN := true
+TARGET_RECOVERY_PRE_COMMAND := "echo -n boot-recovery | dd of=/dev/block/nandf count=1 conv=sync; sync;"
 
 # Wifi stuff
 BOARD_WPA_SUPPLICANT_DRIVER := WEXT
