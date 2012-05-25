@@ -8,10 +8,11 @@ rm -f $REPACK/ota/system/app/RomManager.apk
 rm -f $REPACK/ota/system/media/video/*.480p.mp4
 rm -f $REPACK/ota/system/lib/hw/*.goldfish.so
 
-cp -f $VENDOR_TOP/app/* $REPACK/ota/system/app/r
-
+# Prebuilt Kernel
 rm -f $REPACK/ota/boot.img
 cp -f $DEVICE_TOP/boot.img $REPACK/ota/boot.img
 
-cp -f $DEVICE_TOP/updater-script $REPACK/ota/META-INF/com/google/android/updater-script
+# Custom Bootanimation
+cp -f $DEVICE_TOP/prebuilt/bootanimation.zip $REPACK/ota/system/media/bootanimation.zip
 
+cp -f $DEVICE_TOP/updater-script $REPACK/ota/META-INF/com/google/android/updater-script

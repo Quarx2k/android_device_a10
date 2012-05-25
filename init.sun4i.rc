@@ -7,18 +7,21 @@ on early-init
         mkdir /mnt/extsd 0000 system system
         mkdir /mnt/usbhost1 0000 system system
         symlink /mnt/sdcard /sdcard
+        symlink /mnt/extsd /extsd
+        symlink /mnt/usbhost1 /usbhost
 
 on fs
 
+        symlink /dev/block/nanda /dev/block/bootloader
         symlink /dev/block/nandc /dev/block/boot
         symlink /dev/block/nandd /dev/block/system
         symlink /dev/block/nande /dev/block/data
         symlink /dev/block/nandg /dev/block/recovery
         symlink /dev/block/nandh /dev/block/cache
 
-        exec /system/bin/e2fsck -y /dev/block/system 
-        exec /system/bin/e2fsck -y /dev/block/data 
-        exec /system/bin/e2fsck -y /dev/block/cache
+        #exec /system/bin/e2fsck -y /dev/block/system 
+        #exec /system/bin/e2fsck -y /dev/block/data 
+        #exec /system/bin/e2fsck -y /dev/block/cache
 
         mount ext4 /dev/block/system /system wait ro noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
         mount ext4 /dev/block/data /data wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
@@ -130,5 +133,4 @@ on property:service.adb.tcp.port=5555
 on property:service.adb.tcp.port=-1
     stop adbd
     start adbd
-
 
