@@ -59,6 +59,7 @@ on boot
         insmod /system/lib/modules/btusb.ko
         insmod /system/lib/modules/pl2303.ko
         insmod /system/lib/modules/tun.ko
+	insmod /system/lib/modules/sun4i-ir.ko #Infrared device
 
         #for stock roms
         insmod /system/vendor/modules/sun4i-vibrator.ko #Vibrator
