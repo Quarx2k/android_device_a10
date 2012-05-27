@@ -12,7 +12,4 @@ rm -f $REPACK/ota/system/lib/hw/*.goldfish.so
 rm -f $REPACK/ota/boot.img
 cp -f $DEVICE_TOP/boot.img $REPACK/ota/boot.img
 
-# Custom Bootanimation
-cp -f $DEVICE_TOP/prebuilt/bootanimation.zip $REPACK/ota/system/media/bootanimation.zip
-
 cp -f $DEVICE_TOP/updater-script $REPACK/ota/META-INF/com/google/android/updater-script
