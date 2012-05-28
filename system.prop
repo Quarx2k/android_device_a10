@@ -22,3 +22,8 @@ persist.sys.strictmode.disable=1
 persist.sys.usb.config=mass_storage,adb
 
 ro.display.switch = 1
+
+#RIL config
+rild.libpath=/system/lib/liballwinner-ril.so
+rild.libargs=-d /dev/ttyUSB2
+
