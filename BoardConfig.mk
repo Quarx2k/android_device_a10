@@ -61,11 +61,13 @@ TARGET_RECOVERY_PRE_COMMAND := "echo -n boot-recovery | dd of=/dev/block/nandf c
 # Wifi stuff
 BOARD_WPA_SUPPLICANT_DRIVER := WEXT
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
 TARGET_CUSTOM_WIFI := ../../device/allwinner/a10/wifi.c
 WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/8192cu.ko"
 WIFI_DRIVER_MODULE_NAME     := 8192cu
 WIFI_DRIVER_FW_PATH_STA     := 8192cu
 WIFI_DRIVER_FW_PATH_AP      := 8192cu
+WIFI_DRIVER_SOCKET_IFACE    := wlan0
 
 # Beware: set only prebuilt OR source+config
 TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel
