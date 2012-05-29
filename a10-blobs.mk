@@ -61,6 +61,7 @@ PRODUCT_COPY_FILES += \
 	device/allwinner/a10/prebuilt/etc/gps.conf:system/etc/gps.conf \
 	device/allwinner/a10/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
 	device/allwinner/a10/prebuilt/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so \
-	device/allwinner/a10/prebuilt/bin/erase_misc.sh:system/bin/erase_misc.sh \
+	device/allwinner/a10/prebuilt/bin/ntfs-3g:system/bin/ntfs-3g \
+	device/allwinner/a10/prebuilt/bin/ntfs-3g.probe:system/bin/ntfs-3g.probe 
 
 #end of a10-blobs.mk
