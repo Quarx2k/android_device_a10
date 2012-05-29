@@ -38,6 +38,7 @@ PRODUCT_COPY_FILES += \
         device/allwinner/a10/prebuilt/etc/3g_dongle.cfg:system/etc/3g_dongle.cfg \
         device/allwinner/a10/prebuilt/bin/usb_modeswitch:system/bin/usb_modeswitch \
         device/allwinner/a10/prebuilt/etc/usb_modeswitch.sh:system/etc/usb_modeswitch.sh \
+        device/allwinner/a10/prebuilt/bin/chat:system/bin/chat \
 
 PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/etc/usb_modeswitch.d && \
 	find device/allwinner/a10/prebuilt/etc/usb_modeswitch.d -name '*' \
