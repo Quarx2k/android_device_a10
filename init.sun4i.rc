@@ -64,7 +64,6 @@ on boot
         insmod /system/lib/modules/btusb.ko
         insmod /system/lib/modules/pl2303.ko
         insmod /system/lib/modules/tun.ko
-        insmod /system/lib/modules/sun4i-ir.ko #Infrared device
 
         #for stock roms
         insmod /system/vendor/modules/sun4i-vibrator.ko #Vibrator
@@ -85,7 +84,6 @@ on boot
         insmod /system/vendor/modules/btusb.ko
         insmod /system/vendor/modules/pl2303.ko
         insmod /system/vendor/modules/tun.ko
-        insmod /system/vendor/modules/sun4i-ir.ko #Infrared device
 
         chown system system /sys/class/timed_output/sun4i-vibrator/enable
         write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor fantasy
