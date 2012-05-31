@@ -46,13 +46,13 @@ on post-fs-data
 
 on boot
 
-        insmod /system/lib/modules/sun4i-vibrator.ko #Vibrator
         insmod /system/lib/modules/ump.ko #Mail 400M
         insmod /system/lib/modules/mali.ko #Mail 400M
         insmod /system/lib/modules/videobuf-core.ko
         insmod /system/lib/modules/videobuf-dma-contig.ko
         insmod /system/lib/modules/mma7660.ko #Gsensor
-        insmod /system/lib/modules/gt2005.ko
+        insmod /system/lib/modules/gt2005.ko #Camera
+        insmod /system/lib/modules/hi253.ko #Camera + LG IPS.
         insmod /system/lib/modules/sun4i_csi0.ko
         insmod /system/lib/modules/usbnet.ko #USB Internet sharing
         insmod /system/lib/modules/asix.ko
@@ -61,29 +61,10 @@ on boot
         insmod /system/lib/modules/rtl8150.ko #Ethernet Controller
         insmod /system/lib/modules/ft5x_ts.ko #Ft5x Touchscreen 
         insmod /system/lib/modules/goodix_touch.ko #Goodix Touchscreen
+        insmod /system/lib/modules/sun4i-vibrator.ko #Vibrator
         insmod /system/lib/modules/btusb.ko
         insmod /system/lib/modules/pl2303.ko
         insmod /system/lib/modules/tun.ko
-
-        #for stock roms
-        insmod /system/vendor/modules/sun4i-vibrator.ko #Vibrator
-        insmod /system/vendor/modules/ump.ko #Mail 400M
-        insmod /system/vendor/modules/mali.ko #Mail 400M
-        insmod /system/vendor/modules/videobuf-core.ko
-        insmod /system/vendor/modules/videobuf-dma-contig.ko
-        insmod /system/vendor/modules/mma7660.ko #Gsensor
-        insmod /system/vendor/modules/gt2005.ko
-        insmod /system/vendor/modules/sun4i_csi0.ko
-        insmod /system/vendor/modules/usbnet.ko #USB Internet sharing
-        insmod /system/vendor/modules/asix.ko
-        insmod /system/vendor/modules/qf9700.ko
-        insmod /system/vendor/modules/mcs7830.ko
-        insmod /system/vendor/modules/rtl8150.ko #Ethernet Controller
-        insmod /system/vendor/modules/ft5x_ts.ko #Ft5x Touchscreen 
-        insmod /system/vendor/modules/goodix_touch.ko #Goodix Touchscreen
-        insmod /system/vendor/modules/btusb.ko
-        insmod /system/vendor/modules/pl2303.ko
-        insmod /system/vendor/modules/tun.ko
 
         chown system system /sys/class/timed_output/sun4i-vibrator/enable
         write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor fantasy
