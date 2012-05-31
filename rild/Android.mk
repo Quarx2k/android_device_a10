@@ -17,9 +17,8 @@ endif # arm
 
 LOCAL_CFLAGS := -DRIL_SHLIB
 LOCAL_MODULE:= rild_sun4i
-
 LOCAL_MODULE_STEM := rild
-
+LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_EXECUTABLE)
 
