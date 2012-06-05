@@ -540,8 +540,8 @@ static int hwc_setrect(sun4i_hwc_context_t *ctx,hwc_rect_t *croprect,hwc_rect_t 
 static int hwc_prepare(hwc_composer_device_t *dev, hwc_layer_list_t* list)
 {
     //LOGV("hwc_prepare list->numHwLayers = %d\n",list->numHwLayers);
-   // if (list && (list->flags & HWC_GEOMETRY_CHANGED))
-    if(true)
+    //list is null on HWComposer->disable() on surfaceflinger
+    if (list && (list->flags & HWC_GEOMETRY_CHANGED))
     {
         //LOGV("hwc_prepare HWC_GEOMETRY_CHANGED list->numHwLayers = %d\n",list->numHwLayers);
 
@@ -1952,9 +1952,11 @@ static int hwc_set(hwc_composer_device_t *dev,
     //}
     EGLBoolean sucess = eglSwapBuffers((EGLDisplay)dpy, (EGLSurface)sur);
     if (!sucess)
-    {
         return HWC_EGL_ERROR;
-    }
+
+    //don't continue if layer list is NULL
+    if (list == NULL)
+        return 0;
 
     return hwc_set_layer(dev,list);
 }
