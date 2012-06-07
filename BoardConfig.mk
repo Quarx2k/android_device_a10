@@ -60,15 +60,18 @@ BOARD_USE_LEGACY_TOUCHSCREEN := true
 TARGET_RECOVERY_PRE_COMMAND := "echo -n boot-recovery | dd of=/dev/block/nandf count=1 conv=sync; sync;"
 
 # Wifi stuff
-BOARD_WPA_SUPPLICANT_DRIVER := WEXT
-WPA_SUPPLICANT_VERSION      := VER_0_8_X
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
-TARGET_CUSTOM_WIFI := ../../device/allwinner/a10/wifi.c
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/8192cu.ko"
-WIFI_DRIVER_MODULE_NAME     := 8192cu
-WIFI_DRIVER_FW_PATH_STA     := 8192cu
-WIFI_DRIVER_FW_PATH_AP      := 8192cu
-WIFI_DRIVER_SOCKET_IFACE    := wlan0
+BOARD_WIFI_VENDOR                := realtek
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER      := WEXT
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_rtl
+BOARD_HOSTAPD_DRIVER             := WEXT
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_rtl
+BOARD_WLAN_DEVICE                := rtl8192cu
+
+WIFI_DRIVER_MODULE_NAME          := 8192cu.ko
+WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/8192cu.ko"
+
+TARGET_CUSTOM_WIFI := ../../hardware/realtek/wlan/wifi_realtek.c
 
 # Beware: set only prebuilt OR source+config
 TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel
