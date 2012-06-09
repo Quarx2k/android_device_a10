@@ -12,59 +12,65 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+DEVICE_PREBUILT := ${device_path}/prebuilt
+
 # EGL Stuff
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/egl/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
-	device/allwinner/a10/prebuilt/lib/egl/libGLESv1_CM_mali.so:system/lib/egl/libGLESv1_CM_mali.so \
-	device/allwinner/a10/prebuilt/lib/egl/libGLESv2_mali.so:system/lib/egl/libGLESv2_mali.so \
-	device/allwinner/a10/prebuilt/lib/libMali.so:system/lib/libMali.so \
-	device/allwinner/a10/prebuilt/lib/libUMP.so:system/lib/libUMP.so \
-	device/allwinner/a10/prebuilt/lib/libMali.so:obj/lib/libMali.so \
-	device/allwinner/a10/prebuilt/lib/libUMP.so:obj/lib/libUMP.so \
+	$(DEVICE_PREBUILT)/lib/egl/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
+	$(DEVICE_PREBUILT)/lib/egl/libGLESv1_CM_mali.so:system/lib/egl/libGLESv1_CM_mali.so \
+	$(DEVICE_PREBUILT)/lib/egl/libGLESv2_mali.so:system/lib/egl/libGLESv2_mali.so \
+	$(DEVICE_PREBUILT)/lib/libMali.so:system/lib/libMali.so \
+	$(DEVICE_PREBUILT)/lib/libUMP.so:system/lib/libUMP.so \
+	$(DEVICE_PREBUILT)/lib/libMali.so:obj/lib/libMali.so \
+	$(DEVICE_PREBUILT)/lib/libUMP.so:obj/lib/libUMP.so \
 
 # Camera
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/hw/camera.sun4i.so:system/lib/hw/camera.sun4i.so \
-	device/allwinner/a10/prebuilt/etc/camera.cfg:system/etc/camera.cfg \
-        device/allwinner/a10/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml 
+	$(DEVICE_PREBUILT)/lib/hw/camera.sun4i.so:system/lib/hw/camera.sun4i.so \
+	$(DEVICE_PREBUILT)/etc/camera.cfg:system/etc/camera.cfg \
+        $(DEVICE_PREBUILT)/etc/media_profiles.xml:system/etc/media_profiles.xml 
 
 # will be removed in future
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/lib/hw/gps.sun4i.so:system/lib/hw/gps.sun4i.so \
+	$(DEVICE_PREBUILT)/lib/hw/gps.sun4i.so:system/lib/hw/gps.sun4i.so \
 
 # OTG/3G stuff
 PRODUCT_COPY_FILES += \
-        device/allwinner/a10/prebuilt/bin/u3gmonitor:system/bin/u3gmonitor \
-        device/allwinner/a10/prebuilt/etc/3g_dongle.cfg:system/etc/3g_dongle.cfg \
-        device/allwinner/a10/prebuilt/bin/usb_modeswitch:system/bin/usb_modeswitch \
-        device/allwinner/a10/prebuilt/etc/usb_modeswitch.sh:system/etc/usb_modeswitch.sh \
-        device/allwinner/a10/prebuilt/bin/chat:system/bin/chat \
-        device/allwinner/a10/prebuilt/etc/ppp/call-pppd:system/etc/ppp/call-pppd \
-        device/allwinner/a10/prebuilt/etc/ppp/ip-down:system/etc/ppp/ip-down \
-        device/allwinner/a10/prebuilt/etc/ppp/ip-up:system/etc/ppp/ip-up 
+        $(DEVICE_PREBUILT)/bin/u3gmonitor:system/bin/u3gmonitor \
+        $(DEVICE_PREBUILT)/etc/3g_dongle.cfg:system/etc/3g_dongle.cfg \
+        $(DEVICE_PREBUILT)/bin/usb_modeswitch:system/bin/usb_modeswitch \
+        $(DEVICE_PREBUILT)/etc/usb_modeswitch.sh:system/etc/usb_modeswitch.sh \
+        $(DEVICE_PREBUILT)/bin/chat:system/bin/chat \
+        $(DEVICE_PREBUILT)/etc/ppp/call-pppd:system/etc/ppp/call-pppd \
+        $(DEVICE_PREBUILT)/etc/ppp/ip-down:system/etc/ppp/ip-down \
+        $(DEVICE_PREBUILT)/etc/ppp/ip-up:system/etc/ppp/ip-up 
 
-PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/etc/usb_modeswitch.d && \
-	find device/allwinner/a10/prebuilt/etc/usb_modeswitch.d -name '*' \
+PRODUCT_COPY_FILES += $(shell test -d $(DEVICE_PREBUILT)/etc/usb_modeswitch.d && \
+	find $(DEVICE_PREBUILT)/etc/usb_modeswitch.d -name '*' \
 	-printf '%p:system/etc/usb_modeswitch.d/%f ')
 
 # Other stuff
 PRODUCT_COPY_FILES += \
-	device/allwinner/a10/prebuilt/usr/keylayout/hv_keypad.kl:system/usr/keylayout/hv_keypad.kl \
-	device/allwinner/a10/prebuilt/usr/keylayout/axp20-supplyer.kl:system/usr/keylayout/axp20-supplyer.kl \
-	device/allwinner/a10/prebuilt/usr/keylayout/sun4i-keyboard.kl:system/usr/keylayout/sun4i-keyboard.kl \
-	device/allwinner/a10/prebuilt/usr/idc/ft5x_ts.idc:system/usr/idc/ft5x_ts.idc \
-	device/allwinner/a10/prebuilt/usr/idc/gt80x.idc:system/usr/idc/gt80x.idc \
-	device/allwinner/a10/prebuilt/usr/idc/qwerty.idc:system/usr/idc/qwerty.idc \
-	device/allwinner/a10/prebuilt/usr/idc/qwerty2.idc:system/usr/idc/qwerty2.idc \
-	device/allwinner/a10/prebuilt/vendor/firmware/ft5206-1024X600.bin:system/vendor/firmware/ft5206-1024X600.bin \
-	device/allwinner/a10/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
-	device/allwinner/a10/prebuilt/etc/gps.conf:system/etc/gps.conf \
-	device/allwinner/a10/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-	device/allwinner/a10/prebuilt/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so \
-	device/allwinner/a10/prebuilt/bin/ntfs-3g:system/bin/ntfs-3g \
-	device/allwinner/a10/prebuilt/bin/ntfs-3g.probe:system/bin/ntfs-3g.probe \
-	device/allwinner/a10/prebuilt/bin/mkfs.exfat:system/bin/mkfs.exfat \
-	device/allwinner/a10/prebuilt/bin/mount.exfat:system/bin/mount.exfat \
- 	device/allwinner/a10/prebuilt/bin/fsck.exfat:system/bin/fsck.exfat
+	$(DEVICE_PREBUILT)/usr/keylayout/hv_keypad.kl:system/usr/keylayout/hv_keypad.kl \
+	$(DEVICE_PREBUILT)/usr/keylayout/axp20-supplyer.kl:system/usr/keylayout/axp20-supplyer.kl \
+	$(DEVICE_PREBUILT)/usr/keylayout/sun4i-keyboard.kl:system/usr/keylayout/sun4i-keyboard.kl \
+	$(DEVICE_PREBUILT)/usr/idc/ft5x_ts.idc:system/usr/idc/ft5x_ts.idc \
+	$(DEVICE_PREBUILT)/usr/idc/gt80x.idc:system/usr/idc/gt80x.idc \
+	$(DEVICE_PREBUILT)/usr/idc/qwerty.idc:system/usr/idc/qwerty.idc \
+	$(DEVICE_PREBUILT)/usr/idc/qwerty2.idc:system/usr/idc/qwerty2.idc \
+	$(DEVICE_PREBUILT)/vendor/firmware/ft5206-1024X600.bin:system/vendor/firmware/ft5206-1024X600.bin \
+	$(DEVICE_PREBUILT)/etc/vold.fstab:system/etc/vold.fstab \
+	$(DEVICE_PREBUILT)/etc/gps.conf:system/etc/gps.conf \
+	$(DEVICE_PREBUILT)/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+	$(DEVICE_PREBUILT)/lib/liballwinner-ril.so:system/lib/liballwinner-ril.so \
+	$(DEVICE_PREBUILT)/bin/ntfs-3g:system/bin/ntfs-3g \
+	$(DEVICE_PREBUILT)/bin/ntfs-3g.probe:system/bin/ntfs-3g.probe \
+	$(DEVICE_PREBUILT)/bin/mkfs.exfat:system/bin/mkfs.exfat \
+	$(DEVICE_PREBUILT)/bin/mount.exfat:system/bin/mount.exfat \
+ 	$(DEVICE_PREBUILT)/bin/fsck.exfat:system/bin/fsck.exfat
+
+# New CM9 backup list system (addon.d)
+PRODUCT_COPY_FILES += \
+	${device_path}/releasetools/addon.d/70-gapps.sh:system/addon.d/70-gapps.sh \
 
 #end of a10-blobs.mk

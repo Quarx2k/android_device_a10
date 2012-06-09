@@ -1,6 +1,12 @@
 show_progress(0.1, 0);
 ui_print("Installing CyanogenMod 9 By Quarx...");
 ui_print("Formatting SYSTEM...");
+package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
+package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
+run_program("/sbin/mkdir","/tmp/backupdir");
+run_program("/sbin/touch","/tmp/backupdir/force_backuptool");
+set_perm(0, 0, 0777, "/tmp/backuptool.sh");
+run_program("/tmp/backuptool.sh", "backup")
 format("ext4", "EMMC", "/dev/block/nandd", "0");
 ui_print("Updating SYSTEM...");
 mount("ext4", "EMMC", "/dev/block/nandd", "/system");
@@ -94,6 +100,7 @@ symlink("toolbox", "/system/bin/cmp",
 set_perm_recursive(0, 0, 0755, 0644, "/system");
 set_perm_recursive(0, 2000, 0755, 0755, "/system/bin");
 set_perm_recursive(1002, 1002, 0755, 0440, "/system/etc/bluetooth");
+set_perm_recursive(0, 0, 0755, 0755, "/system/addon.d");
 set_perm_recursive(0, 0, 0755, 0755, "/system/etc/init.d");
 set_perm_recursive(0, 0, 0755, 0755, "/system/etc/ppp");
 set_perm_recursive(0, 2000, 0755, 0644, "/system/vendor");
@@ -109,6 +116,8 @@ set_perm(1002, 1002, 0440, "/system/etc/dbus.conf");
 set_perm(1014, 2000, 0550, "/system/etc/dhcpcd/dhcpcd-run-hooks");
 set_perm(0, 0, 06755, "/system/xbin/su");
 symlink("/system/xbin/su", "/system/bin/su");
+symlink("Roboto-Bold.ttf", "/system/fonts/DroidSans-Bold.ttf");
+symlink("Roboto-Regular.ttf", "/system/fonts/DroidSans.ttf");
 package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
 package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
 set_perm(0, 0, 0777, "/tmp/backuptool.sh");
