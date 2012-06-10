@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+device_path = device/allwinner/a10
+
 DEVICE_PREBUILT := ${device_path}/prebuilt
 
 # EGL Stuff

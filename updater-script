@@ -6,7 +6,7 @@ package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functio
 run_program("/sbin/mkdir","/tmp/backupdir");
 run_program("/sbin/touch","/tmp/backupdir/force_backuptool");
 set_perm(0, 0, 0777, "/tmp/backuptool.sh");
-run_program("/tmp/backuptool.sh", "backup")
+run_program("/tmp/backuptool.sh", "backup");
 format("ext4", "EMMC", "/dev/block/nandd", "0");
 ui_print("Updating SYSTEM...");
 mount("ext4", "EMMC", "/dev/block/nandd", "/system");
