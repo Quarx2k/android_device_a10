@@ -61,7 +61,6 @@ on boot
         insmod /system/lib/modules/rtl8150.ko #Ethernet Controller
         insmod /system/lib/modules/ft5x_ts.ko #Ft5x Touchscreen 
         insmod /system/lib/modules/goodix_touch.ko #Goodix Touchscreen
-        insmod /system/lib/modules/sun4i-vibrator.ko #Vibrator
         insmod /system/lib/modules/btusb.ko
         insmod /system/lib/modules/pl2303.ko
         insmod /system/lib/modules/tun.ko
