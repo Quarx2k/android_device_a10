@@ -16,6 +16,14 @@ device_path = device/allwinner/a10
 
 DEVICE_PREBUILT := ${device_path}/prebuilt
 
+# Ramdisk
+PRODUCT_COPY_FILES += \
+	device/allwinner/a10/ramdisk/init.sun4i.rc:root/init.sun4i.rc \
+	device/allwinner/a10/ramdisk/init.sun4i.usb.rc:root/init.sun4i.usb.rc \
+	device/allwinner/a10/ramdisk/ueventd.rc:root/ueventd.rc \
+	device/allwinner/a10/ramdisk/ueventd.sun4i.rc:root/ueventd.sun4i.rc \
+	device/allwinner/a10/ramdisk/adbd:root/sbin/adbd \
+
 # EGL Stuff
 PRODUCT_COPY_FILES += \
 	$(DEVICE_PREBUILT)/lib/egl/libEGL_mali.so:system/lib/egl/libEGL_mali.so \

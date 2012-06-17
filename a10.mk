@@ -48,7 +48,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
 	packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml \
 
-
 # Other stuff
 PRODUCT_PACKAGES += librs_jni rild_sun4i
 
@@ -72,11 +71,6 @@ PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.su
 
 # CedarX libraries
 PRODUCT_PACKAGES += libCedarA libCedarX libcedarv libcedarxbase libcedarxosal libswdrm libcedarxsftdemux
-
-# copy all others kernel modules under the "modules" directory to system/lib/modules
-PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/lib/modules && \
-	find device/allwinner/a10/prebuilt/lib/modules -name '*.ko' \
-	-printf '%p:system/lib/modules/%f ')
 
 $(call inherit-product, build/target/product/full_base.mk)
 

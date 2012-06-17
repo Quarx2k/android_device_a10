@@ -1,0 +1,121 @@
+import init.sun4i.usb.rc
+
+on early-init
+
+        export EXTERNAL_STORAGE /mnt/sdcard
+        mkdir /mnt/sdcard 0000 system system
+        mkdir /mnt/extsd 0000 system system
+        mkdir /mnt/usbhost1 0000 system system
+        symlink /mnt/sdcard /sdcard
+        symlink /mnt/extsd /extsd
+        symlink /mnt/usbhost1 /usbhost
+
+on fs
+
+        symlink /dev/block/nanda /dev/block/bootloader
+        symlink /dev/block/nandc /dev/block/boot
+        symlink /dev/block/nandd /dev/block/system
+        symlink /dev/block/nande /dev/block/data
+        symlink /dev/block/nandg /dev/block/recovery
+        symlink /dev/block/nandh /dev/block/cache
+
+        #exec /system/bin/e2fsck -y /dev/block/system 
+        #exec /system/bin/e2fsck -y /dev/block/data 
+        #exec /system/bin/e2fsck -y /dev/block/cache
+
+        mount ext4 /dev/block/system /system wait ro noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+        mount ext4 /dev/block/data /data wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+        mount ext4 /dev/block/cache /cache wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+
+on post-fs
+
+# bluetooth power up/down interface
+        chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+        chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+        chmod 0660 /sys/class/rfkill/rfkill0/state
+        chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
+        chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
+        chmod 0660 /sys/class/rfkill/rfkill1/state
+        write /sys/class/rfkill/rfkill0/state 0
+        setprop rw.bluetooth.status "0"
+
+on post-fs-data
+        mkdir /data/misc/wifi 0771 wifi wifi
+        mkdir /data/misc/wifi/sockets 0771 wifi wifi
+        mkdir /data/misc/dhcp 0771 dhcp dhcp
+
+on boot
+
+        insmod /system/lib/modules/ump.ko #Mail 400M
+        insmod /system/lib/modules/mali.ko #Mail 400M
+        insmod /system/lib/modules/videobuf-core.ko
+        insmod /system/lib/modules/videobuf-dma-contig.ko
+        insmod /system/lib/modules/mma7660.ko #Gsensor
+        insmod /system/lib/modules/gt2005.ko
+        insmod /system/lib/modules/hi253.ko #Camera with lg ips
+        insmod /system/lib/modules/sun4i_csi0.ko
+        insmod /system/lib/modules/usbnet.ko #USB Internet sharing
+        insmod /system/lib/modules/asix.ko
+        insmod /system/lib/modules/qf9700.ko
+        insmod /system/lib/modules/mcs7830.ko
+        insmod /system/lib/modules/rtl8150.ko #Ethernet Controller
+        insmod /system/lib/modules/ft5x_ts.ko #Ft5x Touchscreen 
+        insmod /system/lib/modules/goodix_touch.ko #Goodix Touchscreen
+        insmod /system/lib/modules/btusb.ko
+        insmod /system/lib/modules/pl2303.ko
+        insmod /system/lib/modules/tun.ko
+
+        chown system system /sys/class/timed_output/sun4i-vibrator/enable
+        write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor fantasy
+
+# wifi related service
+service wpa_supplicant /system/bin/wpa_supplicant -D wext -i wlan0 \
+	-c /data/misc/wifi/wpa_supplicant.conf -e /data/misc/wifi/entropy.bin
+    class main
+    socket wpa_wlan0 dgram 0660 wifi wifi
+    group system wifi inet
+    disabled
+    oneshot
+
+# dhcpcd daemons
+service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot    
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot    
+
+service iprenew_eth0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service u3gmonitor /system/bin/u3gmonitor
+    class main
+    user root
+    group root
+    oneshot
+
+service hciattach /system/bin/hciattach -n -s 115200 /dev/ttyS1 rda 1500000
+    class main
+    user root
+    group bluetooth net_bt_admin
+    disabled
+    oneshot	
+
+# adb over network
+on property:service.adb.tcp.port=5555
+    stop adbd
+    start adbd
+on property:service.adb.tcp.port=-1
+    stop adbd
+    start adbd
+

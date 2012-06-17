@@ -58,6 +58,7 @@ COMMON_GLOBAL_CFLAGS += -DSURFACEFLINGER_FORCE_SCREEN_RELEASE
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/allwinner/a10/recovery_keys.c
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 TARGET_RECOVERY_PRE_COMMAND := "echo -n boot-recovery | dd of=/dev/block/nandf count=1 conv=sync; sync;"
+TARGET_RECOVERY_INITRC := device/allwinner/a10/ramdisk/recovery_init.rc
 
 # Wifi stuff
 BOARD_WIFI_VENDOR                := realtek
@@ -67,7 +68,6 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_rtl
 BOARD_HOSTAPD_DRIVER             := WEXT
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_rtl
 BOARD_WLAN_DEVICE                := rtl8192cu
-
 WIFI_DRIVER_MODULE_NAME          := 8192cu
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/8192cu.ko"
 
@@ -76,5 +76,13 @@ TARGET_CUSTOM_WIFI := ../../hardware/realtek/wlan/wifi_realtek.c
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 
+# Extra : to build external modules sources
+TARGET_KERNEL_SOURCE := $(ANDROID_BUILD_TOP)/kernel/
+TARGET_KERNEL_CONFIG := sun4i_aurora_defconfig
+TARGET_KERNEL_MODULES_EXT := $(ANDROID_BUILD_TOP)/device/allwinner/a10/prebuilt/lib/modules
+BOARD_KERNEL_CMDLINE := console=ttyS0,115200 rw init=/init
+BOARD_KERNEL_BASE := 0x40000000
+BOARD_KERNEL_PAGESIZE := 2048
+
 # Beware: set only prebuilt OR source+config
-TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel
+#TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel
