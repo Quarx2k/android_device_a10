@@ -33,6 +33,7 @@
 
 #include "sensors.h"
 
+
 #include "AccelSensor.h"
 
 /*****************************************************************************/
@@ -94,7 +95,7 @@ struct sensors_poll_context_t {
 
 private:
     enum {
-	accel = 0,
+	accel             = 0,
         numSensorDrivers,
         numFds,
     };

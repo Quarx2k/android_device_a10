@@ -48,6 +48,8 @@ __BEGIN_DECLS
 #define CONVERT_A_Y                 (-CONVERT_A)
 #define CONVERT_A_Z                 (CONVERT_A)
 
+#define SENSOR_STATE_MASK           (0x7FFF)
+
 __END_DECLS
 
 #endif  // ANDROID_SENSORS_H

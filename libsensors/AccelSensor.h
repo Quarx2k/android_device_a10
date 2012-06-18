@@ -36,26 +36,39 @@ public:
             AccelSensor();
     virtual ~AccelSensor();
 
+    enum {
+        Accelerometer   = 0,
+        numSensors
+    };
+
     virtual int setDelay(int32_t handle, int64_t ns);
     virtual int enable(int32_t handle, int enabled);
     virtual int readEvents(sensors_event_t* data, int count);
     void processEvent(int code, int value);
 
 private:
-    int isEnabled();
     uint32_t mEnabled;
+    uint32_t mPendingMask;
     InputEventCircularReader mInputReader;
-    sensors_event_t mPendingEvents;
+    sensors_event_t mPendingEvents[numSensors];
+    int mMinPollDelay;
+    int mMaxPollDelay;
+    char poll_sysfs_file[PATH_MAX];
+    int poll_sysfs_file_len;
+    int getPollFile(const char* inputName);
     static inline int accel_is_sensor_enabled(uint32_t sensor_type)
     {
+        //dummy now......
         return 1;
     }
     static inline int accel_enable_sensor(uint32_t sensor_type)
     {
+        //dummy now......
         return 0;
     }
     static inline int accel_disable_sensor(uint32_t sensor_type)
     {
+       //dummy now......
        return 0;
     }
 };
