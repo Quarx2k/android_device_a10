@@ -51,8 +51,9 @@ on boot
         insmod /system/lib/modules/videobuf-core.ko
         insmod /system/lib/modules/videobuf-dma-contig.ko
         insmod /system/lib/modules/mma7660.ko #Gsensor
-        insmod /system/lib/modules/gt2005.ko
-        insmod /system/lib/modules/hi253.ko #Camera with lg ips
+        insmod /system/lib/modules/gt2005.ko #Camera
+        insmod /system/lib/modules/hi253.ko #Camera for Aurora v3
+        insmod /system/lib/modules/gc0307.ko #Camera for Explay 701
         insmod /system/lib/modules/sun4i_csi0.ko
         insmod /system/lib/modules/usbnet.ko #USB Internet sharing
         insmod /system/lib/modules/asix.ko
@@ -62,11 +63,9 @@ on boot
         insmod /system/lib/modules/ft5x_ts.ko #Ft5x Touchscreen 
         insmod /system/lib/modules/goodix_touch.ko #Goodix Touchscreen
         insmod /system/lib/modules/btusb.ko
-        insmod /system/lib/modules/pl2303.ko
         insmod /system/lib/modules/tun.ko
 
         chown system system /sys/class/timed_output/sun4i-vibrator/enable
-        write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor fantasy
 
 # wifi related service
 service wpa_supplicant /system/bin/wpa_supplicant -D wext -i wlan0 \
