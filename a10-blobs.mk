@@ -36,7 +36,6 @@ PRODUCT_COPY_FILES += \
 
 # Camera
 PRODUCT_COPY_FILES += \
-	$(DEVICE_PREBUILT)/lib/hw/camera.sun4i.so:system/lib/hw/camera.sun4i.so \
 	$(DEVICE_PREBUILT)/etc/camera.cfg:system/etc/camera.cfg \
         $(DEVICE_PREBUILT)/etc/media_profiles.xml:system/etc/media_profiles.xml 
 
