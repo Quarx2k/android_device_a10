@@ -49,10 +49,10 @@ PRODUCT_COPY_FILES += \
 	packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml \
 
 # Other stuff
-PRODUCT_PACKAGES += librs_jni rild_sun4i 
+PRODUCT_PACKAGES += librs_jni rild_sun4i
 
 # EGL stuff
-PRODUCT_PACKAGES += gralloc.sun4i hwcomposer.sun4i display.sun4i 
+PRODUCT_PACKAGES += gralloc.sun4i hwcomposer.sun4i display.sun4i
 
 # Sensors
 PRODUCT_PACKAGES += lights.sun4i sensors.sun4i
