@@ -75,6 +75,7 @@ TARGET_CUSTOM_WIFI := ../../hardware/realtek/wlan/wifi_realtek.c
 
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
+ENABLE_WEBGL := true
 
 # Extra : to build external modules sources
 TARGET_KERNEL_SOURCE := $(ANDROID_BUILD_TOP)/kernel/
