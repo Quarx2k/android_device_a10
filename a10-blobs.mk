@@ -55,11 +55,6 @@ PRODUCT_COPY_FILES += \
         $(DEVICE_PREBUILT)/etc/ppp/ip-down:system/etc/ppp/ip-down \
         $(DEVICE_PREBUILT)/etc/ppp/ip-up:system/etc/ppp/ip-up 
 
-# copy all others kernel modules under the "modules" directory to system/lib/modules
-PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/lib/modules && \
-  find device/allwinner/a10/prebuilt/lib/modules -name '*.ko' \
-  -printf '%p:system/lib/modules/%f ')
-
 PRODUCT_COPY_FILES += $(shell test -d $(DEVICE_PREBUILT)/etc/usb_modeswitch.d && \
 	find $(DEVICE_PREBUILT)/etc/usb_modeswitch.d -name '*' \
 	-printf '%p:system/etc/usb_modeswitch.d/%f ')
