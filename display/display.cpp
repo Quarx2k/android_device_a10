@@ -24,11 +24,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
-#ifdef HAVE_ANDROID_OS      // just want PAGE_SIZE define
 #include <asm/page.h>
-#else
-#include <sys/user.h>
-#endif
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/mman.h>
@@ -208,59 +204,7 @@ static int display_gethdmimaxmode(struct display_device_t *dev)
 
     return DISPLAY_TVFORMAT_720P_50HZ;    
 }      
-/*
-**********************************************************************************************************************
-*                                               display_gettvdacstatus
-*
-* author:           
-*
-* date:             2011-7-17:11:22:22
-*
-* Description:      get tv dac status 
-*
-* parameters:       
-*
-* return:           if success return GUI_RET_OK
-*                   if fail return the number of fail
-* modify history: 
-**********************************************************************************************************************
-*/
 
-static int display_gettvdacstatus(struct display_device_t *dev)
-{
-    struct display_context_t* ctx = (struct display_context_t*)dev;
-    int                       status;
-    
-    if(ctx)
-    {
-        if(ctx->mFD_disp)
-        {
-        	unsigned long args[4];
-        	
-        	args[0] = 0;
-            status = ioctl(ctx->mFD_disp,DISP_CMD_TV_GET_INTERFACE,args);
-            if(status == DISP_TV_YPBPR)
-            {
-                return  DISPLAY_TVDAC_YPBPR;
-            }
-            else if(status == DISP_TV_CVBS)
-            {
-                return  DISPLAY_TVDAC_CVBS;
-            }
-            else if(status == DISP_TV_SVIDEO)
-            {
-                return  DISPLAY_TVDAC_SVIDEO;
-            }
-            else
-            {
-                return  DISPLAY_TVDAC_NONE;
-            }
-        }
-    }
-
-    return DISPLAY_TVDAC_NONE;
-}
-      
 /*
 **********************************************************************************************************************
 *                                               display_getoutputtype
@@ -296,221 +240,16 @@ static int display_getoutputtype(struct display_device_t *dev,int displayno)
             {
                 return  DISPLAY_DEVICE_LCD;
             }
-            else if(ret == DISP_OUTPUT_TYPE_TV)
-            {
-                return  DISPLAY_DEVICE_TV;
-            }
             else if(ret == DISP_OUTPUT_TYPE_HDMI)
             {
                 return  DISPLAY_DEVICE_HDMI;
             }
-            else if(ret == DISP_OUTPUT_TYPE_VGA)
-            {
-                return  DISPLAY_DEVICE_VGA;
-            } 
         }
     }
 
     return  DISPLAY_DEVICE_NONE;
 }
-
-/*
-**********************************************************************************************************************
-*                                               display_gettvformat
-*
-* author:           
-*
-* date:             2011-7-17:11:22:29
-*
-* Description:      获取屏幕output type tvformat
-*
-* parameters:       
-*
-* return:           if success return GUI_RET_OK
-*                   if fail return the number of fail
-* modify history: 
-**********************************************************************************************************************
-*/
-
-static int display_gettvformat(struct display_device_t *dev,int displayno)
-{
-    struct display_context_t* ctx = (struct display_context_t*)dev;
-    int                       ret;
-
     
-    if(ctx)
-    {
-        if(ctx->mFD_disp)
-        {
-            unsigned long args[4];
-
-            args[0] = displayno;
-            ret = ioctl(ctx->mFD_disp,DISP_CMD_TV_GET_MODE,args);
-            if(ret == DISP_TV_MOD_480I)
-            {
-                return  DISPLAY_TVFORMAT_480I;
-            }
-            else if(ret == DISP_TV_MOD_576I)
-            {
-                return  DISPLAY_TVFORMAT_576I;
-            }
-            else if(ret == DISP_TV_MOD_480P)
-            {
-                return  DISPLAY_TVFORMAT_480P;
-            }
-            else if(ret == DISP_TV_MOD_576P)
-            {
-                return  DISPLAY_TVFORMAT_576P;
-            } 
-            else if(ret == DISP_TV_MOD_720P_50HZ)
-            {
-                return  DISPLAY_TVFORMAT_720P_50HZ;
-            }
-            else if(ret == DISP_TV_MOD_720P_60HZ)
-            {
-                return  DISPLAY_TVFORMAT_720P_60HZ;
-            }
-            else if(ret == DISP_TV_MOD_1080I_50HZ)
-            {
-                return  DISPLAY_TVFORMAT_1080I_50HZ;
-            } 
-            else if(ret == DISP_TV_MOD_1080I_60HZ)
-            {
-                return  DISPLAY_TVFORMAT_1080I_60HZ;
-            }
-            else if(ret == DISP_TV_MOD_1080P_24HZ)
-            {
-                return  DISPLAY_TVFORMAT_1080P_24HZ;
-            }
-            else if(ret == DISP_TV_MOD_1080P_50HZ)
-            {
-                return  DISPLAY_TVFORMAT_1080P_50HZ;
-            } 
-            else if(ret == DISP_TV_MOD_1080P_60HZ)
-            {
-                return  DISPLAY_TVFORMAT_1080P_60HZ;
-            }
-            else if(ret == DISP_TV_MOD_PAL)
-            {
-                return  DISPLAY_TVFORMAT_PAL;
-            }
-            else if(ret == DISP_TV_MOD_PAL_SVIDEO)
-            {
-                return  DISPLAY_TVFORMAT_PAL_SVIDEO;
-            }            
-            else if(ret == DISP_TV_MOD_NTSC)
-            {
-                return  DISPLAY_TVFORMAT_NTSC;
-            }
-            else if(ret == DISP_TV_MOD_NTSC_SVIDEO)
-            {
-                return  DISPLAY_TVFORMAT_NTSC_SVIDEO;
-            }              
-            else if(ret == DISP_TV_MOD_PAL_M)
-            {
-                return  DISPLAY_TVFORMAT_PAL_M;
-            }
-            else if(ret == DISP_TV_MOD_PAL_M_SVIDEO)
-            {
-                return  DISPLAY_TVFORMAT_PAL_M_SVIDEO;
-            }            
-            else if(ret == DISP_TV_MOD_PAL_NC)
-            {
-                return  DISPLAY_TVFORMAT_PAL_NC;
-            }
-            else if(ret == DISP_TV_MOD_PAL_NC_SVIDEO)
-            {
-                return  DISPLAY_TVFORMAT_PAL_NC_SVIDEO;
-            }             
-        }
-    }
-
-    return  DISPLAY_TVFORMAT_480I;
-}
-      
-/*
-**********************************************************************************************************************
-*                                               display_gettvtype
-*
-* author:           
-*
-* date:             2011-7-17:11:22:36
-*
-* Description:      display gettvtype 
-*
-* parameters:       
-*
-* return:           if success return GUI_RET_OK
-*                   if fail return the number of fail
-* modify history: 
-**********************************************************************************************************************
-*/
-
-static int  display_gettvtype(int  tvformat)
-{
-    switch(tvformat)
-    {
-        case  DISPLAY_TVFORMAT_480I:
-        case  DISPLAY_TVFORMAT_576I:
-        case  DISPLAY_TVFORMAT_480P:
-        case  DISPLAY_TVFORMAT_576P:
-        case  DISPLAY_TVFORMAT_720P_50HZ:
-        case  DISPLAY_TVFORMAT_720P_60HZ:
-        case  DISPLAY_TVFORMAT_1080I_50HZ:
-        case  DISPLAY_TVFORMAT_1080I_60HZ:
-        case  DISPLAY_TVFORMAT_1080P_50HZ:
-        case  DISPLAY_TVFORMAT_1080P_60HZ:
-        case  DISPLAY_TVFORMAT_1080P_24HZ:
-            return  DISPLAY_TVDAC_YPBPR;
-
-        case  DISPLAY_TVFORMAT_PAL:
-        case  DISPLAY_TVFORMAT_NTSC:
-        case  DISPLAY_TVFORMAT_PAL_M:
-        case  DISPLAY_TVFORMAT_PAL_NC:
-            return  DISPLAY_TVDAC_CVBS;
-
-        default:
-            return  DISPLAY_TVDAC_NONE;
-    }
-}
-      
-/*
-**********************************************************************************************************************
-*                                               display_gettvstatus
-*
-* author:           
-*
-* date:             2011-7-17:11:22:42
-*
-* Description:      根据TV Format来检查TV插入状态 
-*
-* parameters:       
-*
-* return:           if success return GUI_RET_OK
-*                   if fail return the number of fail
-* modify history: 
-**********************************************************************************************************************
-*/
-
-static int  display_gettvstatus(struct display_device_t *dev,int displayno)
-{
-    struct 	display_context_t* ctx = (struct display_context_t*)dev;
-    int  tvtype;
-    int  tvstatus;
-    
-    if(g_display[displayno].type == DISPLAY_DEVICE_TV)
-    {
-        tvstatus   = display_gettvdacstatus(dev);
-        tvtype     = display_gettvtype(g_display[displayno].tvformat);
-        if((tvstatus == tvtype)&&(tvstatus != DISPLAY_TVDAC_NONE))
-        {
-            return  DISPLAY_PLUGIN;
-        }
-    }
-
-    return  DISPLAY_PLUGOUT;
-}
-      
 /*
 **********************************************************************************************************************
 *                                               display_gethotplug
@@ -531,11 +270,7 @@ static int  display_gettvstatus(struct display_device_t *dev,int displayno)
 
 static int display_gethotplug(struct display_device_t *dev,int displayno)
 {
-    if(g_display[displayno].type == DISPLAY_DEVICE_TV)
-	{  
-        g_display[displayno].hotplug    = display_gettvstatus(dev,displayno);
-	}
-    else if(g_display[displayno].type == DISPLAY_DEVICE_HDMI)
+    if(g_display[displayno].type == DISPLAY_DEVICE_HDMI)
     {
         g_display[displayno].hotplug    = display_gethdmistatus(dev);
     }
@@ -983,7 +718,7 @@ static int display_pandisplay(struct display_device_t *dev,int fb_id,int bufno)
 
     return 0;
 }
-      
+  
 /*
 **********************************************************************************************************************
 *                                               get_tvformat
@@ -1058,9 +793,7 @@ static int get_pixelformat(int format)
     }       
     return -1;
 }  
-
-
-      
+         
 /*
 **********************************************************************************************************************
 *                                               display_getwidth
@@ -1162,18 +895,6 @@ static int  display_getvalidwidth(struct display_context_t* ctx,int displayno,in
 		case DISPLAY_TVFORMAT_PAL_NC:     				return 660;    	 
 		case DISPLAY_TVFORMAT_PAL_NC_SVIDEO:     		return 660;     	 
 		case DISPLAY_TVFORMAT_PAL_NC_CVBS_SVIDEO:  		return 660;  
-		case DISPLAY_VGA_H1680_V1050:					return 1680;   
-	    case DISPLAY_VGA_H1440_V900:                    return 1440;    
-	    case DISPLAY_VGA_H1360_V768:                    return 1360;    
-	    case DISPLAY_VGA_H1280_V1024:                   return 1280;   
-	    case DISPLAY_VGA_H1024_V768:                    return 1024;    
-	    case DISPLAY_VGA_H800_V600:                     return 800;     
-	    case DISPLAY_VGA_H640_V480:                     return 640;     
-	    case DISPLAY_VGA_H1440_V900_RB:                 return 1440; 
-	    case DISPLAY_VGA_H1680_V1050_RB:                return 1680;
-	    case DISPLAY_VGA_H1920_V1080_RB:                return 1920;
-	    case DISPLAY_VGA_H1920_V1080:                   return 1920;   
-	    case DISPLAY_VGA_H1280_V720:                    return 1280;    
 		default:										break;  
 	 
     }
@@ -1217,19 +938,8 @@ static int  display_getvalidwidth(struct display_context_t* ctx,int displayno,in
 		case DISPLAY_TVFORMAT_PAL_NC:     				return 720;    	 
 		case DISPLAY_TVFORMAT_PAL_NC_SVIDEO:     		return 720;     	 
 		case DISPLAY_TVFORMAT_PAL_NC_CVBS_SVIDEO:  		return 720;  
-		case DISPLAY_VGA_H1680_V1050:					return 1680;   
-	    case DISPLAY_VGA_H1440_V900:                    return 1440;    
-	    case DISPLAY_VGA_H1360_V768:                    return 1360;    
-	    case DISPLAY_VGA_H1280_V1024:                   return 1280;   
-	    case DISPLAY_VGA_H1024_V768:                    return 1024;    
-	    case DISPLAY_VGA_H800_V600:                     return 800;     
-	    case DISPLAY_VGA_H640_V480:                     return 640;     
-	    case DISPLAY_VGA_H1440_V900_RB:                 return 1440; 
-	    case DISPLAY_VGA_H1680_V1050_RB:                return 1680;
-	    case DISPLAY_VGA_H1920_V1080_RB:                return 1920;
-	    case DISPLAY_VGA_H1920_V1080:                   return 1920;   
-	    case DISPLAY_VGA_H1280_V720:                    return 1280;    
-		default:										break;  
+
+		default: break;  
 	 
     }
 
@@ -1291,17 +1001,6 @@ static int  display_getheight(struct display_context_t* ctx,int displayno,int fo
 		case DISPLAY_TVFORMAT_PAL_NC_SVIDEO:     		return 576;     	 
 		case DISPLAY_TVFORMAT_PAL_NC_CVBS_SVIDEO:  		return 576;  
 		case DISPLAY_VGA_H1680_V1050:					return 1050;   
-	    case DISPLAY_VGA_H1440_V900:                    return 900;    
-	    case DISPLAY_VGA_H1360_V768:                    return 768;    
-	    case DISPLAY_VGA_H1280_V1024:                   return 1024;   
-	    case DISPLAY_VGA_H1024_V768:                    return 768;    
-	    case DISPLAY_VGA_H800_V600:                     return 600;     
-	    case DISPLAY_VGA_H640_V480:                     return 480;     
-	    case DISPLAY_VGA_H1440_V900_RB:                 return 900;
-	    case DISPLAY_VGA_H1680_V1050_RB:                return 1050;
-	    case DISPLAY_VGA_H1920_V1080_RB:                return 1080;
-	    case DISPLAY_VGA_H1920_V1080:                   return 1080;   
-	    case DISPLAY_VGA_H1280_V720:                    return 720;    
 		default:										break;  
 	 
     }  
@@ -1346,18 +1045,7 @@ static int  display_getvalidheight(struct display_context_t* ctx,int displayno,i
 		case DISPLAY_TVFORMAT_PAL_NC:     				return 536;    	 
 		case DISPLAY_TVFORMAT_PAL_NC_SVIDEO:     		return 536;     	 
 		case DISPLAY_TVFORMAT_PAL_NC_CVBS_SVIDEO:  		return 536;  
-		case DISPLAY_VGA_H1680_V1050:					return 1050;   
-	    case DISPLAY_VGA_H1440_V900:                    return 900;    
-	    case DISPLAY_VGA_H1360_V768:                    return 768;    
-	    case DISPLAY_VGA_H1280_V1024:                   return 1024;   
-	    case DISPLAY_VGA_H1024_V768:                    return 768;    
-	    case DISPLAY_VGA_H800_V600:                     return 600;     
-	    case DISPLAY_VGA_H640_V480:                     return 480;     
-	    case DISPLAY_VGA_H1440_V900_RB:                 return 900;
-	    case DISPLAY_VGA_H1680_V1050_RB:                return 1050;
-	    case DISPLAY_VGA_H1920_V1080_RB:                return 1080;
-	    case DISPLAY_VGA_H1920_V1080:                   return 1080;   
-	    case DISPLAY_VGA_H1280_V720:                    return 720;    
+ 
 		default:										break;  
 	 
     }  
@@ -1401,18 +1089,6 @@ static int  display_getvalidheight(struct display_context_t* ctx,int displayno,i
 		case DISPLAY_TVFORMAT_PAL_NC:     				return 576;    	 
 		case DISPLAY_TVFORMAT_PAL_NC_SVIDEO:     		return 576;     	 
 		case DISPLAY_TVFORMAT_PAL_NC_CVBS_SVIDEO:  		return 576;  
-		case DISPLAY_VGA_H1680_V1050:					return 1050;   
-	    case DISPLAY_VGA_H1440_V900:                    return 900;    
-	    case DISPLAY_VGA_H1360_V768:                    return 768;    
-	    case DISPLAY_VGA_H1280_V1024:                   return 1024;   
-	    case DISPLAY_VGA_H1024_V768:                    return 768;    
-	    case DISPLAY_VGA_H800_V600:                     return 600;     
-	    case DISPLAY_VGA_H640_V480:                     return 480;     
-	    case DISPLAY_VGA_H1440_V900_RB:                 return 900;
-	    case DISPLAY_VGA_H1680_V1050_RB:                return 1050;
-	    case DISPLAY_VGA_H1920_V1080_RB:                return 1080;
-	    case DISPLAY_VGA_H1920_V1080:                   return 1080;   
-	    case DISPLAY_VGA_H1280_V720:                    return 720;    
 		default:										break;  
 	 
     }  
@@ -1655,7 +1331,7 @@ static int  display_requestfb(struct display_context_t* ctx,int fb_id,struct dis
 		scn_rect.width		= displaypara->valid_width;
 		scn_rect.height		= displaypara->valid_height;
 		
-		LOGD("scn_rect.width = %d,scn_rect.height = %d,screen = %d,fb_layer_hdl = %d,fb_id = %d\n",scn_rect.width,scn_rect.height,screen,fb_layer_hdl,fb_id);
+		//LOGD("scn_rect.width = %d,scn_rect.height = %d,screen = %d,fb_layer_hdl = %d,fb_id = %d\n",scn_rect.width,scn_rect.height,screen,fb_layer_hdl,fb_id);
 		
 		arg[0] 				= screen;
 	    arg[1] 				= fb_layer_hdl;
@@ -1764,7 +1440,7 @@ static int  display_setfbrect(struct display_context_t* ctx,int displayno,int fb
 	scn_rect.width			= width;
 	scn_rect.height			= height;
 	
-	LOGD("scn_rect.width = %d,scn_rect.height = %d,screen = %d,fb_layer_hdl = %d,fb_id = %d\n",scn_rect.width,scn_rect.height,displayno,fb_layer_hdl,fb_id);
+	//LOGD("scn_rect.width = %d,scn_rect.height = %d,screen = %d,fb_layer_hdl = %d,fb_id = %d\n",scn_rect.width,scn_rect.height,displayno,fb_layer_hdl,fb_id);
 	
 	arg[0] 					= displayno;
     arg[1] 					= fb_layer_hdl;
@@ -1806,17 +1482,9 @@ static int  display_on(struct display_context_t* ctx,int displayno,int outputtyp
 	{
 		ret = ioctl(ctx->mFD_disp,DISP_CMD_LCD_ON,(unsigned long)args);
 	}
-	else if(outputtype == DISPLAY_DEVICE_TV)
-	{
-		ret = ioctl(ctx->mFD_disp,DISP_CMD_TV_ON,(unsigned long)args);
-	}
 	else if(outputtype == DISPLAY_DEVICE_HDMI)
 	{
 		ret = ioctl(ctx->mFD_disp,DISP_CMD_HDMI_ON,(unsigned long)args);
-	}
-	else if(outputtype == DISPLAY_DEVICE_VGA)
-	{
-		ret = ioctl(ctx->mFD_disp,DISP_CMD_VGA_ON,(unsigned long)args);
 	}
 	
 	return   ret;
@@ -1853,19 +1521,10 @@ static int  display_off(struct display_context_t* ctx,int displayno,int outputty
 	{
 		ret = ioctl(ctx->mFD_disp,DISP_CMD_LCD_OFF,(unsigned long)args);
 	}
-	else if(outputtype == DISPLAY_DEVICE_TV)
-	{
-		ret = ioctl(ctx->mFD_disp,DISP_CMD_TV_OFF,(unsigned long)args);
-	}
 	else if(outputtype == DISPLAY_DEVICE_HDMI)
 	{
 		ret = ioctl(ctx->mFD_disp,DISP_CMD_HDMI_OFF,(unsigned long)args);
 	}
-	else if(outputtype == DISPLAY_DEVICE_VGA)
-	{
-		ret = ioctl(ctx->mFD_disp,DISP_CMD_VGA_OFF,(unsigned long)args);
-	}
-	
 	return   ret;
 }
       
@@ -2016,26 +1675,12 @@ static int  display_output(struct display_context_t* ctx, int displayno, int out
     {
         ret = ioctl(ctx->mFD_disp,DISP_CMD_LCD_ON,(unsigned long)arg);
     }
-    else if(out_type == DISPLAY_DEVICE_TV)
-    {
-        arg[1] = (__disp_tv_mode_t)mode;
-        ret = ioctl(ctx->mFD_disp,DISP_CMD_TV_SET_MODE,(unsigned long)arg);
-
-        ret = ioctl(ctx->mFD_disp,DISP_CMD_TV_ON,(unsigned long)arg);
-    }
     else if(out_type == DISPLAY_DEVICE_HDMI)
     {
         arg[1] = (__disp_tv_mode_t)mode;
         ret = ioctl(ctx->mFD_disp,DISP_CMD_HDMI_SET_MODE,(unsigned long)arg);
 
         ret = ioctl(ctx->mFD_disp,DISP_CMD_HDMI_ON,(unsigned long)arg);
-    }
-    else if(out_type == DISPLAY_DEVICE_VGA)
-    {
-        arg[1] = (__disp_vga_mode_t)mode;
-        ret = ioctl(ctx->mFD_disp,DISP_CMD_VGA_SET_MODE,(unsigned long)arg);
-
-        ret = ioctl(ctx->mFD_disp,DISP_CMD_VGA_ON,(unsigned long)arg);
     }
     
     return   ret;
@@ -2354,34 +1999,6 @@ static int display_dualsamechangemode(struct display_device_t *dev,int displayno
         {
             display_off(ctx,displayno,g_display[displayno].type);
 
-#if 0           
-        	display_releasefb(ctx,g_display[displayno].fb_id);
-
-            display_getminsize(ctx,&minwidth,&minheight);
-            
-        	para.fb_mode                = (__fb_mode_t)g_display[displayno].fbmode;
-            para.format                 = g_display[displayno].format;
-            para.width                  = minwidth;
-            para.height                 = minheight;
-            if(value0 != DISPLAY_DEVICE_LCD)
-            {
-                para.output_height      = display_getheight(ctx,displayno,value1);
-                para.output_width       = display_getwidth(ctx,displayno,value1);
-                para.valid_height		= display_getvalidheight(ctx,displayno,value1);
-                para.valid_width		= display_getvalidwidth(ctx,displayno,value1);
-            }
-            else
-            {
-                para.output_height      = display_getheight(ctx,displayno,DISPLAY_DEFAULT);
-                para.output_width       = display_getwidth(ctx,displayno,DISPLAY_DEFAULT);
-                para.valid_height       = para.output_height;
-                para.valid_width        = para.output_width;
-            }
-            para.bufno                  = 3;
-            para.layer_mode             = DISP_LAYER_WORK_MODE_SCALER;
-            
-            display_requestfb(ctx,g_display[displayno].fb_id,&para);
-#else
 			if(value0 != DISPLAY_DEVICE_LCD)
             {
                 para.output_height      = display_getheight(ctx,displayno,value1);
@@ -2398,7 +2015,7 @@ static int display_dualsamechangemode(struct display_device_t *dev,int displayno
             }
             
             display_setfbrect(ctx,g_display[displayno].fb_id,displayno,(para.output_width - para.valid_width)>>1,(para.output_height - para.valid_height)>>1,para.valid_width,para.valid_height);
-#endif
+
             g_display[displayno].tvformat       = value1;
             g_display[displayno].width          = para.output_width;
             g_display[displayno].height         = para.output_height;
@@ -3972,7 +3589,6 @@ static int open_display(const struct hw_module_t* module, const char* name,
     ctx->device.setdisplaymode      = display_setmode;
     ctx->device.setdisplayparameter = display_setparameter;
     ctx->device.gethdmistatus       = display_gethdmistatus;
-    ctx->device.gettvdacstatus      = display_gettvdacstatus;
     ctx->device.opendisplay         = display_opendev;
     ctx->device.closedisplay        = display_closedev;
     ctx->device.getdisplayparameter = display_getparameter;
