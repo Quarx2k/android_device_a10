@@ -70,6 +70,24 @@ status_t V4L2CameraDevice::Initialize()
 	return V4L2Camera::Initialize();
 }
 
+static bool
+deviceCardMatches(const char *matchCard)
+{
+   char buffer[8192];
+   bool ret;
+   FILE *fd = fopen( "/proc/modules", "r" );
+
+    if (fd) 
+    {
+       int l  = fread(buffer, 1, sizeof(buffer)-1, fd);
+       buffer[l] = 0;
+       if (strstr(buffer, matchCard)) {
+           ret = strstr(buffer, matchCard);
+        }
+    }
+
+    return ret;
+}
 
 /****************************************************************************
  * V4L2Camera device abstract interface implementation.
@@ -199,7 +217,7 @@ status_t V4L2CameraDevice::startDevice(int width,
 	mPreviewAfter = 1000000 / getFrameRate();
 
 	// front camera do not use hw preview, SW preview will mirror it
-	if (mCameraFacing == CAMERA_FACING_FRONT)
+	if (mCameraFacing == CAMERA_FACING_FRONT && (!deviceCardMatches("gt2005")))
 	{
 		LOGD("do not us hw preview");
 		mPreviewUseHW = false;
