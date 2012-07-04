@@ -130,10 +130,7 @@ status_t V4L2CameraDevice::connectDevice()
 		mPreviewBuffer.buf_phy_addr[i] |= 0x40000000;
 		LOGD("preview buffer: index: %d, vir: %x, phy: %x, len: %x", 
 				i, mPreviewBuffer.buf_vir_addr[i], mPreviewBuffer.buf_phy_addr[i], buffer_len);
-
-		memset((void*)mPreviewBuffer.buf_vir_addr[i], 0x10, MAX_PREVIEW_WIDTH * MAX_PREVIEW_HEIGHT);
-		memset((void*)mPreviewBuffer.buf_vir_addr[i] + MAX_PREVIEW_WIDTH * MAX_PREVIEW_HEIGHT, 
-			0x80, MAX_PREVIEW_WIDTH * MAX_PREVIEW_HEIGHT / 2);
+	//	memset((void*)mPreviewBuffer.buf_vir_addr[i], 0x10, MAX_PREVIEW_WIDTH * MAX_PREVIEW_HEIGHT /2);
 	}
 
     /* There is no device to connect to. */
@@ -433,6 +430,7 @@ int V4L2CameraDevice::openCameraDev()
 {
 	// open V4L2 device
 	mCamFd = open(mDeviceName, O_RDWR | O_NONBLOCK, 0);
+
 	if (mCamFd == -1) 
 	{ 
         LOGE("ERROR opening V4L interface: %s", strerror(errno)); 
@@ -454,6 +452,7 @@ int V4L2CameraDevice::openCameraDev()
 	int ret = -1;
 	struct v4l2_capability cap; 
 	ret = ioctl (mCamFd, VIDIOC_QUERYCAP, &cap); 
+
     if (ret < 0) 
 	{ 
         LOGE("Error opening device: unable to query device."); 
@@ -479,10 +478,10 @@ void V4L2CameraDevice::closeCameraDev()
 {
 	F_LOG;
 	
-	if (mCamFd != NULL)
+	if (mCamFd != 0)
 	{
 		close(mCamFd);
-		mCamFd = NULL;
+		mCamFd = 0;
 	}
 }
 

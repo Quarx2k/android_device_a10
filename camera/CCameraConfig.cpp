@@ -18,12 +18,12 @@
 	memcpy(mUsed##key, "0\0", 2);										\
 	mSupport##key##Value = 0;											\
 	mDefault##key##Value = 0;											\
-	if (readKey(kUSED_##KEY, mUsed##key))								\
+	if (readKey((char*)kUSED_##KEY, mUsed##key))								\
 	{                                                                   \
 		if (usedKey(mUsed##key))                                        \
 		{                                                               \
-			READ_KEY_VALUE(kSUPPORT_##KEY, mSupport##key##Value)		\
-			READ_KEY_VALUE(kDEFAULT_##KEY, mDefault##key##Value)	    \
+			READ_KEY_VALUE((char*)kSUPPORT_##KEY, mSupport##key##Value)		\
+			READ_KEY_VALUE((char*)kDEFAULT_##KEY, mDefault##key##Value)	    \
 		}																\
 		else                                                            \
 		{                                                               \
@@ -82,7 +82,7 @@ CCameraConfig::CCameraConfig(int id)
 ,mDeviceID(0)
 {
 	mhKeyFile = ::fopen(CAMERA_KEY_CONFIG_PATH, "rb");
-	if (mhKeyFile <= 0)
+	if (!mhKeyFile)
 	{
 		LOGV("open file %s failed", CAMERA_KEY_CONFIG_PATH);
 		return;
@@ -94,7 +94,7 @@ CCameraConfig::CCameraConfig(int id)
 
 	// get number of camera
 	char numberOfCamera[2];
-	if(readKey(kNUMBER_OF_CAMERA, numberOfCamera))
+	if(readKey((char*)kNUMBER_OF_CAMERA, numberOfCamera))
 	{
 		mNumberOfCamera = atoi(numberOfCamera);
 		LOGV("read number: %d", mNumberOfCamera);
@@ -102,7 +102,7 @@ CCameraConfig::CCameraConfig(int id)
 
 	// get camera facing
 	char cameraFacing[2];
-	if(readKey(kCAMERA_FACING, cameraFacing))
+	if(readKey((char*)kCAMERA_FACING, cameraFacing))
 	{
 		mCameraFacing = atoi(cameraFacing);
 		LOGV("camera facing %s", (mCameraFacing == 0) ? "back" : "front");
@@ -110,14 +110,14 @@ CCameraConfig::CCameraConfig(int id)
 
 	// get camera device driver
 	memset(mCameraDevice, 0, sizeof(mCameraDevice));
-	if(readKey(kCAMERA_DEVICE, mCameraDevice))
+	if(readKey((char*)kCAMERA_DEVICE, mCameraDevice))
 	{
 		LOGV("camera device %s", mCameraDevice);
 	}
 
 	// get device id
 	char deviceID[2];
-	if(readKey(kDEVICE_ID, deviceID))
+	if(readKey((char*)kDEVICE_ID, deviceID))
 	{
 		mDeviceID = atoi(deviceID);
 		LOGV("camera device id %d", mDeviceID);
@@ -155,9 +155,9 @@ void CCameraConfig::initParameters()
 		return ;
 	}
 
-	INIT_PARAMETER(PREVIEW_SIZE, PreviewSize)
+	INIT_PARAMETER(PREVIEW_SIZE, PreviewSize);
 	INIT_PARAMETER(PICTURE_SIZE, PictureSize)
-	INIT_PARAMETER(FLASH_MODE, FlashMode)
+	INIT_PARAMETER(FLASH_MODE, FlashMode);
 	INIT_PARAMETER(COLOR_EFFECT, ColorEffect)
 	INIT_PARAMETER(FRAME_RATE, FrameRate)
 	INIT_PARAMETER(FOCUS_MODE, FocusMode)
@@ -170,14 +170,14 @@ void CCameraConfig::initParameters()
 	memset(mMinExposureCompensation, 0, 4);
 	memset(mStepExposureCompensation, 0, 4);
 	memset(mDefaultExposureCompensation, 0, 4);
-	if (readKey(kUSED_EXPOSURE_COMPENSATION, mUsedExposureCompensation))	
+	if (readKey((char*)kUSED_EXPOSURE_COMPENSATION, mUsedExposureCompensation))	
 	{
 		if (usedKey(mUsedExposureCompensation)) 
 		{
-			readKey(kMIN_EXPOSURE_COMPENSATION, mMinExposureCompensation);
-			readKey(kMAX_EXPOSURE_COMPENSATION, mMaxExposureCompensation);
-			readKey(kSTEP_EXPOSURE_COMPENSATION, mStepExposureCompensation);
-			readKey(kDEFAULT_EXPOSURE_COMPENSATION, mDefaultExposureCompensation);
+			readKey((char*)kMIN_EXPOSURE_COMPENSATION, mMinExposureCompensation);
+			readKey((char*)kMAX_EXPOSURE_COMPENSATION, mMaxExposureCompensation);
+			readKey((char*)kSTEP_EXPOSURE_COMPENSATION, mStepExposureCompensation);
+			readKey((char*)kDEFAULT_EXPOSURE_COMPENSATION, mDefaultExposureCompensation);
 		}
 		else
 		{
@@ -192,15 +192,15 @@ void CCameraConfig::initParameters()
 	memset(mZoomRatios, 0, KEY_LENGTH);
 	memset(mMaxZoom, 0, 4);
 	memset(mDefaultZoom, 0, 4);
-	if (readKey(kUSED_ZOOM, mUsedZoom))	
+	if (readKey((char*)kUSED_ZOOM, mUsedZoom))	
 	{
 		if (usedKey(mUsedZoom)) 
 		{
-			readKey(kZOOM_SUPPORTED, mZoomSupported);
-			readKey(kSMOOTH_ZOOM_SUPPORTED, mSmoothZoomSupported);
-			readKey(kZOOM_RATIOS, mZoomRatios);
-			readKey(kMAX_ZOOM, mMaxZoom);
-			readKey(kDEFAULT_ZOOM, mDefaultZoom);
+			readKey((char*)kZOOM_SUPPORTED, mZoomSupported);
+			readKey((char*)kSMOOTH_ZOOM_SUPPORTED, mSmoothZoomSupported);
+			readKey((char*)kZOOM_RATIOS, mZoomRatios);
+			readKey((char*)kMAX_ZOOM, mMaxZoom);
+			readKey((char*)kDEFAULT_ZOOM, mDefaultZoom);
 		}
 		else
 		{
@@ -257,7 +257,7 @@ void CCameraConfig::getValue(char *line, char *value)
 	}
 
 	char *pval = ptemp;
-	char *seps = " \n\r\t";
+	const char *seps = " \n\r\t";
 	int offset = 0;
 	pval = strtok(pval, seps);
 	while (pval != NULL)

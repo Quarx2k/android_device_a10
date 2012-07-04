@@ -97,10 +97,10 @@ protected:
 public:
 
 	virtual status_t Initialize();
-	int setV4L2DeviceName(char * pname);			// set device node name, such as "/dev/video0"
-	int setV4L2DeviceID(int device_id);				// set different device id on the same CSI
-	int tryFmtSize(int * width, int * height);		// check if driver support this size
-	int getFrameRate();								// get v4l2 device current frame rate
+	int setV4L2DeviceName(char * pname); // set device node name, such as "/dev/video0"
+	int setV4L2DeviceID(int device_id); // set different device id on the same CSI
+	int tryFmtSize(int * width, int * height); // check if driver support this size
+	int getFrameRate(); // get v4l2 device current frame rate
 	int setCameraFacing(int facing);
 
 	int setImageEffect(int effect);
@@ -108,11 +108,11 @@ public:
 	int setExposure(int exp);
 	int setFlashMode(int mode);
 	
-	void releasePreviewFrame(int index);			// Q buffer for encoder
+	void releasePreviewFrame(int index); // Q buffer for encoder
 	
 	inline void prepareTakePhoto(bool prepare)
 	{
-		mPrepareTakePhoto = prepare;
+	  mPrepareTakePhoto = prepare;
 	}
 	
 	void waitPrepareTakePhoto();
@@ -138,46 +138,48 @@ private:
 	bool isPreviewTime();
 
 private:
+
 	// -------------------------------------------------------------------------
 	// private data
 	// -------------------------------------------------------------------------
 	
 	// camera id
-	int								mCameraID;
+	int mCameraID;
 	
 	// v4l2 device handle
-	int								mCamFd; 
+	int mCamFd; 
 
 	// device node name
-	char							mDeviceName[16];
+	char mDeviceName[16];
 
 	// device id on the CSI, used when two camera device shared with one CSI
-	int								mDeviceID;
-
-	// camera facing back / front
-	int								mCameraFacing;
+	int mDeviceID;
 
 	typedef struct v4l2_mem_map_t{
 		void *	mem[NB_BUFFER]; 
 		int 	length;
-	}v4l2_mem_map_t;
-	v4l2_mem_map_t					mMapMem;
+	}
+
+	v4l2_mem_map_t;
+	v4l2_mem_map_t mMapMem;
 
 	// actually buffer counts
-	int								mBufferCnt;
+	int mBufferCnt;
+
+	// camera facing back / front
+	int mCameraFacing;
 
 	// HW preview failed, should use SW preview
-	bool							mPreviewUseHW;
+	bool mPreviewUseHW;
 	
 	/* Timestamp (abs. microseconds) when last frame has been pushed to the
-     * preview window. */
-    uint64_t                        mLastPreviewed;
+	* preview window. */
+	uint64_t  mLastPreviewed;
 
-    /* Preview frequency in microseconds. */
-    uint32_t                        mPreviewAfter;
-
-	// 
-	bool							mPrepareTakePhoto;
+	/* Preview frequency in microseconds. */
+	uint32_t mPreviewAfter;
+	int mPreviewBufferID;
+	bool mPrepareTakePhoto;
 
 	typedef struct bufferManagerQ_t
 	{
@@ -186,11 +188,10 @@ private:
 		int			write_id;
 		int			read_id;
 		int			buf_unused;
-	}bufferManagerQ_t;
+	}
 
+	bufferManagerQ_t;
 	bufferManagerQ_t				mPreviewBuffer;
-	int								mPreviewBufferID;
-
 	pthread_mutex_t					mMutexTakePhoto;
 	pthread_cond_t					mCondTakePhoto;
 };
