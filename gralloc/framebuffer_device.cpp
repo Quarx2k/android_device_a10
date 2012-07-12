@@ -86,7 +86,7 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
 #define S3CFB_SET_VSYNC_INT	_IOW('F', 206, unsigned int)
 		if (ioctl(m->framebuffer->fd, FBIOPAN_DISPLAY, &m->info) == -1) 
 		{
-			LOGE("FBIOPAN_DISPLAY failed");
+			ALOGE("FBIOPAN_DISPLAY failed");
 			m->base.unlock(&m->base, buffer); 
 			return 0;
 		}
@@ -95,16 +95,17 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
                 interrupt = 1;
                 if(ioctl(m->framebuffer->fd, S3CFB_SET_VSYNC_INT, &interrupt) < 0) 
 		{
-                    LOGE("S3CFB_SET_VSYNC_INT enable failed");
+                    ALOGE("S3CFB_SET_VSYNC_INT enable failed");
                     return 0;
                 }
                 // wait for VSYNC
 #ifdef MALI_VSYNC_EVENT_REPORT_ENABLE
 		gralloc_mali_vsync_report(MALI_VSYNC_EVENT_BEGIN_WAIT);
 #endif
-                if(ioctl(m->framebuffer->fd, FBIO_WAITFORVSYNC, 0) < 0) 
+		int crtc = 0;
+                if(ioctl(m->framebuffer->fd, FBIO_WAITFORVSYNC, &crtc) < 0)
 		{
-                    LOGE("FBIO_WAITFORVSYNC failed");
+                    ALOGE("FBIO_WAITFORVSYNC failed");
 #ifdef MALI_VSYNC_EVENT_REPORT_ENABLE
 			gralloc_mali_vsync_report(MALI_VSYNC_EVENT_END_WAIT);
 #endif
@@ -117,7 +118,7 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
                 interrupt = 0;
                 if(ioctl(m->framebuffer->fd, S3CFB_SET_VSYNC_INT, &interrupt) < 0) 
 		{
-                    LOGE("S3CFB_SET_VSYNC_INT disable failed");
+                    ALOGE("S3CFB_SET_VSYNC_INT disable failed");
                     return 0;
                 }
 #else 
@@ -127,7 +128,7 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
 #endif
 		if (ioctl(m->framebuffer->fd, FBIOPUT_VSCREENINFO, &m->info) == -1) 
 		{
-			LOGE("FBIOPUT_VSCREENINFO failed");
+			ALOGE("FBIOPUT_VSCREENINFO failed");
 #ifdef MALI_VSYNC_EVENT_REPORT_ENABLE
 			gralloc_mali_vsync_report(MALI_VSYNC_EVENT_END_WAIT);
 #endif
@@ -248,7 +249,7 @@ int init_frame_buffer_locked(struct private_module_t* module)
 	{
 		info.yres_virtual = info.yres;
 		flags &= ~PAGE_FLIP;
-		LOGW("FBIOPUT_VSCREENINFO failed, page flipping not supported");
+		ALOGW("FBIOPUT_VSCREENINFO failed, page flipping not supported");
 	}
 
 	if (info.yres_virtual < info.yres * 2)
@@ -256,7 +257,7 @@ int init_frame_buffer_locked(struct private_module_t* module)
 		// we need at least 2 for page-flipping
 		info.yres_virtual = info.yres;
 		flags &= ~PAGE_FLIP;
-		LOGW("page flipping not supported (yres_virtual=%d, requested=%d)", info.yres_virtual, info.yres*2);
+		ALOGW("page flipping not supported (yres_virtual=%d, requested=%d)", info.yres_virtual, info.yres*2);
 	}
 
 	if (ioctl(fd, FBIOGET_VSCREENINFO, &info) == -1)
@@ -264,12 +265,20 @@ int init_frame_buffer_locked(struct private_module_t* module)
 		return -errno;
 	}
 
-	int refreshRate = 1000000000000000LLU /
-	(
-		uint64_t( info.upper_margin + info.lower_margin + info.yres )
-		* ( info.left_margin  + info.right_margin + info.xres )
-		* info.pixclock
-	);
+	int refreshRate = 0;
+	if ( info.pixclock > 0 )
+	{
+		refreshRate = 1000000000000000LLU /
+		(
+			uint64_t( info.upper_margin + info.lower_margin + info.yres )
+			* ( info.left_margin  + info.right_margin + info.xres )
+			* info.pixclock
+		);
+	}
+	else
+	{
+		ALOGW("fbdev pixclock is zero");
+	}
 
 	if (refreshRate == 0)
 	{
@@ -288,7 +297,7 @@ int init_frame_buffer_locked(struct private_module_t* module)
 	float ydpi = (info.yres * 25.4f) / info.height;
 	float fps  = refreshRate / 1000.0f;
 
-	LOGI("using (fd=%d)\n"
+	ALOGI("using (fd=%d)\n"
 	     "id           = %s\n"
 	     "xres         = %d px\n"
 	     "yres         = %d px\n"
@@ -309,7 +318,7 @@ int init_frame_buffer_locked(struct private_module_t* module)
 	     info.green.offset, info.green.length,
 	     info.blue.offset, info.blue.length);
 
-	LOGI("width        = %d mm (%f dpi)\n"
+	ALOGI("width        = %d mm (%f dpi)\n"
 	     "height       = %d mm (%f dpi)\n"
 	     "refresh rate = %.2f Hz\n",
 	     info.width,  xdpi,
@@ -340,7 +349,7 @@ int init_frame_buffer_locked(struct private_module_t* module)
 	void* vaddr = mmap(0, fbSize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 	if (vaddr == MAP_FAILED) 
 	{
-		LOGE("Error mapping the framebuffer (%s)", strerror(errno));
+		ALOGE("Error mapping the framebuffer (%s)", strerror(errno));
 		return -errno;
 	}
 
@@ -377,12 +386,9 @@ static int fb_close(struct hw_device_t *device)
 
 int compositionComplete(struct framebuffer_device_t* dev)
 {
-	unsigned char pixels[4];
-	/* By doing a readpixel here we force the GL driver to start rendering
-	   all the drawcalls up to this point, and to wait for the rendering to be complete.
-	   Readpixel() also reads a dummy pixel, but this is not used. We only use this
-	   function here to flush the render pipeline. */
-	glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	/* By doing a finish here we force the GL driver to start rendering
+	   all the drawcalls up to this point, and to wait for the rendering to be complete.*/
+	glFinish();
 	/* The rendering of the backbuffer is now completed.
 	   When SurfaceFlinger later does a call to eglSwapBuffer(), the swap will be done
 	   synchronously in the same thread, and not asynchronoulsy in a background thread later.

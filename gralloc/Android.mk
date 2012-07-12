@@ -23,18 +23,21 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
+
+LOCAL_MODULE := gralloc.$(TARGET_BOARD_PLATFORM)
+LOCAL_MODULE_TAGS := optional
+
 LOCAL_SHARED_LIBRARIES := liblog libcutils libMali libGLESv1_CM libUMP
 
 # Include the UMP header files
 LOCAL_C_INCLUDES := device/allwinner/a10/include
+
+LOCAL_CFLAGS:= -DLOG_TAG=\"gralloc\" -DGRALLOC_32_BITS -DSTANDARD_LINUX_SCREEN
 
 LOCAL_SRC_FILES := \
 	gralloc_module.cpp \
 	alloc_device.cpp \
 	framebuffer_device.cpp
 
-LOCAL_MODULE := gralloc.$(TARGET_BOARD_PLATFORM)
-LOCAL_MODULE_TAGS := optional
-LOCAL_CFLAGS:= -DLOG_TAG=\"gralloc\" -DGRALLOC_32_BITS -DSTANDARD_LINUX_SCREEN
 #LOCAL_CFLAGS+= -DMALI_VSYNC_EVENT_REPORT_ENABLE
 include $(BUILD_SHARED_LIBRARY)

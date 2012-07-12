@@ -33,6 +33,8 @@
 #include <ump/ump.h>
 #include <ump/ump_ref_drv.h>
 
+#define GRALLOC_ALIGN( value, base ) (((value) + ((base) - 1)) & ~((base) - 1))
+
 #if GRALLOC_SIMULATE_FAILURES
 #include <cutils/properties.h>
 
@@ -68,14 +70,14 @@ static int __ump_alloc_should_fail()
 	/* failure simulation is enabled by setting the first_fail property to non-zero */
 	if (first_fail > 0)
 	{
-		LOGI("iteration %u (fail=%u, period=%u)\n", call_count, first_fail, fail_period);
+		ALOGI("iteration %u (fail=%u, period=%u)\n", call_count, first_fail, fail_period);
 		
 		fail = 	(call_count == first_fail) ||
 				(call_count > first_fail && fail_period > 0 && 0 == (call_count - first_fail) % fail_period);
 		
 		if (fail) 
 		{
-			LOGE("failed ump_ref_drv_allocate on iteration #%d\n", call_count);
+			ALOGE("failed ump_ref_drv_allocate on iteration #%d\n", call_count);
 		}
 	}
 	return fail;
@@ -127,26 +129,26 @@ static int gralloc_alloc_buffer(alloc_device_t* dev, size_t size, int usage, buf
 				}
 				else
 				{
-					LOGE("gralloc_alloc_buffer() failed to allocate handle");
+					ALOGE("gralloc_alloc_buffer() failed to allocate handle");
 				}
 			}
 			else
 			{
-				LOGE("gralloc_alloc_buffer() failed to retrieve valid secure id");
+				ALOGE("gralloc_alloc_buffer() failed to retrieve valid secure id");
 			}
 			
 			ump_mapped_pointer_release(ump_mem_handle);
 		}
 		else
 		{
-			LOGE("gralloc_alloc_buffer() failed to map UMP memory");
+			ALOGE("gralloc_alloc_buffer() failed to map UMP memory");
 		}
 
 		ump_reference_release(ump_mem_handle);
 	}
 	else
 	{
-		LOGE("gralloc_alloc_buffer() failed to allocate UMP memory");
+		ALOGE("gralloc_alloc_buffer() failed to allocate UMP memory");
 	}
 
 	return -1;
@@ -176,7 +178,7 @@ static int gralloc_alloc_framebuffer_locked(alloc_device_t* dev, size_t size, in
 		// we return a regular buffer which will be memcpy'ed to the main
 		// screen when post is called.
 		int newUsage = (usage & ~GRALLOC_USAGE_HW_FB) | GRALLOC_USAGE_HW_2D;
-		LOGE("fallback to single buffering");
+		ALOGE("fallback to single buffering");
 		return gralloc_alloc_buffer(dev, bufferSize, newUsage, pHandle);
 	}
 
@@ -230,8 +232,9 @@ static int alloc_device_alloc(alloc_device_t* dev, int w, int h, int format, int
 		{
 			case HAL_PIXEL_FORMAT_YCrCb_420_SP:
 			case HAL_PIXEL_FORMAT_YV12:
-				stride = (w + 15) & ~15;
-				size = h * (stride + stride/2);
+				stride = GRALLOC_ALIGN(w, 16);
+				size = h * (stride + GRALLOC_ALIGN(stride/2,16));
+
 				break;
 			default:
 				return -EINVAL;
@@ -335,7 +338,7 @@ int alloc_device_open(hw_module_t const* module, const char* name, hw_device_t**
 	ump_result ump_res = ump_open();
 	if (UMP_OK != ump_res)
 	{
-		LOGE("UMP open failed");
+		ALOGE("UMP open failed");
 		delete dev;
 		return -1;
 	}

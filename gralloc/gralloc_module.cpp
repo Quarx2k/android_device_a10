@@ -52,7 +52,7 @@ static int gralloc_register_buffer(gralloc_module_t const* module, buffer_handle
 {
 	if (private_handle_t::validate(handle) < 0)
 	{
-		LOGE("Registering invalid buffer, returning error");
+		ALOGE("Registering invalid buffer, returning error");
 		return -EINVAL;
 	}
 
@@ -73,7 +73,7 @@ static int gralloc_register_buffer(gralloc_module_t const* module, buffer_handle
 		if (res != UMP_OK)
 		{
 			pthread_mutex_unlock(&s_map_lock);
-			LOGE("Failed to open UMP library");
+			ALOGE("Failed to open UMP library");
 			return retval;
 		}
 		s_ump_is_open = 1;
@@ -96,19 +96,19 @@ static int gralloc_register_buffer(gralloc_module_t const* module, buffer_handle
 			}
 			else
 			{
-				LOGE("Failed to map UMP handle");
+				ALOGE("Failed to map UMP handle");
 			}
 
 			ump_reference_release((ump_handle)hnd->ump_mem_handle);
 		}
 		else
 		{
-			LOGE("Failed to create UMP handle");
+			ALOGE("Failed to create UMP handle");
 		}
 	}
 	else
 	{
-		LOGE("registering non-UMP buffer not supported");
+		ALOGE("registering non-UMP buffer not supported");
 	}
 
 	pthread_mutex_unlock(&s_map_lock);
@@ -119,13 +119,13 @@ static int gralloc_unregister_buffer(gralloc_module_t const* module, buffer_hand
 {
 	if (private_handle_t::validate(handle) < 0)
 	{
-		LOGE("unregistering invalid buffer, returning error");
+		ALOGE("unregistering invalid buffer, returning error");
 		return -EINVAL;
 	}
 
 	private_handle_t* hnd = (private_handle_t*)handle;
     
-	LOGE_IF(hnd->lockState & private_handle_t::LOCK_STATE_READ_MASK, "[unregister] handle %p still locked (state=%08x)", hnd, hnd->lockState);
+	ALOGE_IF(hnd->lockState & private_handle_t::LOCK_STATE_READ_MASK, "[unregister] handle %p still locked (state=%08x)", hnd, hnd->lockState);
 
 	// never unmap buffers that were created in this process
 	if (hnd->pid != getpid())
@@ -141,7 +141,7 @@ static int gralloc_unregister_buffer(gralloc_module_t const* module, buffer_hand
 		}
 		else
 		{
-			LOGE("unregistering non-UMP buffer not supported");
+			ALOGE("unregistering non-UMP buffer not supported");
 		}
 
 		hnd->base = 0;
@@ -158,7 +158,7 @@ static int gralloc_lock(gralloc_module_t const* module, buffer_handle_t handle, 
 {
 	if (private_handle_t::validate(handle) < 0)
 	{
-		LOGE("Locking invalid buffer, returning error");
+		ALOGE("Locking invalid buffer, returning error");
 		return -EINVAL;
 	}
 
@@ -180,7 +180,7 @@ static int gralloc_unlock(gralloc_module_t const* module, buffer_handle_t handle
 {
 	if (private_handle_t::validate(handle) < 0)
 	{
-		LOGE("Unlocking invalid buffer, returning error");
+		ALOGE("Unlocking invalid buffer, returning error");
 		return -EINVAL;
 	}
 
