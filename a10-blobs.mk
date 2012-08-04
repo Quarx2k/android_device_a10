@@ -69,6 +69,8 @@ PRODUCT_COPY_FILES += \
 	$(DEVICE_PREBUILT)/usr/idc/qwerty.idc:system/usr/idc/qwerty.idc \
 	$(DEVICE_PREBUILT)/usr/idc/qwerty2.idc:system/usr/idc/qwerty2.idc \
 	$(DEVICE_PREBUILT)/vendor/firmware/ft5206-1024X600.bin:system/vendor/firmware/ft5206-1024X600.bin \
+	$(DEVICE_PREBUILT)/vendor/firmware/ft5206-sc3013-1024X600.bin:system/vendor/firmware/ft5206-sc3013-1024X600.bin \
+	$(DEVICE_PREBUILT)/vendor/firmware/ft5206-sc3017-1024X600.bin:system/vendor/firmware/ft5206-sc3017-1024X600.bin \
 	$(DEVICE_PREBUILT)/etc/vold.fstab:system/etc/vold.fstab \
 	$(DEVICE_PREBUILT)/etc/gps.conf:system/etc/gps.conf \
 	$(DEVICE_PREBUILT)/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
