@@ -78,12 +78,12 @@ TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 ENABLE_WEBGL := true
 
 # Extra : to build external modules sources
-TARGET_KERNEL_SOURCE := $(ANDROID_BUILD_TOP)/kernel/
-TARGET_KERNEL_CONFIG := sun4i_aurora_defconfig
-TARGET_KERNEL_MODULES_EXT := $(ANDROID_BUILD_TOP)/device/allwinner/a10/prebuilt/lib/modules
+#TARGET_KERNEL_SOURCE := $(ANDROID_BUILD_TOP)/kernel/
+#TARGET_KERNEL_CONFIG := sun4i_aurora_defconfig
+#TARGET_KERNEL_MODULES_EXT := $(ANDROID_BUILD_TOP)/device/allwinner/a10/prebuilt/lib/modules
 BOARD_KERNEL_CMDLINE := console=ttyS0,115200 rw init=/init
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_PAGESIZE := 2048
 
 # Beware: set only prebuilt OR source+config
-#TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel
+TARGET_PREBUILT_KERNEL := $(ANDROID_BUILD_TOP)/device/allwinner/a10/kernel

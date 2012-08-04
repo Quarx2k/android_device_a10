@@ -72,6 +72,11 @@ PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.su
 # CedarX libraries
 PRODUCT_PACKAGES += libCedarA libCedarX libcedarv libcedarxbase libcedarxosal libswdrm libcedarxsftdemux
 
+# copy all others kernel modules under the "modules" directory to system/lib/modules
+PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/lib/modules && \
+	find device/allwinner/a10/prebuilt/lib/modules -name '*.ko' \
+	-printf '%p:system/lib/modules/%f ')
+
 $(call inherit-product, build/target/product/full_base.mk)
 
 # Should be after the full_base include, which loads languages_full
