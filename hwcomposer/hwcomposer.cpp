@@ -79,7 +79,7 @@ static int hwc_setcolorkey(sun4i_hwc_context_t  *ctx)
         if(ret != 0)
         {
             //open display layer failed, need send play end command, and exit
-            LOGE("Set video display Top failed!\n");
+            ALOGE("Set video display Top failed!\n");
 
             return NULL;
         }
@@ -100,7 +100,7 @@ static int hwc_setcolorkey(sun4i_hwc_context_t  *ctx)
     fbfh0 = open("/dev/graphics/fb0",O_RDWR);
     if(fbfh0 < 0)
     {
-        LOGE("open fb0 fail \n ");
+        ALOGE("open fb0 fail \n ");
 
         return -1;
     }
@@ -160,7 +160,7 @@ static int hwc_setcolorkey(sun4i_hwc_context_t  *ctx)
     args[1]                         = fb_layer_hdl;
     ioctl(ctx->dispfd,DISP_CMD_LAYER_CK_OFF,(void*)args);//disable the global alpha, use the pixel's alpha
 
-    LOGI("layer open hdl:%d,ret :%d\n",(unsigned long)ctx->hwc_layer.currenthandle,ret);
+    ALOGI("layer open hdl:%d,ret :%d\n",(unsigned long)ctx->hwc_layer.currenthandle,ret);
 
     return 0;
 }
@@ -174,13 +174,13 @@ static int hwc_requestlayer(sun4i_hwc_context_t *ctx,uint32_t screenid)
         ctx->dispfd                 = open("/dev/disp", O_RDWR);
         if (ctx->dispfd < 0)
         {
-            LOGE("Failed to open overlay device : %s\n", strerror(errno));
+            ALOGE("Failed to open overlay device : %s\n", strerror(errno));
 
             return  -1;
         }
     }
 
-    LOGV("screenid = %d\n",screenid);
+    ALOGV("screenid = %d\n",screenid);
     if(screenid > 1)
     {
         screenid = 1;
@@ -194,12 +194,12 @@ static int hwc_requestlayer(sun4i_hwc_context_t *ctx,uint32_t screenid)
         layerhandle                     = (uint32_t)ioctl(ctx->dispfd, DISP_CMD_LAYER_REQUEST,args);
         if(layerhandle == 0)
         {
-            LOGE("request layer failed!\n");
+            ALOGE("request layer failed!\n");
 
             return -1;
         }
 
-        LOGV("hwc_requestlayer layerhandle = %d\n",layerhandle);
+        ALOGV("hwc_requestlayer layerhandle = %d\n",layerhandle);
 
         ctx->hwc_layer.currenthandle = layerhandle;
         ctx->hwc_screen                 = screenid;
@@ -220,7 +220,7 @@ static int hwc_requestlayer(sun4i_hwc_context_t *ctx,uint32_t screenid)
         layerhandle                     = (uint32_t)ioctl(ctx->dispfd, DISP_CMD_LAYER_REQUEST,args);
         if(layerhandle == 0)
         {
-            LOGE("request layer failed!\n");
+            ALOGE("request layer failed!\n");
 
             return -1;
         }
@@ -230,8 +230,8 @@ static int hwc_requestlayer(sun4i_hwc_context_t *ctx,uint32_t screenid)
         ctx->hwc_layeropen                 = false;
     }
 
-    LOGV("ctx->hwc_layer.currenthandle = %d\n",ctx->hwc_layer.currenthandle);
-    LOGV("ctx->hwc_screen = %d\n",ctx->hwc_screen);
+    ALOGV("ctx->hwc_layer.currenthandle = %d\n",ctx->hwc_layer.currenthandle);
+    ALOGV("ctx->hwc_screen = %d\n",ctx->hwc_screen);
 
     return  0;
 }
@@ -250,7 +250,7 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
 
     if(!ctx)
     {
-        LOGE("parameter error!\n");
+        ALOGE("parameter error!\n");
 
         return ;
     }
@@ -260,7 +260,7 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
         ctx->dispfd                 = open("/dev/disp", O_RDWR);
         if (ctx->dispfd < 0)
         {
-            LOGE("Failed to open overlay device : %s\n", strerror(errno));
+            ALOGE("Failed to open overlay device : %s\n", strerror(errno));
 
             return ;
         }
@@ -276,7 +276,7 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
     curlayer->posW    = curlayer->posW_org;
     curlayer->posH    = curlayer->posH_org;
     /*
-     * This logic here is to return an error if the rectangle is not fully
+     * This ALOGIc here is to return an error if the rectangle is not fully
      * within the display, unless we have not received a valid position yet,
      * in which case we will do our best to adjust the rectangle to be within
      * the display.
@@ -290,8 +290,8 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
     g_lcd_width                     = ioctl(ctx->dispfd, DISP_CMD_SCN_GET_WIDTH,args);
     g_lcd_height                    = ioctl(ctx->dispfd, DISP_CMD_SCN_GET_HEIGHT,args);
 
-    LOGV("hdmi mode = %d\n",ret);
-    LOGV("ctx->cur_3denable = %d\n",ctx->cur_3dmode);
+    ALOGV("hdmi mode = %d\n",ret);
+    ALOGV("ctx->cur_3denable = %d\n",ctx->cur_3dmode);
 
     if(ret == DISP_OUTPUT_TYPE_HDMI && (ctx->cur_3denable == true || ctx->cur_half_enable == true))
     {
@@ -381,16 +381,16 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
         }
     }
 
-    LOGV("curlayer->dispH = %d\n",curlayer->dispH);
-    LOGV("curlayer->dispW = %d\n",curlayer->dispW);
-    LOGV("curlayer->dispH = %d\n",curlayer->org_dispH);
-    LOGV("curlayer->dispW = %d\n",curlayer->org_dispW);
-    LOGV("scn_w = %d\n",scn_w);
-    LOGV("scn_h = %d\n",scn_h);
-    LOGV("curlayer->posX_org = %d\n",curlayer->posX_org);
-    LOGV("curlayer->posY_org = %d\n",curlayer->posY_org);
-    LOGV("curlayer->posW_org = %d\n",curlayer->posW_org);
-    LOGV("curlayer->posH_org = %d\n",curlayer->posH_org);
+    ALOGV("curlayer->dispH = %d\n",curlayer->dispH);
+    ALOGV("curlayer->dispW = %d\n",curlayer->dispW);
+    ALOGV("curlayer->dispH = %d\n",curlayer->org_dispH);
+    ALOGV("curlayer->dispW = %d\n",curlayer->org_dispW);
+    ALOGV("scn_w = %d\n",scn_w);
+    ALOGV("scn_h = %d\n",scn_h);
+    ALOGV("curlayer->posX_org = %d\n",curlayer->posX_org);
+    ALOGV("curlayer->posY_org = %d\n",curlayer->posY_org);
+    ALOGV("curlayer->posW_org = %d\n",curlayer->posW_org);
+    ALOGV("curlayer->posH_org = %d\n",curlayer->posH_org);
     if ( temp_x < 0 )
     {
         temp_x = 0;
@@ -416,10 +416,10 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
         temp_h = curlayer->dispH - temp_y;
     }
 
-    LOGV("temp_x = %d\n",temp_x);
-    LOGV("temp_y = %d\n",temp_y);
-    LOGV("temp_w = %d\n",temp_w);
-    LOGV("temp_h = %d\n",temp_h);
+    ALOGV("temp_x = %d\n",temp_x);
+    ALOGV("temp_y = %d\n",temp_y);
+    ALOGV("temp_w = %d\n",temp_w);
+    ALOGV("temp_h = %d\n",temp_h);
 
     if(((int)curlayer->posX != temp_x) || ((int)curlayer->posY != temp_y)
           ||((int)curlayer->posW != temp_w) || ((int)curlayer->posH != temp_h) )
@@ -438,7 +438,7 @@ static bool hwc_can_render_layer(hwc_layer_t *layer)
         ||(layer->format == HWC_FORMAT_YUV420PLANAR)
         ||(layer->format == HWC_FORMAT_DEFAULT))
     {
-        LOGV("format support overlay");
+        ALOGV("format support overlay");
 
         return  true;
     }
@@ -454,7 +454,7 @@ static int hwc_setrect(sun4i_hwc_context_t *ctx,hwc_rect_t *croprect,hwc_rect_t 
     int                         screen;
     bool                        needset = false;
 
-    LOGV("hwc_setcrop");
+    ALOGV("hwc_setcrop");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -522,7 +522,7 @@ static int hwc_setrect(sun4i_hwc_context_t *ctx,hwc_rect_t *croprect,hwc_rect_t 
             args[3]                 = 0;
             ioctl(ctx->dispfd, DISP_CMD_LAYER_OPEN, args);
 
-            // LOGV("------------------------------SET_PARA--0 addr0:%x addr1:%x ret:%d",layer_info.fb.addr[0],layer_info.fb.addr[1],ret);
+            // ALOGV("------------------------------SET_PARA--0 addr0:%x addr1:%x ret:%d",layer_info.fb.addr[0],layer_info.fb.addr[1],ret);
             args[0]                 = screen;
             args[1]                 = (unsigned long)overlay;
             args[2]                 = 0;
@@ -539,11 +539,11 @@ static int hwc_setrect(sun4i_hwc_context_t *ctx,hwc_rect_t *croprect,hwc_rect_t 
 /*****************************************************************************/
 static int hwc_prepare(hwc_composer_device_t *dev, hwc_layer_list_t* list)
 {
-    //LOGV("hwc_prepare list->numHwLayers = %d\n",list->numHwLayers);
+    //ALOGV("hwc_prepare list->numHwLayers = %d\n",list->numHwLayers);
     //list is null on HWComposer->disable() on surfaceflinger
     if (list && (list->flags & HWC_GEOMETRY_CHANGED))
     {
-        //LOGV("hwc_prepare HWC_GEOMETRY_CHANGED list->numHwLayers = %d\n",list->numHwLayers);
+        //ALOGV("hwc_prepare HWC_GEOMETRY_CHANGED list->numHwLayers = %d\n",list->numHwLayers);
 
         for (size_t i=0 ; i<list->numHwLayers ; i++)
         {
@@ -552,14 +552,14 @@ static int hwc_prepare(hwc_composer_device_t *dev, hwc_layer_list_t* list)
                 //dump_layer(&list->hwLayers[i]);
                 list->hwLayers[i].compositionType = HWC_OVERLAY;
 
-                //LOGV("hwc_prepare HWC_OVERLAY i = %d\n",i);
+                //ALOGV("hwc_prepare HWC_OVERLAY i = %d\n",i);
             }
             else
             {
                 //dump_layer(&list->hwLayers[i]);
                 list->hwLayers[i].compositionType = HWC_FRAMEBUFFER;
 
-                //LOGV("hwc_prepare HWC_FRAMEBUFFER i = %d\n",i);
+                //ALOGV("hwc_prepare HWC_FRAMEBUFFER i = %d\n",i);
             }
         }
     }
@@ -575,7 +575,7 @@ static int hwc_startset(hwc_composer_device_t *dev)
         ctx->dispfd                 = open("/dev/disp", O_RDWR);
         if (ctx->dispfd < 0)
         {
-            LOGE("Failed to open overlay device : %s\n", strerror(errno));
+            ALOGE("Failed to open overlay device : %s\n", strerror(errno));
 
             return -1;
         }
@@ -595,7 +595,7 @@ static int hwc_endset(hwc_composer_device_t *dev)
         ctx->dispfd                 = open("/dev/disp", O_RDWR);
         if (ctx->dispfd < 0)
         {
-            LOGE("Failed to open overlay device : %s\n", strerror(errno));
+            ALOGE("Failed to open overlay device : %s\n", strerror(errno));
 
             return -1;
         }
@@ -618,7 +618,7 @@ static int hwc_setlayerframepara(sun4i_hwc_context_t *ctx,uint32_t value)
 
     if(!ctx)
     {
-        LOGE("parameter error!\n");
+        ALOGE("parameter error!\n");
 
         return -1;
     }
@@ -628,7 +628,7 @@ static int hwc_setlayerframepara(sun4i_hwc_context_t *ctx,uint32_t value)
         ctx->dispfd                 = open("/dev/disp", O_RDWR);
         if (ctx->dispfd < 0)
         {
-            LOGE("Failed to open overlay device : %s\n", strerror(errno));
+            ALOGE("Failed to open overlay device : %s\n", strerror(errno));
 
             return -1;
         }
@@ -638,7 +638,7 @@ static int hwc_setlayerframepara(sun4i_hwc_context_t *ctx,uint32_t value)
     overlaypara                     = (libhwclayerpara_t *)value;
     //set framebuffer parameter to display driver
     tmpFrmBufAddr.interlace         = (overlaypara->bProgressiveSrc?0:1);
-    LOGV("tmpFrmBufAddr.interlace:%d",tmpFrmBufAddr.interlace);
+    ALOGV("tmpFrmBufAddr.interlace:%d",tmpFrmBufAddr.interlace);
     tmpFrmBufAddr.top_field_first   = overlaypara->bTopFieldFirst;
     tmpFrmBufAddr.frame_rate        = overlaypara->pVideoInfo.frame_rate;
     tmpFrmBufAddr.addr[0]           = overlaypara->top_y;
@@ -672,14 +672,14 @@ static int hwc_setlayerframepara(sun4i_hwc_context_t *ctx,uint32_t value)
     ctx->hwc_layer.cur_frameid        = tmpFrmBufAddr.id;
     handle                            = (unsigned long)ctx->hwc_layer.currenthandle;
     ctx->hwc_frameset               = true;
-    //LOGV("overlaypara->bProgressiveSrc = %x",overlaypara->bProgressiveSrc);
-    //LOGV("overlaypara->bTopFieldFirst = %x",overlaypara->bTopFieldFirst);
-    //LOGV("overlaypara->pVideoInfo.frame_rate = %x",overlaypara->pVideoInfo.frame_rate);
-    //LOGV("overlaypara->first_frame_flg = %x",overlaypara->first_frame_flg);
-    //LOGV("overlay = %x",(unsigned long)handle);
+    //ALOGV("overlaypara->bProgressiveSrc = %x",overlaypara->bProgressiveSrc);
+    //ALOGV("overlaypara->bTopFieldFirst = %x",overlaypara->bTopFieldFirst);
+    //ALOGV("overlaypara->pVideoInfo.frame_rate = %x",overlaypara->pVideoInfo.frame_rate);
+    //ALOGV("overlaypara->first_frame_flg = %x",overlaypara->first_frame_flg);
+    //ALOGV("overlay = %x",(unsigned long)handle);
     if(overlaypara->first_frame_flg || ctx->wait_layer_open)
     {
-        LOGV("overlay first ............");
+        ALOGV("overlay first ............");
         args[0]                 = screen;
         args[1]                 = handle;
         args[2]                 = (unsigned long) (&layer_info);
@@ -711,7 +711,7 @@ static int hwc_setlayerframepara(sun4i_hwc_context_t *ctx,uint32_t value)
     }
     else
     {
-        //LOGV("set FB");
+        //ALOGV("set FB");
         args[0]                    = screen;
         args[1]                 = handle;
         args[2]                 = (unsigned long)(&tmpFrmBufAddr);
@@ -786,7 +786,7 @@ static int hwc_setlayerpara(sun4i_hwc_context_t *ctx,uint32_t value)
         ctx->dispfd                 = open("/dev/disp", O_RDWR);
         if (ctx->dispfd < 0)
         {
-            LOGE("Failed to open overlay device : %s\n", strerror(errno));
+            ALOGE("Failed to open overlay device : %s\n", strerror(errno));
 
             return  -1;
         }
@@ -800,7 +800,7 @@ static int hwc_setlayerpara(sun4i_hwc_context_t *ctx,uint32_t value)
     ret                             = hwc_requestlayer(ctx,screenid);
     if(ret != 0)
     {
-        LOGE("request layer failed!\n");
+        ALOGE("request layer failed!\n");
 
         return -1;
     }
@@ -811,7 +811,7 @@ static int hwc_setlayerpara(sun4i_hwc_context_t *ctx,uint32_t value)
     g_lcd_width                     = ioctl(ctx->dispfd, DISP_CMD_SCN_GET_WIDTH,args);
     g_lcd_height                    = ioctl(ctx->dispfd, DISP_CMD_SCN_GET_HEIGHT,args);
 
-    LOGV("overlay.cpp:fb_mode:%d,disp_format:%d  %d:%d, %d",fb_mode,disp_format,g_lcd_width,g_lcd_height, __LINE__);
+    ALOGV("overlay.cpp:fb_mode:%d,disp_format:%d  %d:%d, %d",fb_mode,disp_format,g_lcd_width,g_lcd_height, __LINE__);
     args[0]                         = screenid;
     args[1]                         = ctx->hwc_layer.currenthandle;
     args[2]                         = (unsigned long) (&tmpLayerAttr);
@@ -866,7 +866,7 @@ static int hwc_setlayerpara(sun4i_hwc_context_t *ctx,uint32_t value)
     args[2]                         = (unsigned long) (&tmpLayerAttr);
     args[3]                         = 0;
     ret = ioctl(ctx->dispfd, DISP_CMD_LAYER_SET_PARA, args);
-    LOGV("SET_PARA ret:%d",ret);
+    ALOGV("SET_PARA ret:%d",ret);
 
     args[0]                         = 0;
     args[1]                         = 0;
@@ -897,12 +897,12 @@ static int hwc_show(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_show, value: %d", value);
+    ALOGV("hwc_show, value: %d", value);
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
     screen                          = ctx->hwc_screen;
-//    LOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
+//    ALOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
 
     if(ctx->hwc_layer.currenthandle)
        {
@@ -912,12 +912,12 @@ static int hwc_show(sun4i_hwc_context_t *ctx,int value)
         args[3]                         = 0;
 
 
-        LOGV("----------screen: %d, handle: %d", screen, ctx->hwc_layer.currenthandle);
+        ALOGV("----------screen: %d, handle: %d", screen, ctx->hwc_layer.currenthandle);
         if(value == 1)
         {
             if(ctx->hwc_layeropen == false)
             {
-                LOGV("----------hwc_layeropen false");
+                ALOGV("----------hwc_layeropen false");
                 ret = ioctl(fd, DISP_CMD_LAYER_OPEN,args);
 
                 ioctl(ctx->dispfd, DISP_CMD_VIDEO_START, args);
@@ -932,7 +932,7 @@ static int hwc_show(sun4i_hwc_context_t *ctx,int value)
         {
             if(ctx->hwc_layeropen == true)
             {
-                LOGV("----------hwc_layeropen true");
+                ALOGV("----------hwc_layeropen true");
                 ret = ioctl(fd, DISP_CMD_LAYER_CLOSE,args);
 
                 ioctl(fd, DISP_CMD_VIDEO_STOP, args);
@@ -957,12 +957,12 @@ static int hwc_reqshow(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_show, value: %d", value);
+    ALOGV("hwc_show, value: %d", value);
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
     screen                          = ctx->hwc_screen;
-//    LOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
+//    ALOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
 
     if(ctx->hwc_layer.currenthandle)
        {
@@ -972,7 +972,7 @@ static int hwc_reqshow(sun4i_hwc_context_t *ctx,int value)
         args[3]                         = 0;
 
 
-        LOGV("----------screen: %d, handle: %d", screen, ctx->hwc_layer.currenthandle);
+        ALOGV("----------screen: %d, handle: %d", screen, ctx->hwc_layer.currenthandle);
         if(value == 1)
         {
             if(ctx->hwc_layeropen == false)
@@ -980,7 +980,7 @@ static int hwc_reqshow(sun4i_hwc_context_t *ctx,int value)
                 if((ctx->hwc_layer.posW_org != 0)
                    ||(ctx->hwc_layer.posH_org != 0))
                 {
-                    LOGV("----------hwc_layeropen false");
+                    ALOGV("----------hwc_layeropen false");
                     ret = ioctl(fd, DISP_CMD_LAYER_OPEN,args);
 
                     ioctl(ctx->dispfd, DISP_CMD_VIDEO_START, args);
@@ -997,7 +997,7 @@ static int hwc_reqshow(sun4i_hwc_context_t *ctx,int value)
         {
             if(ctx->hwc_layeropen == true)
             {
-                LOGV("----------hwc_layeropen true");
+                ALOGV("----------hwc_layeropen true");
                 ret = ioctl(fd, DISP_CMD_LAYER_CLOSE,args);
 
                 ioctl(fd, DISP_CMD_VIDEO_STOP, args);
@@ -1016,7 +1016,7 @@ static int hwc_reqshow(sun4i_hwc_context_t *ctx,int value)
                        args[3]                     = 0;
                        ioctl(ctx->dispfd,DISP_CMD_HDMI_OFF,(unsigned long)args);
 
-                       LOGV("ctx->cur_hdmimode %d",ctx->cur_hdmimode);
+                       ALOGV("ctx->cur_hdmimode %d",ctx->cur_hdmimode);
                        args[0]                     = ctx->hwc_screen;
                        args[1]                     = ctx->cur_hdmimode;
                        args[2]                     = 0;
@@ -1047,12 +1047,12 @@ static int hwc_release(sun4i_hwc_context_t *ctx)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_release!ctx->hwc_layer.currenthandle = %d\n",ctx->hwc_layer.currenthandle);
+    ALOGV("hwc_release!ctx->hwc_layer.currenthandle = %d\n",ctx->hwc_layer.currenthandle);
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
     screen                          = ctx->hwc_screen;
-//    LOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
+//    ALOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
 
     if(ctx->hwc_layer.currenthandle)
        {
@@ -1082,7 +1082,7 @@ static int hwc_release(sun4i_hwc_context_t *ctx)
             args[3]                     = 0;
             ioctl(ctx->dispfd,DISP_CMD_HDMI_OFF,(unsigned long)args);
 
-            LOGV("ctx->cur_hdmimode %d",ctx->cur_hdmimode);
+            ALOGV("ctx->cur_hdmimode %d",ctx->cur_hdmimode);
             args[0]                     = ctx->hwc_screen;
             args[1]                     = ctx->cur_hdmimode;
             args[2]                     = 0;
@@ -1110,7 +1110,7 @@ static int hwc_setformat(sun4i_hwc_context_t *ctx,uint32_t value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_setformat");
+    ALOGV("hwc_setformat");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1127,12 +1127,12 @@ static int hwc_setformat(sun4i_hwc_context_t *ctx,uint32_t value)
         tmp_args[3]             = 0;
 
         ret = ioctl(fd, DISP_CMD_LAYER_GET_PARA, &tmp_args);
-        LOGV("DISP_CMD_LAYER_GET_PARA, ret %d", ret);
+        ALOGV("DISP_CMD_LAYER_GET_PARA, ret %d", ret);
 
         tmpLayerAttr.fb.seq = (__disp_pixel_seq_t)value;
 
         ret = ioctl(fd, DISP_CMD_LAYER_SET_PARA, &tmp_args);
-        LOGV("DISP_CMD_LAYER_GET_PARA, ret %d", ret);
+        ALOGV("DISP_CMD_LAYER_GET_PARA, ret %d", ret);
     }
 
     return ret;
@@ -1150,14 +1150,14 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
     int                            ctl_fd;
 
     overlay_handle                = ctx->hwc_layer.currenthandle;
-    LOGV("overlay_handle = %d\n",(unsigned long)overlay_handle);
+    ALOGV("overlay_handle = %d\n",(unsigned long)overlay_handle);
     old_screen                   = ctx->hwc_screen;
-    LOGV("old_screen = %d\n",(unsigned long)old_screen);
+    ALOGV("old_screen = %d\n",(unsigned long)old_screen);
     ctl_fd                       = ctx->dispfd;
 
     if(old_screen  == value)
     {
-        LOGV("nothing to do!");
+        ALOGV("nothing to do!");
 
         return  0;
     }
@@ -1167,7 +1167,7 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
         value = 1;
     }
 
-    LOGV("overlay release first");
+    ALOGV("overlay release first");
     args[0]                     = old_screen;
     args[1]                     = (unsigned long) overlay_handle;
     args[2]                         = (unsigned long) (&layer_info);
@@ -1181,7 +1181,7 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
     ioctl(ctl_fd, DISP_CMD_VIDEO_STOP, args);
     ioctl(ctl_fd, DISP_CMD_LAYER_RELEASE,args);
 
-    LOGV("release overlay = %d,value = %d\n",(unsigned long) overlay_handle,value);
+    ALOGV("release overlay = %d,value = %d\n",(unsigned long) overlay_handle,value);
 
     sleep(2);
 
@@ -1191,7 +1191,7 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
     overlayhandle                 = (void *)ioctl(ctl_fd, DISP_CMD_LAYER_REQUEST,args);
     if(overlayhandle == 0)
     {
-        LOGE("request layer failed!\n");
+        ALOGE("request layer failed!\n");
 
         goto error;
     }
@@ -1206,7 +1206,7 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
         args[2]                     = 0;
         args[3]                     = 0;
         ctx->cur_hdmimode            = ioctl(ctl_fd, DISP_CMD_HDMI_GET_MODE, args);
-        LOGV("overlay_setScreenid ctx->cur_hdmimode = %d\n",ctx->cur_hdmimode);
+        ALOGV("overlay_setScreenid ctx->cur_hdmimode = %d\n",ctx->cur_hdmimode);
         args[0]                     = value;
         args[1]                     = 0;
         args[2]                     = 0;
@@ -1234,11 +1234,11 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
 
     ctx->hwc_layer.currenthandle    = (unsigned long)overlayhandle;
     ctx->hwc_screen                    = value;
-    LOGV("g_screen = %d",ctx->hwc_screen);
-    LOGV("g_currenthandle = %d",ctx->hwc_layer.currenthandle);
+    ALOGV("g_screen = %d",ctx->hwc_screen);
+    ALOGV("g_currenthandle = %d",ctx->hwc_layer.currenthandle);
     ctx->hwc_layer.dispW            = g_lcd_width;
     ctx->hwc_layer.dispH            = g_lcd_height;
-    LOGV("ctx->hwc_layer.dispW = %d,ctx->hwc_layer.dispH = %d\n",ctx->hwc_layer.dispW,ctx->hwc_layer.dispH);
+    ALOGV("ctx->hwc_layer.dispW = %d,ctx->hwc_layer.dispH = %d\n",ctx->hwc_layer.dispW,ctx->hwc_layer.dispH);
 
     hwc_computerlayerdisplayframe((hwc_composer_device_t *)ctx);
     layer_info.scn_win.x             = ctx->hwc_layer.posX;
@@ -1258,8 +1258,8 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
         layer_info.b_trd_out            = false;
     }
 
-    LOGV("request overlay.cpp:w:%d,h:%d  %d:%d",layer_info.fb.size.width,layer_info.fb.size.height,g_lcd_width,g_lcd_height);
-    LOGV("request overlay.cpp:fb_mode:%d,disp_format:%d  %d:%d",layer_info.fb.mode,layer_info.fb.format,g_lcd_width,g_lcd_height);
+    ALOGV("request overlay.cpp:w:%d,h:%d  %d:%d",layer_info.fb.size.width,layer_info.fb.size.height,g_lcd_width,g_lcd_height);
+    ALOGV("request overlay.cpp:fb_mode:%d,disp_format:%d  %d:%d",layer_info.fb.mode,layer_info.fb.format,g_lcd_width,g_lcd_height);
 
     //set channel
     args[0]                         = value;
@@ -1267,7 +1267,7 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
     args[2]                         = (unsigned long) (&layer_info);
     args[3]                         = 0;
     ret = ioctl(ctl_fd, DISP_CMD_LAYER_SET_PARA, args);
-    LOGV("SET_PARA ret:%d",ret);
+    ALOGV("SET_PARA ret:%d",ret);
 
     args[0]                            = value;
     args[1]                         = (unsigned long)overlayhandle;
@@ -1312,12 +1312,12 @@ static int hwc_vppon(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
     screen                          = ctx->hwc_screen;
-//    LOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
+//    ALOGV("handle = %x,tmpFrmBufAddr.addr[0] = %x,tmpFrmBufAddr.addr[1] = %x,screen = %d\n",handle,tmpFrmBufAddr.addr[0],tmpFrmBufAddr.addr[1],screen);
 
     if(ctx->hwc_layer.currenthandle)
        {
@@ -1347,7 +1347,7 @@ static int hwc_getvppon(sun4i_hwc_context_t *ctx)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1374,7 +1374,7 @@ static int hwc_setlumasharp(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1401,7 +1401,7 @@ static int hwc_getlumasharp(sun4i_hwc_context_t *ctx)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1428,7 +1428,7 @@ static int hwc_setchromasharp(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1455,7 +1455,7 @@ static int hwc_getchromasharp(sun4i_hwc_context_t *ctx)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1482,7 +1482,7 @@ static int hwc_setwhiteexten(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1509,7 +1509,7 @@ static int hwc_getwhiteexten(sun4i_hwc_context_t *ctx)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1536,7 +1536,7 @@ static int hwc_setblackexten(sun4i_hwc_context_t *ctx,int value)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1563,7 +1563,7 @@ static int hwc_getblackexten(sun4i_hwc_context_t *ctx)
     int                         ret = 0;
     int                         screen;
 
-    LOGV("hwc_vppon");
+    ALOGV("hwc_vppon");
 
     overlay                         = ctx->hwc_layer.currenthandle;
     fd                              = ctx->dispfd;
@@ -1598,7 +1598,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
     layerinitpara_t                layer_para;
     video3Dinfo_t                 *_3d_info;
 
-    LOGV("overlay_show");
+    ALOGV("overlay_show");
 
     memset(&layer_info, 0, sizeof(__disp_layer_info_t));
 
@@ -1619,7 +1619,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
         ioctl(fd, DISP_CMD_LAYER_CLOSE,args);
         ioctl(fd, DISP_CMD_VIDEO_STOP, args);
     }
-    LOGV("width %d, height %d, format %x, value %d, mode %d, is mode changed %d", _3d_info->width, _3d_info->height, _3d_info->format, _3d_info->_3d_mode, _3d_info->display_mode, _3d_info->is_mode_changed);
+    ALOGV("width %d, height %d, format %x, value %d, mode %d, is mode changed %d", _3d_info->width, _3d_info->height, _3d_info->format, _3d_info->_3d_mode, _3d_info->display_mode, _3d_info->is_mode_changed);
 
     layer_para.w              = _3d_info->width;
     layer_para.h              = _3d_info->height;
@@ -1638,7 +1638,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
         ret = ioctl(fd,DISP_CMD_GET_OUTPUT_TYPE,args);
         if(ret == DISP_OUTPUT_TYPE_HDMI)
         {
-            LOGV("value = %d, f_trd_srd = %d, trd_mode = %d, b_trd_out %d", value, layer_info.fb.b_trd_src, layer_info.fb.trd_mode, layer_info.b_trd_out);
+            ALOGV("value = %d, f_trd_srd = %d, trd_mode = %d, b_trd_out %d", value, layer_info.fb.b_trd_src, layer_info.fb.trd_mode, layer_info.b_trd_out);
 
             if(mode == HWC_DISP_MODE_3D && value != HWC_3D_OUT_MODE_NORMAL)
             {
@@ -1681,7 +1681,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
                     layer_info.scn_win.y         = 0;
                     layer_info.scn_win.width     = g_lcd_width;
                     layer_info.scn_win.height     = g_lcd_height;
-                    LOGV("%d, 3d mode %d, value is %d ", __LINE__, mode, value);
+                    ALOGV("%d, 3d mode %d, value is %d ", __LINE__, mode, value);
 
                     layer_info.fb.trd_mode         =  (__disp_3d_src_mode_t)value;
                     layer_info.out_trd_mode        = DISP_3D_OUT_MODE_FP;
@@ -1691,7 +1691,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
                     ctx->cur_3dmode                = value;
                     ctx->cur_3denable            = true;
                     ctx->cur_half_enable        = true;
-                    LOGV("line %d, screen width %d, screen height %d", __LINE__, g_lcd_width, g_lcd_height);
+                    ALOGV("line %d, screen width %d, screen height %d", __LINE__, g_lcd_width, g_lcd_height);
 
                     args[0]                     = screen;
                     args[1]                     = (unsigned long) overlay;
@@ -1739,13 +1739,13 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
                     }
                     if(mode == HWC_DISP_MODE_2D)
                     {
-                        LOGV("%d, 3d mode with one picture", __LINE__);
+                        ALOGV("%d, 3d mode with one picture", __LINE__);
                         layer_info.fb.b_trd_src     = true;
                         layer_info.b_trd_out        = false;
                     }
                     else
                     {
-                        LOGV("%d, original mode", __LINE__);
+                        ALOGV("%d, original mode", __LINE__);
                         layer_info.fb.b_trd_src     = false;
                         layer_info.b_trd_out        = false;
                     }
@@ -1756,7 +1756,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
                     ctx->cur_half_enable        = layer_info.fb.b_trd_src;
                     ctx->cur_3dmode                = value;
 
-                    LOGV("line %d, screen width %d, screen height %d", __LINE__, g_lcd_width, g_lcd_height);
+                    ALOGV("line %d, screen width %d, screen height %d", __LINE__, g_lcd_width, g_lcd_height);
                     args[0]                     = screen;
                     args[1]                     = (unsigned long) overlay;
                     args[2]                     = (unsigned long) (&layer_info);
@@ -1819,7 +1819,7 @@ static int hwc_setparameter(hwc_composer_device_t *dev,uint32_t param,uint32_t v
     }
     else if(param == HWC_LAYER_SETFRAMEPARA)
     {
-        //LOGV("set parameter overlay = %x",(unsigned long)overlay);
+        //ALOGV("set parameter overlay = %x",(unsigned long)overlay);
         ret = hwc_setlayerframepara(ctx,value);
     }
     else if(param == HWC_LAYER_GETCURFRAMEPARA)
@@ -1828,83 +1828,83 @@ static int hwc_setparameter(hwc_composer_device_t *dev,uint32_t param,uint32_t v
         if(ret == -1)
         {
             ret = ctx->hwc_layer.cur_frameid;
-            LOGV("ret = -1 HWC_LAYER_GETCURFRAMEPARA =%d",ret);
+            ALOGV("ret = -1 HWC_LAYER_GETCURFRAMEPARA =%d",ret);
         }
-        LOGV("HWC_LAYER_GETCURFRAMEPARA =%d",ret);
+        ALOGV("HWC_LAYER_GETCURFRAMEPARA =%d",ret);
     }
     else if(param == HWC_LAYER_SETSCREEN)
     {
-        LOGV("param == HWC_LAYER_SETSCREEN,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETSCREEN,value = %d\n",value);
         ret = hwc_setscreen(ctx,value);
     }
     else if(param == HWC_LAYER_SHOW)
     {
-        LOGV("param == HWC_LAYER_SHOW,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SHOW,value = %d\n",value);
         ret = hwc_reqshow(ctx,value);
     }
     else if(param == HWC_LAYER_RELEASE)
     {
-        LOGV("param == HWC_LAYER_RELEASE,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_RELEASE,value = %d\n",value);
         ret = hwc_release(ctx);
     }
     else if(param == HWC_LAYER_SET3DMODE)
     {
-        LOGV("param == HWC_LAYER_SET3DMODE,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SET3DMODE,value = %d\n",value);
         ret = hwc_set3dmode(ctx,value);
     }
     else if(param == HWC_LAYER_SETFORMAT)
     {
-        LOGV("param == HWC_LAYER_SETFORMAT,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETFORMAT,value = %d\n",value);
         ret = hwc_setformat(ctx,value);
     }
     else if(param == HWC_LAYER_VPPON)
     {
-        LOGV("param == HWC_LAYER_SETFORMAT,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETFORMAT,value = %d\n",value);
         ret = hwc_vppon(ctx,value);
     }
     else if(param == HWC_LAYER_VPPGETON)
     {
-        LOGV("param == HWC_LAYER_VPPGETON,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_VPPGETON,value = %d\n",value);
         ret = hwc_getvppon(ctx);
     }
     else if(param == HWC_LAYER_SETLUMASHARP)
     {
-        LOGV("param == HWC_LAYER_SETLUMASHARP,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETLUMASHARP,value = %d\n",value);
         ret = hwc_setlumasharp(ctx,value);
     }
     else if(param == HWC_LAYER_GETLUMASHARP)
     {
-        LOGV("param == HWC_LAYER_GETLUMASHARP,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_GETLUMASHARP,value = %d\n",value);
         ret = hwc_getlumasharp(ctx);
     }
     else if(param == HWC_LAYER_SETCHROMASHARP)
     {
-        LOGV("param == HWC_LAYER_SETCHROMASHARP,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETCHROMASHARP,value = %d\n",value);
         ret = hwc_setchromasharp(ctx,value);
     }
     else if(param == HWC_LAYER_GETCHROMASHARP)
     {
-        LOGV("param == HWC_LAYER_GETCHROMASHARP,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_GETCHROMASHARP,value = %d\n",value);
         ret = hwc_getchromasharp(ctx);
     }
     else if(param == HWC_LAYER_SETWHITEEXTEN)
     {
-        LOGV("param == HWC_LAYER_SETWHITEEXTEN,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETWHITEEXTEN,value = %d\n",value);
         ret = hwc_setwhiteexten(ctx,value);
     }
     else if(param == HWC_LAYER_GETWHITEEXTEN)
     {
-        LOGV("param == HWC_LAYER_GETWHITEEXTEN,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_GETWHITEEXTEN,value = %d\n",value);
         ret = hwc_getwhiteexten(ctx);
     }
     else if(param == HWC_LAYER_SETBLACKEXTEN)
     {
-        LOGV("param == HWC_LAYER_SETBLACKEXTEN,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_SETBLACKEXTEN,value = %d\n",value);
         ret = hwc_setblackexten(ctx,value);
     }
     else if(param == HWC_LAYER_GETBLACKEXTEN)
     {
-        LOGV("param == HWC_LAYER_GETBLACKEXTEN,value = %d\n",value);
+        ALOGV("param == HWC_LAYER_GETBLACKEXTEN,value = %d\n",value);
         ret = hwc_getblackexten(ctx);
     }
 
@@ -1922,7 +1922,7 @@ static int hwc_set_layer(hwc_composer_device_t *dev,hwc_layer_list_t* list)
     sun4i_hwc_context_t           *ctx = (sun4i_hwc_context_t *)dev;
     bool                        findoverlay = false;
 
-    //LOGV("hwc_set_layer list->numHwLayers = %d\n",list->numHwLayers);
+    //ALOGV("hwc_set_layer list->numHwLayers = %d\n",list->numHwLayers);
 
     for (size_t i=0 ; i<list->numHwLayers ; i++)
     {
@@ -1991,7 +1991,7 @@ static int hwc_device_close(struct hw_device_t *dev)
             args[3]                     = 0;
             ioctl(ctx->dispfd,DISP_CMD_HDMI_OFF,(unsigned long)args);
 
-            LOGV("ctx->cur_hdmimode %d",ctx->cur_hdmimode);
+            ALOGV("ctx->cur_hdmimode %d",ctx->cur_hdmimode);
             args[0]                     = ctx->hwc_screen;
             args[1]                     = ctx->cur_hdmimode;
             args[2]                     = 0;

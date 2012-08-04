@@ -64,7 +64,7 @@ int AccelSensor::enable(int32_t handle, int en)
         else
             err = accel_disable_sensor(sensor_type);
 
-        LOGE_IF(err, "Could not change sensor state (%s)", strerror(-err));
+        ALOGE_IF(err, "Could not change sensor state (%s)", strerror(-err));
     }
 
     if (!err) {
@@ -80,7 +80,7 @@ int AccelSensor::setDelay(int32_t handle, int64_t ns)
     int ret = 0;
 
     int ms = ns / 1000000;
-    LOGD("AccelSensor....setDelay, ms=%d\n", ms);
+    ALOGD("AccelSensor....setDelay, ms=%d\n", ms);
 
     return ret;
 }
@@ -108,7 +108,7 @@ int AccelSensor::readEvents(sensors_event_t* data, int count)
             count--;
             numEventReceived++;
         } else {
-            LOGE("AccelSensor: unknown event (type=%d, code=%d)",type, event->code);
+            ALOGE("AccelSensor: unknown event (type=%d, code=%d)",type, event->code);
         }
             mInputReader.next();
     }

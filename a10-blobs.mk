@@ -79,7 +79,10 @@ PRODUCT_COPY_FILES += \
 	$(DEVICE_PREBUILT)/bin/ntfs-3g.probe:system/bin/ntfs-3g.probe \
 	$(DEVICE_PREBUILT)/bin/mkfs.exfat:system/bin/mkfs.exfat \
 	$(DEVICE_PREBUILT)/bin/mount.exfat:system/bin/mount.exfat \
- 	$(DEVICE_PREBUILT)/bin/fsck.exfat:system/bin/fsck.exfat
+ 	$(DEVICE_PREBUILT)/bin/fsck.exfat:system/bin/fsck.exfat \
+	$(DEVICE_PREBUILT)/etc/media_codecs.xml:system/etc/media_codecs.xml \
+	$(DEVICE_PREBUILT)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+
 
 # New CM9 backup list system (addon.d)
 PRODUCT_COPY_FILES += \

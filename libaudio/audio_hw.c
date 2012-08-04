@@ -39,7 +39,7 @@
 
 #include "ril_interface.h"
 
-#define F_LOG LOGV("%s, line: %d", __FUNCTION__, __LINE__);
+#define F_ALOG ALOGV("%s, line: %d", __FUNCTION__, __LINE__);
 
 /* Mixer control names */
 #define MIXER_DL2_LEFT_EQUALIZER            "DL2 Left Equalizer"
@@ -653,7 +653,7 @@ static int set_route_by_array(struct mixer *mixer, struct route_setting *route,
 
 static int start_call(struct tuna_audio_device *adev)
 {
-    LOGE("Opening modem PCMs");
+    ALOGE("Opening modem PCMs");
 
     pcm_config_vx.rate = adev->wb_amr ? VX_WB_SAMPLING_RATE : VX_NB_SAMPLING_RATE;
 
@@ -661,7 +661,7 @@ static int start_call(struct tuna_audio_device *adev)
     if (adev->pcm_modem_dl == NULL) {
         adev->pcm_modem_dl = pcm_open(0, PORT_MODEM, PCM_OUT, &pcm_config_vx);
         if (!pcm_is_ready(adev->pcm_modem_dl)) {
-            LOGE("cannot open PCM modem DL stream: %s", pcm_get_error(adev->pcm_modem_dl));
+            ALOGE("cannot open PCM modem DL stream: %s", pcm_get_error(adev->pcm_modem_dl));
             goto err_open_dl;
         }
     }
@@ -669,7 +669,7 @@ static int start_call(struct tuna_audio_device *adev)
     if (adev->pcm_modem_ul == NULL) {
         adev->pcm_modem_ul = pcm_open(0, PORT_MODEM, PCM_IN, &pcm_config_vx);
         if (!pcm_is_ready(adev->pcm_modem_ul)) {
-            LOGE("cannot open PCM modem UL stream: %s", pcm_get_error(adev->pcm_modem_ul));
+            ALOGE("cannot open PCM modem UL stream: %s", pcm_get_error(adev->pcm_modem_ul));
             goto err_open_ul;
         }
     }
@@ -691,7 +691,7 @@ err_open_dl:
 
 static void end_call(struct tuna_audio_device *adev)
 {
-    LOGE("Closing modem PCMs");
+    ALOGE("Closing modem PCMs");
 
     pcm_stop(adev->pcm_modem_dl);
     pcm_stop(adev->pcm_modem_ul);
@@ -913,7 +913,7 @@ static void force_all_standby(struct tuna_audio_device *adev)
 static void select_mode(struct tuna_audio_device *adev)
 {
     if (adev->mode == AUDIO_MODE_IN_CALL) {
-        LOGE("Entering IN_CALL state, in_call=%d", adev->in_call);
+        ALOGE("Entering IN_CALL state, in_call=%d", adev->in_call);
         if (!adev->in_call) {
             force_all_standby(adev);
             /* force earpiece route for in call state if speaker is the
@@ -940,7 +940,7 @@ static void select_mode(struct tuna_audio_device *adev)
             adev->in_call = 1;
         }
     } else {
-        LOGE("Leaving IN_CALL state, in_call=%d, mode=%d",
+        ALOGE("Leaving IN_CALL state, in_call=%d, mode=%d",
              adev->in_call, adev->mode);
         if (adev->in_call) {
             adev->in_call = 0;
@@ -1141,7 +1141,7 @@ static void select_input_device(struct tuna_audio_device *adev)
 /* must be called with hw device and output stream mutexes locked */
 static int start_output_stream(struct tuna_stream_out *out)
 {
-	F_LOG;
+	F_ALOG;
     struct tuna_audio_device *adev = out->dev;
     unsigned int card = CARD_TUNA_DEFAULT;
     unsigned int port = PORT_MM;
@@ -1173,7 +1173,7 @@ static int start_output_stream(struct tuna_stream_out *out)
     out->pcm = pcm_open(card, port, PCM_OUT | PCM_MMAP | PCM_NOIRQ, &out->config);
 
     if (!pcm_is_ready(out->pcm)) {
-        LOGE("cannot open pcm_out driver: %s", pcm_get_error(out->pcm));
+        ALOGE("cannot open pcm_out driver: %s", pcm_get_error(out->pcm));
         pcm_close(out->pcm);
         adev->active_output = NULL;
         return -ENOMEM;
@@ -1297,7 +1297,7 @@ static int get_playback_delay(struct tuna_stream_out *out,
         buffer->time_stamp.tv_sec  = 0;
         buffer->time_stamp.tv_nsec = 0;
         buffer->delay_ns           = 0;
-        LOGV("get_playback_delay(): pcm_get_htimestamp error,"
+        ALOGV("get_playback_delay(): pcm_get_htimestamp error,"
                 "setting playbackTimestamp to 0");
         return status;
     }
@@ -1598,7 +1598,7 @@ static int out_remove_audio_effect(const struct audio_stream *stream, effect_han
 /* must be called with hw device and input stream mutexes locked */
 static int start_input_stream(struct tuna_stream_in *in)
 {
-	F_LOG;
+	F_ALOG;
     int ret = 0;
     struct tuna_audio_device *adev = in->dev;
 
@@ -1619,7 +1619,7 @@ static int start_input_stream(struct tuna_stream_in *in)
     /* this assumes routing is done previously */
     in->pcm = pcm_open(0, PORT_MM2_UL, PCM_IN, &in->config);
     if (!pcm_is_ready(in->pcm)) {
-        LOGE("cannot open pcm_in driver: %s", pcm_get_error(in->pcm));
+        ALOGE("cannot open pcm_in driver: %s", pcm_get_error(in->pcm));
         pcm_close(in->pcm);
         adev->active_input = NULL;
         return -ENOMEM;
@@ -1627,11 +1627,11 @@ static int start_input_stream(struct tuna_stream_in *in)
 
     /* if no supported sample rate is available, use the resampler */
     if (in->resampler) {
-		F_LOG;
+		F_ALOG;
         in->resampler->reset(in->resampler);
         in->frames_in = 0;
     }
-	F_LOG;
+	F_ALOG;
     return 0;
 }
 
@@ -1793,7 +1793,7 @@ static void get_capture_delay(struct tuna_stream_in *in,
         buffer->time_stamp.tv_sec  = 0;
         buffer->time_stamp.tv_nsec = 0;
         buffer->delay_ns           = 0;
-        LOGW("read get_capture_delay(): pcm_htimestamp error");
+        ALOGW("read get_capture_delay(): pcm_htimestamp error");
         return;
     }
 
@@ -1814,7 +1814,7 @@ static void get_capture_delay(struct tuna_stream_in *in,
 
     buffer->time_stamp = tstamp;
     buffer->delay_ns   = delay_ns;
-    LOGV("get_capture_delay time_stamp = [%ld].[%ld], delay_ns: [%d],"
+    ALOGV("get_capture_delay time_stamp = [%ld].[%ld], delay_ns: [%d],"
          " kernel_delay:[%ld], buf_delay:[%ld], rsmp_delay:[%ld], kernel_frames:[%d], "
          "in->frames_in:[%d], in->proc_frames_in:[%d], frames:[%d]",
          buffer->time_stamp.tv_sec , buffer->time_stamp.tv_nsec, buffer->delay_ns,
@@ -1828,7 +1828,7 @@ static int32_t update_echo_reference(struct tuna_stream_in *in, size_t frames)
     struct echo_reference_buffer b;
     b.delay_ns = 0;
 
-    LOGV("update_echo_reference, frames = [%d], in->ref_frames_in = [%d],  "
+    ALOGV("update_echo_reference, frames = [%d], in->ref_frames_in = [%d],  "
           "b.frame_count = [%d]",
          frames, in->ref_frames_in, frames - in->ref_frames_in);
     if (in->ref_frames_in < frames) {
@@ -1847,12 +1847,12 @@ static int32_t update_echo_reference(struct tuna_stream_in *in, size_t frames)
         if (in->echo_reference->read(in->echo_reference, &b) == 0)
         {
             in->ref_frames_in += b.frame_count;
-            LOGV("update_echo_reference: in->ref_frames_in:[%d], "
+            ALOGV("update_echo_reference: in->ref_frames_in:[%d], "
                     "in->ref_buf_size:[%d], frames:[%d], b.frame_count:[%d]",
                  in->ref_frames_in, in->ref_buf_size, frames, b.frame_count);
         }
     } else
-        LOGW("update_echo_reference: NOT enough frames to read ref buffer");
+        ALOGW("update_echo_reference: NOT enough frames to read ref buffer");
     return b.delay_ns;
 }
 
@@ -1939,7 +1939,7 @@ static int get_next_buffer(struct resampler_buffer_provider *buffer_provider,
         return -ENODEV;
     }
 
-	LOGV("get_next_buffer: in->config.period_size: %d, audio_stream_frame_size: %d", 
+	ALOGV("get_next_buffer: in->config.period_size: %d, audio_stream_frame_size: %d", 
 		in->config.period_size, audio_stream_frame_size(&in->stream.common));
     if (in->frames_in == 0) {
         in->read_status = pcm_read(in->pcm,
@@ -1947,7 +1947,7 @@ static int get_next_buffer(struct resampler_buffer_provider *buffer_provider,
                                    in->config.period_size *
                                        audio_stream_frame_size(&in->stream.common));
         if (in->read_status != 0) {
-            LOGE("get_next_buffer() pcm_read error %d, %s", in->read_status, strerror(errno));
+            ALOGE("get_next_buffer() pcm_read error %d, %s", in->read_status, strerror(errno));
             buffer->raw = NULL;
             buffer->frame_count = 0;
             return in->read_status;
@@ -1982,7 +1982,7 @@ static void release_buffer(struct resampler_buffer_provider *buffer_provider,
  * if necessary and output the number of frames requested to the buffer specified */
 static ssize_t read_frames(struct tuna_stream_in *in, void *buffer, ssize_t frames)
 {
-	// F_LOG;
+	// F_ALOG;
     ssize_t frames_wr = 0;
 
     while (frames_wr < frames) {
@@ -2022,7 +2022,7 @@ static ssize_t read_frames(struct tuna_stream_in *in, void *buffer, ssize_t fram
  * to the buffer specified */
 static ssize_t process_frames(struct tuna_stream_in *in, void* buffer, ssize_t frames)
 {
-	F_LOG;
+	F_ALOG;
     ssize_t frames_wr = 0;
     audio_buffer_t in_buf;
     audio_buffer_t out_buf;
@@ -2038,7 +2038,7 @@ static ssize_t process_frames(struct tuna_stream_in *in, void* buffer, ssize_t f
                 in->proc_buf = (int16_t *)realloc(in->proc_buf,
                                          in->proc_buf_size *
                                              in->config.channels * sizeof(int16_t));
-                LOGV("process_frames(): in->proc_buf %p size extended to %d frames",
+                ALOGV("process_frames(): in->proc_buf %p size extended to %d frames",
                      in->proc_buf, in->proc_buf_size);
             }
             frames_rd = read_frames(in,
@@ -2089,7 +2089,7 @@ static ssize_t process_frames(struct tuna_stream_in *in, void* buffer, ssize_t f
 static ssize_t in_read(struct audio_stream_in *stream, void* buffer,
                        size_t bytes)
 {
-	// F_LOG;
+	// F_ALOG;
     int ret = 0;
     struct tuna_stream_in *in = (struct tuna_stream_in *)stream;
     struct tuna_audio_device *adev = in->dev;
@@ -2462,7 +2462,7 @@ static int adev_open_input_stream(struct audio_hw_device *dev, uint32_t devices,
     memcpy(&in->config, &pcm_config_mm_ul, sizeof(pcm_config_mm_ul));
     in->config.channels = channel_count;
 
-	LOGD("to malloc in-buffer: period_size: %d, frame_size: %d", 
+	ALOGD("to malloc in-buffer: period_size: %d, frame_size: %d", 
 		in->config.period_size, audio_stream_frame_size(&in->stream.common));
     in->buffer = malloc(in->config.period_size *
                         audio_stream_frame_size(&in->stream.common) * 8);
@@ -2601,7 +2601,7 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->mixer = mixer_open(0);
     if (!adev->mixer) {
         free(adev);
-        LOGE("Unable to open the mixer, aborting.");
+        ALOGE("Unable to open the mixer, aborting.");
         return -EINVAL;
     }
 
@@ -2628,9 +2628,9 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->mixer_ctls.earpiece_enable = mixer_get_ctl_by_name(adev->mixer,
                                            MIXER_EARPHONE_ENABLE_SWITCH);
     adev->mixer_ctls.left_capture = mixer_get_ctl_by_name(adev->mixer,
-                                           MIXER_ANALOG_LEFT_CAPTURE_ROUTE);
+                                           MIXER_ANAALOG_LEFT_CAPTURE_ROUTE);
     adev->mixer_ctls.right_capture = mixer_get_ctl_by_name(adev->mixer,
-                                           MIXER_ANALOG_RIGHT_CAPTURE_ROUTE);
+                                           MIXER_ANAALOG_RIGHT_CAPTURE_ROUTE);
     adev->mixer_ctls.amic_ul_volume = mixer_get_ctl_by_name(adev->mixer,
                                            MIXER_AMIC_UL_VOLUME);
     adev->mixer_ctls.voice_ul_volume = mixer_get_ctl_by_name(adev->mixer,
@@ -2656,8 +2656,8 @@ static int adev_open(const hw_module_t* module, const char* name,
         !adev->mixer_ctls.earpiece_volume) {
         mixer_close(adev->mixer);
         free(adev);
-        LOGE("Unable to locate all mixer controls, aborting.");
-        LOGW("mixer value: %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d\n",
+        ALOGE("Unable to locate all mixer controls, aborting.");
+        ALOGW("mixer value: %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d %d\n %d\n",
         !adev->mixer_ctls.dl1_eq, !adev->mixer_ctls.vx_dl2_volume,
         !adev->mixer_ctls.mm_dl2_volume , !adev->mixer_ctls.mm_dl1 ,
         !adev->mixer_ctls.vx_dl1 , !adev->mixer_ctls.mm_dl2 ,
