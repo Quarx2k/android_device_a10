@@ -15,6 +15,7 @@
 #
 
 PRODUCT_CHARACTERISTICS := tablet
+DEVICE_PACKAGE_OVERLAYS := device/allwinner/a10/overlay
 
 ## (3)  Finally, the least specific parts, i.e. the non-GSM-specific aspects
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -27,8 +28,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vold.umsdirtyratio=20 \
 	net.dns1=8.8.8.8 \
 	net.dns2=8.8.4.4 
-
-DEVICE_PACKAGE_OVERLAYS := device/allwinner/a10/overlay
 
 # Permissions
 PRODUCT_COPY_FILES += \

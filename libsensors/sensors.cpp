@@ -55,8 +55,8 @@ static const struct sensor_t sSensorList[] = {
 };
 
 
-static int open_sensors(const struct hw_module_t* module, const char* id,
-                        struct hw_device_t** device);
+static int open_sensors(const struct hw_module_t* module, const char* name,
+        struct hw_device_t** device);
 
 
 static int sensors__get_sensors_list(struct sensors_module_t* module,
@@ -241,8 +241,8 @@ static int poll__poll(struct sensors_poll_device_t *dev,
 /*****************************************************************************/
 
 /** Open a new instance of a sensor device using name */
-static int open_sensors(struct hw_module_t* module, const char* id,
-                        struct hw_device_t** device)
+static int open_sensors(const struct hw_module_t* module, const char* name,
+        struct hw_device_t** device)
 {
         int status = -EINVAL;
         sensors_poll_context_t *dev = new sensors_poll_context_t();
