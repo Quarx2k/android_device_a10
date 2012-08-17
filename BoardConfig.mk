@@ -52,7 +52,8 @@ USE_OPENGL_RENDERER := true
 BOARD_USE_SKIA_LCDTEXT := true
 COMMON_GLOBAL_CFLAGS += -DSURFACEFLINGER_FORCE_SCREEN_RELEASE
 TARGET_BOOTANIMATION_PRELOAD := true
-#TARGET_BOOTANIMATION_TEXTURE_CACHE := true
+TARGET_BOOTANIMATION_TEXTURE_CACHE := true
+TARGET_BOOTANIMATION_USE_RGB565 "= true
 
 #Recovery Stuff
 #TARGET_RECOVERY_UI_LIB := librecovery_ui_generic
@@ -72,13 +73,11 @@ BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_rtl
 BOARD_WLAN_DEVICE                := rtl8192cu
 WIFI_DRIVER_MODULE_NAME          := 8192cu
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/8192cu.ko"
-
 TARGET_CUSTOM_WIFI := ../../hardware/realtek/wlan/wifi_realtek.c
 
-TARGET_BOOTANIMATION_PRELOAD := true
-TARGET_BOOTANIMATION_TEXTURE_CACHE := true
-ENABLE_WEBGL := true
+COMMON_GLOBAL_CFLAGS += -DICS_CAMERA_BLOB #temporary
 
+ENABLE_WEBGL := true
 # Extra : to build external modules sources
 #TARGET_KERNEL_SOURCE := $(ANDROID_BUILD_TOP)/kernel/
 #TARGET_KERNEL_CONFIG := sun4i_aurora_defconfig
