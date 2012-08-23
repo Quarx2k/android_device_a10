@@ -70,6 +70,8 @@ PRODUCT_PACKAGES += audio.a2dp.default libaudioutils libtinyalsa audio_policy.su
 
 # CedarX libraries
 PRODUCT_PACKAGES += libCedarA libCedarX libcedarv libcedarxbase libcedarxosal libswdrm libcedarxsftdemux
+PRODUCT_PACKAGES += libcedarv_adapter libve libfacedetection libaw_audio libaw_audioa libcedarv_base
+PRODUCT_PACKAGES += libstagefright_soft_cedar_h264dec librtmp
 
 # copy all others kernel modules under the "modules" directory to system/lib/modules
 PRODUCT_COPY_FILES += $(shell test -d device/allwinner/a10/prebuilt/lib/modules && \
