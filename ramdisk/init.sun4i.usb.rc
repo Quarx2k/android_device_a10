@@ -1,4 +1,21 @@
-ob boot
+# Copyright (C) 2012 The Android Open Source Project
+#
+# USB configuration common for all android devices
+#
+on boot
+    chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
+    chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
+
+    #ADB on Boot
+    write /sys/class/android_usb/android0/enable 	0
+    write /sys/class/android_usb/android0/idVendor 	18d1
+    write /sys/class/android_usb/android0/idProduct	0003
+    write /sys/class/android_usb/android0/functions	mass_storage,adb
+    write /sys/class/android_usb/android0/enable 	1
+    start adbd
+
 
 on property:sys.usb.config=mass_storage
     write /sys/class/android_usb/android0/enable	0

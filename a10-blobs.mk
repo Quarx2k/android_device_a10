@@ -20,6 +20,7 @@ DEVICE_PREBUILT := ${device_path}/prebuilt
 PRODUCT_COPY_FILES += \
 	device/allwinner/a10/ramdisk/init.sun4i.rc:root/init.sun4i.rc \
 	device/allwinner/a10/ramdisk/init.sun4i.usb.rc:root/init.sun4i.usb.rc \
+	device/allwinner/a10/ramdisk/init.trace.rc:root/init.trace.rc \
 	device/allwinner/a10/ramdisk/ueventd.rc:root/ueventd.rc \
 	device/allwinner/a10/ramdisk/ueventd.sun4i.rc:root/ueventd.sun4i.rc \
 	device/allwinner/a10/ramdisk/adbd:root/sbin/adbd \
