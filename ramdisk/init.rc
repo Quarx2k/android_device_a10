@@ -200,7 +200,7 @@ on post-fs-data
 
     mkdir /cache/dalvik-cache 0771 system system
     chown system system /cache/dalvik-cache
-    chmod 0771 /cache/dalvik-cache
+    chmod 0777 /cache/dalvik-cache
 
     # create resource-cache and double-check the perms
     mkdir /data/resource-cache 0771 system system
