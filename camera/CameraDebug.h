@@ -4,7 +4,7 @@
 // #define LOG_NDEBUG 0
 #include <cutils/log.h>
 
-#define F_LOG LOGV("%s, line: %d", __FUNCTION__, __LINE__);
+#define F_LOG ALOGV("%s, line: %d", __FUNCTION__, __LINE__);
 
 #endif // CAMERA_DEBUG_H
 

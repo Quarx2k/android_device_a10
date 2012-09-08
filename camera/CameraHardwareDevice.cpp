@@ -57,7 +57,7 @@ status_t CameraHardwareDevice::Initialize()
 	mV4L2CameraDevice = new V4L2CameraDevice(this, mCameraID);
 	if (mV4L2CameraDevice == NULL)
 	{
-		LOGE("Failed to create V4L2Camera instance");
+		ALOGE("Failed to create V4L2Camera instance");
 		return NO_MEMORY;
 	}
 	

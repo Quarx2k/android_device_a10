@@ -85,7 +85,7 @@ CameraHardware::CameraHardware(int cameraId, struct hw_module_t* module)
 	mCameraConfig = new CCameraConfig(cameraId);
 	if (mCameraConfig == NULL)
 	{
-		LOGE("create CCameraConfig failed");
+		ALOGE("create CCameraConfig failed");
 	}
 	
 	mCameraConfig->initParameters();
@@ -120,28 +120,28 @@ void CameraHardware::initDefaultParameters()
 	String8 parameterString;
 	char * value;
 
-	LOGV("CameraHardware::initDefaultParameters");
+	ALOGV("CameraHardware::initDefaultParameters");
 	
 	if (mCameraConfig->cameraFacing() == CAMERA_FACING_BACK)
 	{
 	    p.set(CameraHardware::FACING_KEY, CameraHardware::FACING_BACK);
-	    LOGV("%s: camera is facing %s", __FUNCTION__, CameraHardware::FACING_BACK);
+	    ALOGV("%s: camera is facing %s", __FUNCTION__, CameraHardware::FACING_BACK);
 	}
 	else
 	{
 	    p.set(CameraHardware::FACING_KEY, CameraHardware::FACING_FRONT);
-	    LOGV("%s: camera is facing %s", __FUNCTION__, CameraHardware::FACING_FRONT);
+	    ALOGV("%s: camera is facing %s", __FUNCTION__, CameraHardware::FACING_FRONT);
 	}
 	
     p.set(CameraHardware::ORIENTATION_KEY, 0);
 	
-	LOGV("to init preview size");
+	ALOGV("to init preview size");
 	// preview size
 	if (mCameraConfig->supportPreviewSize())
 	{
 		value = mCameraConfig->supportPreviewSizeValue();
 		p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, value);
-		LOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, value);
+		ALOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, value);
 		p.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES, value);
 
 		value = mCameraConfig->defaultPreviewSizeValue();
@@ -150,13 +150,13 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO, value);
 	}
 
-	LOGV("to init picture size");
+	ALOGV("to init picture size");
 	// picture size
 	if (mCameraConfig->supportPictureSize())
 	{
 		value = mCameraConfig->supportPictureSizeValue();
 		p.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES, value);
-		LOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PICTURE_SIZES, value);
+		ALOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PICTURE_SIZES, value);
 
 		value = mCameraConfig->defaultPictureSizeValue();
 		p.set(CameraParameters::KEY_PICTURE_SIZE, value);
@@ -164,13 +164,13 @@ void CameraHardware::initDefaultParameters()
 		p.setPictureFormat(CameraParameters::PIXEL_FORMAT_JPEG);
 	}
 
-	LOGV("to init frame rate");
+	ALOGV("to init frame rate");
 	// frame rate
 	if (mCameraConfig->supportFrameRate())
 	{
 		value = mCameraConfig->supportFrameRateValue();
 		p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES, value);
-		LOGV("supportFrameRateValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES, value);
+		ALOGV("supportFrameRateValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES, value);
 
 		p.set(CameraParameters::KEY_PREVIEW_FPS_RANGE, "5000,30000");				// add temp for CTS
 		p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE, "(5000,30000)");	// add temp for CTS
@@ -179,7 +179,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_PREVIEW_FRAME_RATE, value);
 	}
 
-	LOGV("to init focus");
+	ALOGV("to init focus");
 	// focus
 	if (mCameraConfig->supportFocusMode())
 	{
@@ -198,7 +198,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_FOCUS_DISTANCES, "0.10,1.20,Infinity");
 	}
 
-	LOGV("to init color effect");
+	ALOGV("to init color effect");
 	// color effect	
 	if (mCameraConfig->supportColorEffect())
 	{
@@ -208,7 +208,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_EFFECT, value);
 	}
 
-	LOGV("to init flash mode");
+	ALOGV("to init flash mode");
 	// flash mode	
 	if (mCameraConfig->supportFlashMode())
 	{
@@ -218,7 +218,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_FLASH_MODE, value);
 	}
 
-	LOGV("to init scene mode");
+	ALOGV("to init scene mode");
 	// scene mode	
 	if (mCameraConfig->supportSceneMode())
 	{
@@ -228,7 +228,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_SCENE_MODE, value);
 	}
 
-	LOGV("to init white balance");
+	ALOGV("to init white balance");
 	// white balance	
 	if (mCameraConfig->supportWhiteBalance())
 	{
@@ -238,7 +238,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_WHITE_BALANCE, value);
 	}
 
-	LOGV("to init exposure compensation");
+	ALOGV("to init exposure compensation");
 	// exposure compensation
 	if (mCameraConfig->supportExposureCompensation())
 	{
@@ -262,7 +262,7 @@ void CameraHardware::initDefaultParameters()
 		p.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, "0");
 	}
 
-	LOGV("to init zoom");
+	ALOGV("to init zoom");
 	// zoom
 	if (mCameraConfig->supportZoom())
 	{
@@ -312,7 +312,7 @@ void CameraHardware::initDefaultParameters()
 
 	mParameters = p;
 
-	LOGV("CameraHardware::initDefaultParameters ok");
+	ALOGV("CameraHardware::initDefaultParameters ok");
 }
 
 bool CameraHardware::onNextFrameAvailable(const void* frame,
@@ -373,11 +373,11 @@ void CameraHardware::onCameraDeviceError(int err)
 
 status_t CameraHardware::connectCamera(hw_device_t** device)
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     status_t res = EINVAL;
     V4L2Camera* const camera_dev = getCameraDevice();
-    LOGE_IF(camera_dev == NULL, "%s: No camera device instance.", __FUNCTION__);
+    ALOGE_IF(camera_dev == NULL, "%s: No camera device instance.", __FUNCTION__);
 
     if (camera_dev != NULL) {
         /* Connect to the camera device. */
@@ -392,14 +392,14 @@ status_t CameraHardware::connectCamera(hw_device_t** device)
 
 status_t CameraHardware::closeCamera()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     return cleanupCamera();
 }
 
 status_t CameraHardware::getCameraInfo(struct camera_info* info)
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     const char* valstr = NULL;
 
@@ -525,7 +525,7 @@ void CameraHardware::stopRecording()
 	mParameters.getVideoSize(&new_video_width, &new_video_height);
 	
 	// do not use high size for preview
-	LOGV("last preview size: %dx%d", mLastPreviewWidth, mLastPreviewHeight);
+	ALOGV("last preview size: %dx%d", mLastPreviewWidth, mLastPreviewHeight);
 	mParameters.setPreviewSize(mLastPreviewWidth, mLastPreviewHeight);
 	mParameters.setVideoSize(mLastPreviewWidth, mLastPreviewHeight);
 	
@@ -552,14 +552,14 @@ void CameraHardware::releaseRecordingFrame(const void* opaque)
 
 status_t CameraHardware::setAutoFocus()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     return mCallbackNotifier.autoFocus();
 }
 
 status_t CameraHardware::cancelAutoFocus()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     /* TODO: Future enhancements. */
     return NO_ERROR;
@@ -567,7 +567,7 @@ status_t CameraHardware::cancelAutoFocus()
 
 status_t CameraHardware::takePicture()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     status_t res;
     int pic_width, pic_height, frame_width, frame_height;
@@ -583,7 +583,7 @@ status_t CameraHardware::takePicture()
 	frame_height = pic_height;
 	getCameraDevice()->tryFmtSize(&frame_width, &frame_height);
 	// mParameters.setPreviewSize(frame_width, frame_height);
-	LOGD("%s, pic_size: %dx%d, frame_size: %dx%d", 
+	ALOGD("%s, pic_size: %dx%d, frame_size: %dx%d", 
 		__FUNCTION__, pic_width, pic_height, frame_width, frame_height);
 
 	getCameraDevice()->setPictureSize(pic_width, pic_height);
@@ -599,7 +599,7 @@ status_t CameraHardware::takePicture()
         /* We only have JPEG converted for NV21 format. */
         org_fmt = V4L2_PIX_FMT_NV12;
     } else {
-        LOGE("%s: Unsupported pixel format %s", __FUNCTION__, pix_fmt);
+        ALOGE("%s: Unsupported pixel format %s", __FUNCTION__, pix_fmt);
         return EINVAL;
     }
     /* Get JPEG quality. */
@@ -628,7 +628,7 @@ status_t CameraHardware::takePicture()
      * enabled. */
     V4L2Camera* const camera_dev = getCameraDevice();
     if (camera_dev->isStarted()) {
-        LOGW("%s: Camera device is started", __FUNCTION__);
+        ALOGW("%s: Camera device is started", __FUNCTION__);
         camera_dev->stopDeliveringFrames();
         camera_dev->stopDevice();
     }
@@ -642,7 +642,7 @@ status_t CameraHardware::takePicture()
 	
 	camera_dev->setTakingPicture(true);
     /* Start camera device for the picture frame. */
-    LOGD("Starting camera for picture: %.4s(%s)[%dx%d]",
+    ALOGD("Starting camera for picture: %.4s(%s)[%dx%d]",
          reinterpret_cast<const char*>(&org_fmt), pix_fmt, frame_width, frame_height);
     res = camera_dev->startDevice(frame_width, frame_height, org_fmt);
     if (res != NO_ERROR) {
@@ -670,14 +670,14 @@ status_t CameraHardware::takePicture()
 
 status_t CameraHardware::cancelPicture()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     return NO_ERROR;
 }
 
 status_t CameraHardware::setParameters(const char* p)
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 	int ret = UNKNOWN_ERROR;
 	
     PrintParamDiff(mParameters, p);
@@ -689,13 +689,13 @@ status_t CameraHardware::setParameters(const char* p)
 	V4L2CameraDevice* pV4L2Device = getCameraDevice();
 	if (pV4L2Device == NULL)
 	{
-		LOGE("%s, getCameraDevice failed", __FUNCTION__);
+		ALOGE("%s, getCameraDevice failed", __FUNCTION__);
 		return UNKNOWN_ERROR;
 	}
 
 	// preview format
 	const char * new_preview_format = params.getPreviewFormat();
-	LOGD("new_preview_format : %s", new_preview_format);
+	ALOGD("new_preview_format : %s", new_preview_format);
 	if (strcmp(new_preview_format, CameraParameters::PIXEL_FORMAT_YUV420SP) == 0
 		|| strcmp(new_preview_format, CameraParameters::PIXEL_FORMAT_YUV420P) == 0) 
 	{
@@ -703,13 +703,13 @@ status_t CameraHardware::setParameters(const char* p)
 	}
 	else
     {
-        LOGE("Only yuv420sp or yuv420p preview is supported");
+        ALOGE("Only yuv420sp or yuv420p preview is supported");
         return -EINVAL;
     }
 
 	if (strcmp(params.getPictureFormat(), CameraParameters::PIXEL_FORMAT_JPEG) != 0) 
     {
-        LOGE("Only jpeg still pictures are supported");
+        ALOGE("Only jpeg still pictures are supported");
         return -EINVAL;
     }
 
@@ -717,14 +717,14 @@ status_t CameraHardware::setParameters(const char* p)
 	int new_picture_width  = 0;
     int new_picture_height = 0;
     params.getPictureSize(&new_picture_width, &new_picture_height);
-    LOGV("%s : new_picture_width x new_picture_height = %dx%d", __FUNCTION__, new_picture_width, new_picture_height);
+    ALOGV("%s : new_picture_width x new_picture_height = %dx%d", __FUNCTION__, new_picture_width, new_picture_height);
     if (0 < new_picture_width && 0 < new_picture_height) 
 	{
 		mParameters.setPictureSize(new_picture_width, new_picture_height);
     }
 	else
 	{
-		LOGE("error picture size");
+		ALOGE("error picture size");
 		return -EINVAL;
 	}
 
@@ -732,7 +732,7 @@ status_t CameraHardware::setParameters(const char* p)
     int new_preview_width  = 0;
     int new_preview_height = 0;
     params.getPreviewSize(&new_preview_width, &new_preview_height);
-    LOGV("%s : new_preview_width x new_preview_height = %dx%d",
+    ALOGV("%s : new_preview_width x new_preview_height = %dx%d",
          __FUNCTION__, new_preview_width, new_preview_height);
 	if (0 < new_preview_width && 0 < new_preview_height)
 	{
@@ -751,7 +751,7 @@ status_t CameraHardware::setParameters(const char* p)
 	}
 	else
 	{
-		LOGE("error preview size");
+		ALOGE("error preview size");
 		return -EINVAL;
 	}
 
@@ -766,33 +766,33 @@ status_t CameraHardware::setParameters(const char* p)
 	}
 	else
 	{
-		LOGE("error preview frame rate");
+		ALOGE("error preview frame rate");
 		return -EINVAL;
 	}
 
 	// JPEG image quality
     int new_jpeg_quality = params.getInt(CameraParameters::KEY_JPEG_QUALITY);
-    LOGV("%s : new_jpeg_quality %d", __FUNCTION__, new_jpeg_quality);
+    ALOGV("%s : new_jpeg_quality %d", __FUNCTION__, new_jpeg_quality);
     if (new_jpeg_quality >=1 && new_jpeg_quality <= 100) 
 	{
 		mParameters.set(CameraParameters::KEY_JPEG_QUALITY, new_jpeg_quality);
     }
 	else
 	{
-		LOGE("error picture quality");
+		ALOGE("error picture quality");
 		return -EINVAL;
 	}
 
 	// rotation	
 	int new_rotation = params.getInt(CameraParameters::KEY_ROTATION);
-    LOGV("%s : new_rotation %d", __FUNCTION__, new_rotation);
+    ALOGV("%s : new_rotation %d", __FUNCTION__, new_rotation);
     if (0 <= new_rotation) 
 	{
         mParameters.set(CameraParameters::KEY_ROTATION, new_rotation);
     }
 	else
 	{
-		LOGE("error rotate");
+		ALOGE("error rotate");
 		return -EINVAL;
 	}
 
@@ -816,13 +816,13 @@ status_t CameraHardware::setParameters(const char* p)
 	            new_image_effect = V4L2_COLORFX_NEGATIVE;
 	        else {
 	            //posterize, whiteboard, blackboard, solarize
-	            LOGE("ERR(%s):Invalid effect(%s)", __FUNCTION__, new_image_effect_str);
+	            ALOGE("ERR(%s):Invalid effect(%s)", __FUNCTION__, new_image_effect_str);
 	            ret = UNKNOWN_ERROR;
 	        }
 
 	        if (new_image_effect >= 0) {
 	            if (pV4L2Device->setImageEffect(new_image_effect) < 0) {
-	                LOGE("ERR(%s):Fail on mV4L2Camera->setImageEffect(effect(%d))", __FUNCTION__, new_image_effect);
+	                ALOGE("ERR(%s):Fail on mV4L2Camera->setImageEffect(effect(%d))", __FUNCTION__, new_image_effect);
 	                ret = UNKNOWN_ERROR;
 	            } else {
 	                mParameters.set(CameraParameters::KEY_EFFECT, new_image_effect_str);
@@ -835,7 +835,7 @@ status_t CameraHardware::setParameters(const char* p)
 	if (mCameraConfig->supportWhiteBalance())
 	{
 		const char *new_white_str = params.get(CameraParameters::KEY_WHITE_BALANCE);
-	    LOGV("%s : new_white_str %s", __FUNCTION__, new_white_str);
+	    ALOGV("%s : new_white_str %s", __FUNCTION__, new_white_str);
 	    if (new_white_str != NULL) {
 	        int new_white = -1;
 
@@ -857,7 +857,7 @@ status_t CameraHardware::setParameters(const char* p)
 	                         CameraParameters::WHITE_BALANCE_WARM_FLUORESCENT))
 	            new_white = V4L2_WB_TUNGSTEN;
 	        else{
-	            LOGE("ERR(%s):Invalid white balance(%s)", __FUNCTION__, new_white_str); //twilight, shade
+	            ALOGE("ERR(%s):Invalid white balance(%s)", __FUNCTION__, new_white_str); //twilight, shade
 	            ret = UNKNOWN_ERROR;
 	        }
 
@@ -865,7 +865,7 @@ status_t CameraHardware::setParameters(const char* p)
 			{
 	            if (pV4L2Device->setWhiteBalance(new_white) < 0) 
 				{
-	                LOGE("ERR(%s):Fail on mV4L2Camera->setWhiteBalance(white(%d))", __FUNCTION__, new_white);
+	                ALOGE("ERR(%s):Fail on mV4L2Camera->setWhiteBalance(white(%d))", __FUNCTION__, new_white);
 	                ret = UNKNOWN_ERROR;
 	            } 
 				else 
@@ -882,11 +882,11 @@ status_t CameraHardware::setParameters(const char* p)
 		int new_exposure_compensation = params.getInt(CameraParameters::KEY_EXPOSURE_COMPENSATION);
 		int max_exposure_compensation = params.getInt(CameraParameters::KEY_MAX_EXPOSURE_COMPENSATION);
 		int min_exposure_compensation = params.getInt(CameraParameters::KEY_MIN_EXPOSURE_COMPENSATION);
-		LOGV("%s : new_exposure_compensation %d", __FUNCTION__, new_exposure_compensation);
+		ALOGV("%s : new_exposure_compensation %d", __FUNCTION__, new_exposure_compensation);
 		if ((min_exposure_compensation <= new_exposure_compensation) &&
 			(max_exposure_compensation >= new_exposure_compensation)) {
 			if (pV4L2Device->setExposure(new_exposure_compensation) < 0) {
-				LOGE("ERR(%s):Fail on mV4L2Camera->setBrightness(brightness(%d))", __FUNCTION__, new_exposure_compensation);
+				ALOGE("ERR(%s):Fail on mV4L2Camera->setBrightness(brightness(%d))", __FUNCTION__, new_exposure_compensation);
 				ret = UNKNOWN_ERROR;
 			} else {
 				mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, new_exposure_compensation);
@@ -905,7 +905,7 @@ status_t CameraHardware::setParameters(const char* p)
 	if (mCameraConfig->supportZoom())
 	{
 		int new_zoom = params.getInt(CameraParameters::KEY_ZOOM);
-		LOGV("new_zoom: %d", new_zoom);
+		ALOGV("new_zoom: %d", new_zoom);
 		mParameters.set(CameraParameters::KEY_ZOOM, new_zoom);
 	}
 
@@ -913,7 +913,7 @@ status_t CameraHardware::setParameters(const char* p)
 	const char *new_focus_mode_str = params.get(CameraParameters::KEY_FOCUS_MODE);
 	if (strcmp(new_focus_mode_str, CameraParameters::FOCUS_MODE_AUTO))
 	{
-		LOGE("invalid focus mode: %s", new_focus_mode_str);
+		ALOGE("invalid focus mode: %s", new_focus_mode_str);
 		return -EINVAL;
 	}
 
@@ -965,7 +965,7 @@ status_t CameraHardware::setParameters(const char* p)
 	// JPEG thumbnail size
 	int new_jpeg_thumbnail_width = params.getInt(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH);
 	int new_jpeg_thumbnail_height= params.getInt(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT);
-	LOGV("new_jpeg_thumbnail_width: %d, new_jpeg_thumbnail_height: %d",
+	ALOGV("new_jpeg_thumbnail_width: %d, new_jpeg_thumbnail_height: %d",
 		new_jpeg_thumbnail_width, new_jpeg_thumbnail_height);
 	if (0 <= new_jpeg_thumbnail_width && 0 <= new_jpeg_thumbnail_height) {
 		mCallbackNotifier.setJpegThumbnailSize(new_jpeg_thumbnail_width, new_jpeg_thumbnail_height);
@@ -990,7 +990,7 @@ char* CameraHardware::getParameters()
         strncpy(ret_str, params.string(), params.length()+1);
         return ret_str;
     } else {
-        LOGE("%s: Unable to allocate string for %s", __FUNCTION__, params.string());
+        ALOGE("%s: Unable to allocate string for %s", __FUNCTION__, params.string());
         /* Apparently, we can't return NULL fron this routine. */
         return &lNoParam;
     }
@@ -1007,7 +1007,7 @@ void CameraHardware::putParameters(char* params)
 
 status_t CameraHardware::sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
 {
-    LOGV("%s: cmd = %d, arg1 = %d, arg2 = %d", __FUNCTION__, cmd, arg1, arg2);
+    ALOGV("%s: cmd = %d, arg1 = %d, arg2 = %d", __FUNCTION__, cmd, arg1, arg2);
 
     /* TODO: Future enhancements. */
 
@@ -1026,14 +1026,14 @@ status_t CameraHardware::sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
 
 void CameraHardware::releaseCamera()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     cleanupCamera();
 }
 
 status_t CameraHardware::dumpCamera(int fd)
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
     /* TODO: Future enhancements. */
     return -EINVAL;
@@ -1045,7 +1045,7 @@ status_t CameraHardware::dumpCamera(int fd)
 
 status_t CameraHardware::doStartPreview()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 	
     V4L2Camera* camera_dev = getCameraDevice();
     if (camera_dev->isStarted()) {
@@ -1096,7 +1096,7 @@ status_t CameraHardware::doStartPreview()
         pix_fmt = mParameters.getPreviewFormat();
     }
     if (pix_fmt == NULL) {
-        LOGE("%s: Unable to obtain video format", __FUNCTION__);
+        ALOGE("%s: Unable to obtain video format", __FUNCTION__);
         mPreviewWindow.stopPreview();
         return EINVAL;
     }
@@ -1109,21 +1109,21 @@ status_t CameraHardware::doStartPreview()
         org_fmt = V4L2_PIX_FMT_RGB32;
     } else if (strcmp(pix_fmt, CameraParameters::PIXEL_FORMAT_YUV420SP) == 0) {
     	if (bPixFmtNV12) {
-			LOGV("============== DISP_SEQ_UVUV");
+			ALOGV("============== DISP_SEQ_UVUV");
 			mPreviewWindow.setLayerFormat(DISP_SEQ_UVUV);
         	org_fmt = V4L2_PIX_FMT_NV12;		// for HW encoder
     	} else {
-	    	LOGV("============== DISP_SEQ_VUVU");
+	    	ALOGV("============== DISP_SEQ_VUVU");
 			mPreviewWindow.setLayerFormat(DISP_SEQ_VUVU);
         	org_fmt = V4L2_PIX_FMT_NV21;		// for some apps
     	}
     } else {
-        LOGE("%s: Unsupported pixel format %s", __FUNCTION__, pix_fmt);
+        ALOGE("%s: Unsupported pixel format %s", __FUNCTION__, pix_fmt);
         mPreviewWindow.stopPreview();
         return EINVAL;
     }
 	
-    LOGD("Starting camera: %dx%d -> %.4s(%s)",
+    ALOGD("Starting camera: %dx%d -> %.4s(%s)",
          width, height, reinterpret_cast<const char*>(&org_fmt), pix_fmt);
     res = camera_dev->startDevice(width, height, org_fmt);
     if (res != NO_ERROR) {
@@ -1146,7 +1146,7 @@ status_t CameraHardware::doStartPreview()
 
 status_t CameraHardware::doStopPreview()
 {
-    LOGV("%s", __FUNCTION__);
+    ALOGV("%s", __FUNCTION__);
 
 	// set layer off can avoid Flicker
 	// mPreviewWindow.showLayer(false);
@@ -1156,13 +1156,14 @@ status_t CameraHardware::doStopPreview()
         /* Stop the camera. */
         if (getCameraDevice()->isStarted()) {
             getCameraDevice()->stopDeliveringFrames();
+            mPreviewWindow.stopPreview();
             res = getCameraDevice()->stopDevice();
         }
 
-        if (res == NO_ERROR) {
+     //   if (res == NO_ERROR) {
             /* Disable preview as well. */
-            mPreviewWindow.stopPreview();
-        }
+    //        mPreviewWindow.stopPreview();
+    //    }
     }
 
     return NO_ERROR;
@@ -1226,7 +1227,7 @@ int CameraHardware::set_preview_window(struct camera_device* dev,
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->setPreviewWindow(window);
@@ -1244,7 +1245,7 @@ void CameraHardware::set_callbacks(
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->setCallbacks(notify_cb, data_cb, data_cb_timestamp, get_memory, user);
@@ -1256,7 +1257,7 @@ void CameraHardware::enable_msg_type(struct camera_device* dev, int32_t msg_type
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->enableMsgType(msg_type);
@@ -1268,7 +1269,7 @@ void CameraHardware::disable_msg_type(struct camera_device* dev, int32_t msg_typ
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->disableMsgType(msg_type);
@@ -1280,7 +1281,7 @@ int CameraHardware::msg_type_enabled(struct camera_device* dev, int32_t msg_type
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->isMsgTypeEnabled(msg_type);
@@ -1292,7 +1293,7 @@ int CameraHardware::start_preview(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->startPreview();
@@ -1304,7 +1305,7 @@ void CameraHardware::stop_preview(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->stopPreview();
@@ -1316,7 +1317,7 @@ int CameraHardware::preview_enabled(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->isPreviewEnabled();
@@ -1329,7 +1330,7 @@ int CameraHardware::store_meta_data_in_buffers(struct camera_device* dev,
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->storeMetaDataInBuffers(enable);
@@ -1341,7 +1342,7 @@ int CameraHardware::start_recording(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->startRecording();
@@ -1353,7 +1354,7 @@ void CameraHardware::stop_recording(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->stopRecording();
@@ -1365,7 +1366,7 @@ int CameraHardware::recording_enabled(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->isRecordingEnabled();
@@ -1378,7 +1379,7 @@ void CameraHardware::release_recording_frame(struct camera_device* dev,
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->releaseRecordingFrame(opaque);
@@ -1390,7 +1391,7 @@ int CameraHardware::auto_focus(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->setAutoFocus();
@@ -1402,7 +1403,7 @@ int CameraHardware::cancel_auto_focus(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->cancelAutoFocus();
@@ -1414,7 +1415,7 @@ int CameraHardware::take_picture(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->takePicture();
@@ -1426,7 +1427,7 @@ int CameraHardware::cancel_picture(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->cancelPicture();
@@ -1438,7 +1439,7 @@ int CameraHardware::set_parameters(struct camera_device* dev, const char* parms)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->setParameters(parms);
@@ -1450,7 +1451,7 @@ char* CameraHardware::get_parameters(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return NULL;
     }
     return ec->getParameters();
@@ -1462,7 +1463,7 @@ void CameraHardware::put_parameters(struct camera_device* dev, char* params)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->putParameters(params);
@@ -1477,7 +1478,7 @@ int CameraHardware::send_command(struct camera_device* dev,
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->sendCommand(cmd, arg1, arg2);
@@ -1489,7 +1490,7 @@ void CameraHardware::release(struct camera_device* dev)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return;
     }
     ec->releaseCamera();
@@ -1501,7 +1502,7 @@ int CameraHardware::dump(struct camera_device* dev, int fd)
 
     CameraHardware* ec = reinterpret_cast<CameraHardware*>(dev->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->dumpCamera(fd);
@@ -1514,7 +1515,7 @@ int CameraHardware::close(struct hw_device_t* device)
     CameraHardware* ec =
         reinterpret_cast<CameraHardware*>(reinterpret_cast<struct camera_device*>(device)->priv);
     if (ec == NULL) {
-        LOGE("%s: Unexpected NULL camera device", __FUNCTION__);
+        ALOGE("%s: Unexpected NULL camera device", __FUNCTION__);
         return -EINVAL;
     }
     return ec->closeCamera();
@@ -1583,7 +1584,7 @@ static char* AddValue(const char* param, const char* val)
     const size_t len1 = strlen(param);
     const size_t len2 = strlen(val);
     char* ret = reinterpret_cast<char*>(malloc(len1 + len2 + 2));
-    LOGE_IF(ret == NULL, "%s: Memory failure", __FUNCTION__);
+    ALOGE_IF(ret == NULL, "%s: Memory failure", __FUNCTION__);
     if (ret != NULL) {
         memcpy(ret, param, len1);
         ret[len1] = ',';
@@ -1615,13 +1616,13 @@ static void PrintParamDiff(const CameraParameters& current,
             const char* in_current = current.get(tmp);
             if (in_current != NULL) {
                 if (strcmp(in_current, val)) {
-                    LOGD("=== Value changed: %s: %s -> %s", tmp, in_current, val);
+                    ALOGD("=== Value changed: %s: %s -> %s", tmp, in_current, val);
                 }
             } else {
-                LOGD("+++ New parameter: %s=%s", tmp, val);
+                ALOGD("+++ New parameter: %s=%s", tmp, val);
             }
         } else {
-            LOGW("No value separator in %s", tmp);
+            ALOGW("No value separator in %s", tmp);
         }
         wrk = next + 1;
         next = strchr(wrk, ';');

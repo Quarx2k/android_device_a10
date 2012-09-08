@@ -99,11 +99,11 @@ status_t V4L2CameraDevice::connectDevice()
 
     Mutex::Autolock locker(&mObjectLock);
     if (!isInitialized()) {
-        LOGE("%s: Fake camera device is not initialized.", __FUNCTION__);
+        ALOGE("%s: Fake camera device is not initialized.", __FUNCTION__);
         return EINVAL;
     }
     if (isConnected()) {
-        LOGW("%s: Fake camera device is already connected.", __FUNCTION__);
+        ALOGW("%s: Fake camera device is already connected.", __FUNCTION__);
         return NO_ERROR;
     }
 
@@ -117,10 +117,10 @@ status_t V4L2CameraDevice::connectDevice()
 	ret = cedarx_hardware_init(2);// CEDARX_HARDWARE_MODE_VIDEO
 	if (ret < 0)
 	{
-		LOGE("cedarx_hardware_init failed");
+		ALOGE("cedarx_hardware_init failed");
 		return -1;
 	}
-	LOGD("cedarx_hardware_init ok");
+	ALOGD("cedarx_hardware_init ok");
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -128,7 +128,7 @@ status_t V4L2CameraDevice::connectDevice()
 		mPreviewBuffer.buf_vir_addr[i] = (int)cedara_phymalloc_map(buffer_len, 1024);
 		mPreviewBuffer.buf_phy_addr[i] = cedarv_address_vir2phy((void*)mPreviewBuffer.buf_vir_addr[i]);
 		mPreviewBuffer.buf_phy_addr[i] |= 0x40000000;
-		LOGD("preview buffer: index: %d, vir: %x, phy: %x, len: %x", 
+		ALOGD("preview buffer: index: %d, vir: %x, phy: %x, len: %x", 
 				i, mPreviewBuffer.buf_vir_addr[i], mPreviewBuffer.buf_phy_addr[i], buffer_len);
 	//	memset((void*)mPreviewBuffer.buf_vir_addr[i], 0x10, MAX_PREVIEW_WIDTH * MAX_PREVIEW_HEIGHT /2);
 	}
@@ -145,11 +145,11 @@ status_t V4L2CameraDevice::disconnectDevice()
 
     Mutex::Autolock locker(&mObjectLock);
     if (!isConnected()) {
-        LOGW("%s: Fake camera device is already disconnected.", __FUNCTION__);
+        ALOGW("%s: Fake camera device is already disconnected.", __FUNCTION__);
         return NO_ERROR;
     }
     if (isStarted()) {
-        LOGE("%s: Cannot disconnect from the started device.", __FUNCTION__);
+        ALOGE("%s: Cannot disconnect from the started device.", __FUNCTION__);
         return EINVAL;
     }
 
@@ -165,9 +165,9 @@ status_t V4L2CameraDevice::disconnectDevice()
 	int ret = cedarx_hardware_exit(2);// CEDARX_HARDWARE_MODE_VIDEO
 	if (ret < 0)
 	{
-		LOGE("cedarx_hardware_exit failed\n");
+		ALOGE("cedarx_hardware_exit failed\n");
 	}
-	LOGD("cedarx_hardware_exit ok");
+	ALOGD("cedarx_hardware_exit ok");
 
     /* There is no device to disconnect from. */
     mState = ECDS_INITIALIZED;
@@ -179,15 +179,15 @@ status_t V4L2CameraDevice::startDevice(int width,
                                        int height,
                                        uint32_t pix_fmt)
 {
-	LOGD("%s, wxh: %dx%d, fmt: %d", __FUNCTION__, width, height, pix_fmt);
+	ALOGD("%s, wxh: %dx%d, fmt: %d", __FUNCTION__, width, height, pix_fmt);
 
     Mutex::Autolock locker(&mObjectLock);
     if (!isConnected()) {
-        LOGE("%s: Fake camera device is not connected.", __FUNCTION__);
+        ALOGE("%s: Fake camera device is not connected.", __FUNCTION__);
         return EINVAL;
     }
     if (isStarted()) {
-        LOGE("%s: Fake camera device is already started.", __FUNCTION__);
+        ALOGE("%s: Fake camera device is already started.", __FUNCTION__);
         return EINVAL;
     }
 	
@@ -214,9 +214,9 @@ status_t V4L2CameraDevice::startDevice(int width,
 	mPreviewAfter = 1000000 / getFrameRate();
 
 	// front camera do not use hw preview, SW preview will mirror it
-	if (mCameraFacing == CAMERA_FACING_FRONT && (!deviceCardMatches("gt2005")))
+	if (mCameraFacing == CAMERA_FACING_FRONT) //&& (!deviceCardMatches("gt2005")))
 	{
-		LOGD("do not us hw preview");
+		ALOGD("do not us hw preview");
 		mPreviewUseHW = false;
 
 		int pix = mFrameWidth * mFrameHeight;
@@ -236,11 +236,11 @@ status_t V4L2CameraDevice::startDevice(int width,
 
 status_t V4L2CameraDevice::stopDevice()
 {
-	LOGD("stopDevice");
+	ALOGD("stopDevice");
 
     Mutex::Autolock locker(&mObjectLock);
     if (!isStarted()) {
-        LOGW("%s: camera device is not started.", __FUNCTION__);
+        ALOGW("%s: camera device is not started.", __FUNCTION__);
         return NO_ERROR;
     }
 	
@@ -269,7 +269,7 @@ bool V4L2CameraDevice::inWorkerThread()
     WorkerThread::SelectRes res =
         getWorkerThread()->Select(mCamFd, 2000);
     if (res == WorkerThread::EXIT_THREAD) {
-        LOGV("%s: Worker thread has been terminated.", __FUNCTION__);
+        ALOGV("%s: Worker thread has been terminated.", __FUNCTION__);
         return false;
     }
 	
@@ -293,12 +293,12 @@ bool V4L2CameraDevice::inWorkerThread()
 	v4l2_buf.index		= buf.index;
 	v4l2_buf.timeStamp	= mCurFrameTimestamp;
 
-	// LOGV("DQBUF: addrPhyY: %x, id: %d, time: %lld", v4l2_buf.addrPhyY, buf.index, mCurFrameTimestamp);
+	// ALOGV("DQBUF: addrPhyY: %x, id: %d, time: %lld", v4l2_buf.addrPhyY, buf.index, mCurFrameTimestamp);
 
 #define __HW_PICTURE__ 1
 	if (mTakingPicture)
 	{
-		LOGD("%s, taking picture", __FUNCTION__);
+		ALOGD("%s, taking picture", __FUNCTION__);
 		int64_t lastTime = systemTime() / 1000;
 		
 #if __HW_PICTURE__
@@ -310,7 +310,7 @@ bool V4L2CameraDevice::inWorkerThread()
 #endif // __HW_PICTURE__
 
 		int64_t nowTime = systemTime() / 1000;
-		LOGD("%s picture size: %dx%d takes %lld (ms)", (__HW_PICTURE__ == 1) ? "hw" : "sw", 
+		ALOGD("%s picture size: %dx%d takes %lld (ms)", (__HW_PICTURE__ == 1) ? "hw" : "sw", 
 			mFrameWidth, mFrameHeight, (nowTime - lastTime) / 1000);
 
 		mTakingPicture = false;
@@ -417,7 +417,7 @@ void V4L2CameraDevice::dealWithVideoFrameTest(V4L2BUF_t * pBuf)
 	// copy buffer
 	memcpy(mCurrentFrame, mMapMem.mem[pBuf->index], mMapMem.length); 
 	// mCurrentFrame = (uint8_t*)mMapMem.mem[pBuf->index];
-	// LOGV("mCurrentFrame: %x", mCurrentFrame);
+	// ALOGV("mCurrentFrame: %x", mCurrentFrame);
 	mCameraHAL->onNextFrameAvailable(mCurrentFrame, mCurFrameTimestamp, this, false);
 
 	releasePreviewFrame(pBuf->index);
@@ -433,7 +433,7 @@ int V4L2CameraDevice::openCameraDev()
 
 	if (mCamFd == -1) 
 	{ 
-        LOGE("ERROR opening V4L interface: %s", strerror(errno)); 
+        ALOGE("ERROR opening V4L interface: %s", strerror(errno)); 
 		return -1; 
 	} 
 
@@ -443,7 +443,7 @@ int V4L2CameraDevice::openCameraDev()
 		inp.index = 1;
 		if (-1 == ioctl (mCamFd, VIDIOC_S_INPUT, &inp))
 		{
-			LOGE("VIDIOC_S_INPUT error!\n");
+			ALOGE("VIDIOC_S_INPUT error!\n");
 			return -1;
 		}
 	}
@@ -455,19 +455,19 @@ int V4L2CameraDevice::openCameraDev()
 
     if (ret < 0) 
 	{ 
-        LOGE("Error opening device: unable to query device."); 
+        ALOGE("Error opening device: unable to query device."); 
         return -1; 
     } 
 
     if ((cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) == 0) 
 	{ 
-        LOGE("Error opening device: video capture not supported."); 
+        ALOGE("Error opening device: video capture not supported."); 
         return -1; 
     } 
   
     if ((cap.capabilities & V4L2_CAP_STREAMING) == 0) 
 	{ 
-        LOGE("Capture device does not support streaming i/o"); 
+        ALOGE("Capture device does not support streaming i/o"); 
         return -1; 
     } 
 
@@ -490,7 +490,7 @@ int V4L2CameraDevice::v4l2SetVideoParams(int width, int height, uint32_t pix_fmt
 	int ret = UNKNOWN_ERROR;
 	struct v4l2_format format;
 
-	LOGV("%s, line: %d, w: %d, h: %d, pfmt: %d", 
+	ALOGV("%s, line: %d, w: %d, h: %d, pfmt: %d", 
 		__FUNCTION__, __LINE__, width, height, pix_fmt);
 	
 	memset(&format, 0, sizeof(format));
@@ -503,13 +503,13 @@ int V4L2CameraDevice::v4l2SetVideoParams(int width, int height, uint32_t pix_fmt
 	ret = ioctl(mCamFd, VIDIOC_S_FMT, &format); 
 	if (ret < 0) 
 	{ 
-		LOGE("VIDIOC_S_FMT Failed: %s", strerror(errno)); 
+		ALOGE("VIDIOC_S_FMT Failed: %s", strerror(errno)); 
 		return ret; 
 	} 
 	
 	mFrameWidth = format.fmt.pix.width;
 	mFrameHeight= format.fmt.pix.height;
-	LOGV("camera params: w: %d, h: %d, pfmt: %d, pfield: %d", 
+	ALOGV("camera params: w: %d, h: %d, pfmt: %d, pfield: %d", 
 		mFrameWidth, mFrameHeight, pix_fmt, V4L2_FIELD_NONE);
 
 	return OK;
@@ -530,7 +530,7 @@ int V4L2CameraDevice::v4l2ReqBufs()
 		mBufferCnt = NB_BUFFER;
 	}
 
-	LOGD("TO VIDIOC_REQBUFS count: %d", mBufferCnt);
+	ALOGD("TO VIDIOC_REQBUFS count: %d", mBufferCnt);
 	
 	memset(&rb, 0, sizeof(rb));
     rb.type   = V4L2_BUF_TYPE_VIDEO_CAPTURE; 
@@ -540,14 +540,14 @@ int V4L2CameraDevice::v4l2ReqBufs()
 	ret = ioctl(mCamFd, VIDIOC_REQBUFS, &rb); 
     if (ret < 0) 
 	{ 
-        LOGE("Init: VIDIOC_REQBUFS failed: %s", strerror(errno)); 
+        ALOGE("Init: VIDIOC_REQBUFS failed: %s", strerror(errno)); 
 		return ret;
     } 
 
 	if (mBufferCnt != rb.count)
 	{
 		mBufferCnt = rb.count;
-		LOGD("VIDIOC_REQBUFS count: %d", mBufferCnt);
+		ALOGD("VIDIOC_REQBUFS count: %d", mBufferCnt);
 	}
 
 	return OK;
@@ -569,7 +569,7 @@ int V4L2CameraDevice::v4l2QueryBuf()
 		ret = ioctl (mCamFd, VIDIOC_QUERYBUF, &buf); 
         if (ret < 0) 
 		{ 
-            LOGE("Unable to query buffer (%s)", strerror(errno)); 
+            ALOGE("Unable to query buffer (%s)", strerror(errno)); 
             return ret; 
         } 
  
@@ -579,11 +579,11 @@ int V4L2CameraDevice::v4l2QueryBuf()
                             mCamFd, 
                             buf.m.offset); 
 		mMapMem.length = buf.length;
-		LOGV("index: %d, mem: %x, len: %x, offset: %x", i, (int)mMapMem.mem[i], buf.length, buf.m.offset);
+		ALOGV("index: %d, mem: %x, len: %x, offset: %x", i, (int)mMapMem.mem[i], buf.length, buf.m.offset);
  
         if (mMapMem.mem[i] == MAP_FAILED) 
 		{ 
-			LOGE("Unable to map buffer (%s)", strerror(errno)); 
+			ALOGE("Unable to map buffer (%s)", strerror(errno)); 
             return -1; 
         } 
 
@@ -591,7 +591,7 @@ int V4L2CameraDevice::v4l2QueryBuf()
         ret = ioctl(mCamFd, VIDIOC_QBUF, &buf); 
         if (ret < 0) 
 		{ 
-            LOGE("VIDIOC_QBUF Failed"); 
+            ALOGE("VIDIOC_QBUF Failed"); 
             return ret; 
         } 
 	} 
@@ -608,7 +608,7 @@ int V4L2CameraDevice::v4l2StartStreaming()
   	ret = ioctl (mCamFd, VIDIOC_STREAMON, &type); 
 	if (ret < 0) 
 	{ 
-		LOGE("StartStreaming: Unable to start capture: %s", strerror(errno)); 
+		ALOGE("StartStreaming: Unable to start capture: %s", strerror(errno)); 
 		return ret; 
 	} 
 
@@ -624,10 +624,10 @@ int V4L2CameraDevice::v4l2StopStreaming()
 	ret = ioctl (mCamFd, VIDIOC_STREAMOFF, &type); 
 	if (ret < 0) 
 	{ 
-		LOGE("StopStreaming: Unable to stop capture: %s", strerror(errno)); 
+		ALOGE("StopStreaming: Unable to stop capture: %s", strerror(errno)); 
 		return ret; 
 	} 
-	LOGV("V4L2Camera::v4l2StopStreaming OK");
+	ALOGV("V4L2Camera::v4l2StopStreaming OK");
 	
 	return OK;
 }
@@ -642,7 +642,7 @@ int V4L2CameraDevice::v4l2UnmapBuf()
 		ret = munmap(mMapMem.mem[i], mMapMem.length);
         if (ret < 0) 
 		{
-            LOGE("v4l2CloseBuf Unmap failed"); 
+            ALOGE("v4l2CloseBuf Unmap failed"); 
 			return ret;
 		}
 	}
@@ -660,12 +660,12 @@ void V4L2CameraDevice::releasePreviewFrame(int index)
     buf.memory = V4L2_MEMORY_MMAP; 
 	buf.index = index;
 	
-	// LOGV("r ID: %d", buf.index);
+	// ALOGV("r ID: %d", buf.index);
     ret = ioctl(mCamFd, VIDIOC_QBUF, &buf); 
     if (ret != 0) 
 	{
 		// comment for temp, to do
-        // LOGE("releasePreviewFrame: VIDIOC_QBUF Failed: index = %d, ret = %d, %s", 
+        // ALOGE("releasePreviewFrame: VIDIOC_QBUF Failed: index = %d, ret = %d, %s", 
 		//	buf.index, ret, strerror(errno)); 
     }
 }
@@ -680,7 +680,7 @@ int V4L2CameraDevice::getPreviewFrame(v4l2_buffer *buf)
     ret = ioctl(mCamFd, VIDIOC_DQBUF, buf); 
     if (ret < 0) 
 	{ 
-        // LOGE("GetPreviewFrame: VIDIOC_DQBUF Failed"); 
+        // ALOGE("GetPreviewFrame: VIDIOC_DQBUF Failed"); 
         return __LINE__; 			// can not return false
     }
 
@@ -693,7 +693,7 @@ int V4L2CameraDevice::tryFmtSize(int * width, int * height)
 	int ret = -1;
 	struct v4l2_format fmt;
 
-	LOGV("V4L2Camera::TryFmtSize: w: %d, h: %d", *width, *height);
+	ALOGV("V4L2Camera::TryFmtSize: w: %d, h: %d", *width, *height);
 
 	memset(&fmt, 0, sizeof(fmt));
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE; 
@@ -705,7 +705,7 @@ int V4L2CameraDevice::tryFmtSize(int * width, int * height)
 	ret = ioctl(mCamFd, VIDIOC_TRY_FMT, &fmt); 
 	if (ret < 0) 
 	{ 
-		LOGE("VIDIOC_TRY_FMT Failed: %s", strerror(errno)); 
+		ALOGE("VIDIOC_TRY_FMT Failed: %s", strerror(errno)); 
 		return ret; 
 	} 
 
@@ -726,7 +726,7 @@ int V4L2CameraDevice::setV4L2DeviceName(char * pname)
 	}
 
 	strncpy(mDeviceName, pname, strlen(pname));
-	LOGV("%s: %s", __FUNCTION__, mDeviceName);
+	ALOGV("%s: %s", __FUNCTION__, mDeviceName);
 
 	return OK;
 }
@@ -750,14 +750,14 @@ int V4L2CameraDevice::getFrameRate()
 	ret = ioctl (mCamFd, VIDIOC_G_PARM, &parms);
 	if (ret < 0) 
 	{
-		LOGE("VIDIOC_G_PARM getFrameRate error\n");
+		ALOGE("VIDIOC_G_PARM getFrameRate error\n");
 		return ret;
 	}
 
 	int numerator = parms.parm.capture.timeperframe.numerator;
 	int denominator = parms.parm.capture.timeperframe.denominator;
 	
-	LOGV("frame rate: numerator = %d, denominator = %d\n", numerator, denominator);
+	ALOGV("frame rate: numerator = %d, denominator = %d\n", numerator, denominator);
 
 	return denominator / numerator;
 }
@@ -779,9 +779,9 @@ int V4L2CameraDevice::setImageEffect(int effect)
 	ctrl.value = effect;
 	ret = ioctl(mCamFd, VIDIOC_S_CTRL, &ctrl);
 	if (ret < 0)
-		LOGV("setImageEffect failed!");
+		ALOGV("setImageEffect failed!");
 	else 
-		LOGV("setImageEffect ok");
+		ALOGV("setImageEffect ok");
 
 	return ret;
 }
@@ -795,9 +795,9 @@ int V4L2CameraDevice::setWhiteBalance(int wb)
 	ctrl.value = wb;
 	ret = ioctl(mCamFd, VIDIOC_S_CTRL, &ctrl);
 	if (ret < 0)
-		LOGV("setWhiteBalance failed!");
+		ALOGV("setWhiteBalance failed!");
 	else 
-		LOGV("setWhiteBalance ok");
+		ALOGV("setWhiteBalance ok");
 
 	return ret;
 }
@@ -812,9 +812,9 @@ int V4L2CameraDevice::setExposure(int exp)
 	ctrl.value = exp;
 	ret = ioctl(mCamFd, VIDIOC_S_CTRL, &ctrl);
 	if (ret < 0)
-		LOGV("setExposure failed!");
+		ALOGV("setExposure failed!");
 	else 
-		LOGV("setExposure ok");
+		ALOGV("setExposure ok");
 
 	return ret;
 }
@@ -830,9 +830,9 @@ int V4L2CameraDevice::setFlashMode(int mode)
 	ctrl.value = mode;
 	ret = ioctl(mCamFd, VIDIOC_S_CTRL, &ctrl);
 	if (ret < 0)
-		LOGV("setFlashMode failed!");
+		ALOGV("setFlashMode failed!");
 	else 
-		LOGV("setFlashMode ok");
+		ALOGV("setFlashMode ok");
 
 	return ret;
 }

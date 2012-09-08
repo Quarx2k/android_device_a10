@@ -21,7 +21,7 @@
 
 #define LOG_TAG "Camera_JPEG"
 #include "CameraDebug.h"
-
+#include <utils/Errors.h>
 #include "JpegCompressor.h"
 
 namespace android {
@@ -44,7 +44,7 @@ status_t NV21JpegCompressor::compressRawImage(const void* image,
                                               int height,
                                               int quality)
 {
-    LOGV("%s: %p[%dx%d]", __FUNCTION__, image, width, height);
+    ALOGV("%s: %p[%dx%d]", __FUNCTION__, image, width, height);
     void* pY = const_cast<void*>(image);
     int offsets[2];
     offsets[0] = 0;
@@ -52,11 +52,11 @@ status_t NV21JpegCompressor::compressRawImage(const void* image,
     mStrides[0] = width;
     mStrides[1] = width;
     if (encode(&mStream, pY, width, height, offsets, quality)) {
-        LOGV("%s: Compressed JPEG: %d[%dx%d] -> %d bytes",
+        ALOGV("%s: Compressed JPEG: %d[%dx%d] -> %d bytes",
              __FUNCTION__, (width * height * 12) / 8, width, height, mStream.getOffset());
         return NO_ERROR;
     } else {
-        LOGE("%s: JPEG compression failed", __FUNCTION__);
+        ALOGE("%s: JPEG compression failed", __FUNCTION__);
         return errno ? errno : EINVAL;
     }
 }

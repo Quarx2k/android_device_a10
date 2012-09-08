@@ -41,13 +41,13 @@ HALCameraFactory::HALCameraFactory()
           mCameraHardwareNum(0),
           mConstructedOK(false)
 {
-	F_LOG;
+	        
 
 	// camera config information
 	mCameraConfig = new CCameraConfig(0);
 	if(mCameraConfig == 0)
 	{
-		LOGE("create CCameraConfig failed");
+		ALOGE("create CCameraConfig failed");
 		return ;
 	}
 
@@ -61,7 +61,7 @@ HALCameraFactory::HALCameraFactory()
     if (mHardwareCameras == NULL) {
         mHardwareCameras = new CameraHardware*[mCameraHardwareNum];
         if (mHardwareCameras == NULL) {
-            LOGE("%s: Unable to allocate V4L2Camera array for %d entries",
+            ALOGE("%s: Unable to allocate V4L2Camera array for %d entries",
                  __FUNCTION__, mCameraHardwareNum);
             return;
         }
@@ -84,19 +84,19 @@ HALCameraFactory::HALCameraFactory()
 		else 
 		{
 	        mHardwareCameras--;
-	        LOGE("%s: Unable to instantiate fake camera class", __FUNCTION__);
+	        ALOGE("%s: Unable to instantiate fake camera class", __FUNCTION__);
 			return;
 	    }
 	}
 
-	LOGV("%d cameras are being created.", mCameraHardwareNum);
+	ALOGV("%d cameras are being created.", mCameraHardwareNum);
 
     mConstructedOK = true;
 }
 
 HALCameraFactory::~HALCameraFactory()
 {
-	F_LOG;
+	        
     if (mHardwareCameras != NULL) {
         for (int n = 0; n < mCameraHardwareNum; n++) {
             if (mHardwareCameras[n] != NULL) {
@@ -117,17 +117,17 @@ HALCameraFactory::~HALCameraFactory()
 
 int HALCameraFactory::cameraDeviceOpen(int camera_id, hw_device_t** device)
 {
-    LOGV("%s: id = %d", __FUNCTION__, camera_id);
+    ALOGV("%s: id = %d", __FUNCTION__, camera_id);
 
     *device = NULL;
 
     if (!isConstructedOK()) {
-        LOGE("%s: HALCameraFactory has failed to initialize", __FUNCTION__);
+        ALOGE("%s: HALCameraFactory has failed to initialize", __FUNCTION__);
         return -EINVAL;
     }
 
     if (camera_id < 0 || camera_id >= getCameraHardwareNum()) {
-        LOGE("%s: Camera id %d is out of bounds (%d)",
+        ALOGE("%s: Camera id %d is out of bounds (%d)",
              __FUNCTION__, camera_id, getCameraHardwareNum());
         return -EINVAL;
     }
@@ -137,15 +137,15 @@ int HALCameraFactory::cameraDeviceOpen(int camera_id, hw_device_t** device)
 
 int HALCameraFactory::getCameraInfo(int camera_id, struct camera_info* info)
 {
-    LOGV("%s: id = %d", __FUNCTION__, camera_id);
+    ALOGV("%s: id = %d", __FUNCTION__, camera_id);
 
     if (!isConstructedOK()) {
-        LOGE("%s: HALCameraFactory has failed to initialize", __FUNCTION__);
+        ALOGE("%s: HALCameraFactory has failed to initialize", __FUNCTION__);
         return -EINVAL;
     }
 
     if (camera_id < 0 || camera_id >= getCameraHardwareNum()) {
-        LOGE("%s: Camera id %d is out of bounds (%d)",
+        ALOGE("%s: Camera id %d is out of bounds (%d)",
              __FUNCTION__, camera_id, getCameraHardwareNum());
         return -EINVAL;
     }
@@ -161,19 +161,19 @@ int HALCameraFactory::device_open(const hw_module_t* module,
                                        const char* name,
                                        hw_device_t** device)
 {
-	F_LOG;
+	        
     /*
      * Simply verify the parameters, and dispatch the call inside the
      * HALCameraFactory instance.
      */
 
     if (module != &HAL_MODULE_INFO_SYM.common) {
-        LOGE("%s: Invalid module %p expected %p",
+        ALOGE("%s: Invalid module %p expected %p",
              __FUNCTION__, module, &HAL_MODULE_INFO_SYM.common);
         return -EINVAL;
     }
     if (name == NULL) {
-        LOGE("%s: NULL name is not expected here", __FUNCTION__);
+        ALOGE("%s: NULL name is not expected here", __FUNCTION__);
         return -EINVAL;
     }
 
@@ -182,14 +182,14 @@ int HALCameraFactory::device_open(const hw_module_t* module,
 
 int HALCameraFactory::get_number_of_cameras(void)
 {
-	F_LOG;
+	        
     return gEmulatedCameraFactory.getCameraHardwareNum();
 }
 
 int HALCameraFactory::get_camera_info(int camera_id,
                                            struct camera_info* info)
 {
-	F_LOG;
+	        
     return gEmulatedCameraFactory.getCameraInfo(camera_id, info);
 }
 

@@ -7,11 +7,11 @@
 #define READ_KEY_VALUE(key, val)						\
 	val = (char*)::malloc(KEY_LENGTH);					\
 	if (val == 0){										\
-		LOGV("malloc %s failed", val);					\
+		ALOGV("malloc %s failed", val);					\
 	}													\
 	memset(val, 0, KEY_LENGTH);							\
 	if (readKey(key, val)){								\
-		LOGV("read key: %s = %s", key, val);			\
+		ALOGV("read key: %s = %s", key, val);			\
 	}
 
 #define INIT_PARAMETER(KEY, key)										\
@@ -27,7 +27,7 @@
 		}																\
 		else                                                            \
 		{                                                               \
-			LOGV("\"%s\" not support", kUSED_##KEY);					\
+			ALOGV("\"%s\" not support", kUSED_##KEY);					\
 		}                                                               \
  	}
 
@@ -44,9 +44,9 @@
 
 #define _DUMP_PARAMETERS(key, value)	\
 	if (value != 0){					\
-		LOGV("%s = %s", key, value);	\
+		ALOGV("%s = %s", key, value);	\
 	}else{								\
-		LOGV("%s not support", key);	\
+		ALOGV("%s not support", key);	\
 	}
 
 #define DUMP_PARAMETERS(kused, key)								\
@@ -84,12 +84,12 @@ CCameraConfig::CCameraConfig(int id)
 	mhKeyFile = ::fopen(CAMERA_KEY_CONFIG_PATH, "rb");
 	if (!mhKeyFile)
 	{
-		LOGV("open file %s failed", CAMERA_KEY_CONFIG_PATH);
+		ALOGV("open file %s failed", CAMERA_KEY_CONFIG_PATH);
 		return;
 	}
 	else
 	{
-		LOGV("open file %s OK", CAMERA_KEY_CONFIG_PATH);
+		ALOGV("open file %s OK", CAMERA_KEY_CONFIG_PATH);
 	}
 
 	// get number of camera
@@ -97,7 +97,7 @@ CCameraConfig::CCameraConfig(int id)
 	if(readKey((char*)kNUMBER_OF_CAMERA, numberOfCamera))
 	{
 		mNumberOfCamera = atoi(numberOfCamera);
-		LOGV("read number: %d", mNumberOfCamera);
+		ALOGV("read number: %d", mNumberOfCamera);
 	}
 
 	// get camera facing
@@ -105,14 +105,14 @@ CCameraConfig::CCameraConfig(int id)
 	if(readKey((char*)kCAMERA_FACING, cameraFacing))
 	{
 		mCameraFacing = atoi(cameraFacing);
-		LOGV("camera facing %s", (mCameraFacing == 0) ? "back" : "front");
+		ALOGV("camera facing %s", (mCameraFacing == 0) ? "back" : "front");
 	}
 
 	// get camera device driver
 	memset(mCameraDevice, 0, sizeof(mCameraDevice));
 	if(readKey((char*)kCAMERA_DEVICE, mCameraDevice))
 	{
-		LOGV("camera device %s", mCameraDevice);
+		ALOGV("camera device %s", mCameraDevice);
 	}
 
 	// get device id
@@ -120,7 +120,7 @@ CCameraConfig::CCameraConfig(int id)
 	if(readKey((char*)kDEVICE_ID, deviceID))
 	{
 		mDeviceID = atoi(deviceID);
-		LOGV("camera device id %d", mDeviceID);
+		ALOGV("camera device id %d", mDeviceID);
 	}
 }
 
@@ -151,7 +151,7 @@ void CCameraConfig::initParameters()
 {	
 	if (mhKeyFile == 0)
 	{
-		LOGW("invalid camera config file hadle");
+		ALOGW("invalid camera config file hadle");
 		return ;
 	}
 
@@ -181,7 +181,7 @@ void CCameraConfig::initParameters()
 		}
 		else
 		{
-			LOGV("\"%s\" not support", kUSED_EXPOSURE_COMPENSATION);
+			ALOGV("\"%s\" not support", kUSED_EXPOSURE_COMPENSATION);
 		}
  	}
 
@@ -204,7 +204,7 @@ void CCameraConfig::initParameters()
 		}
 		else
 		{
-			LOGV("\"%s\" not support", kUSED_ZOOM);
+			ALOGV("\"%s\" not support", kUSED_ZOOM);
 		}
  	}
 }
@@ -213,14 +213,14 @@ void CCameraConfig::dumpParameters()
 {
 	if (mhKeyFile == 0)
 	{
-		LOGW("invalid camera config file hadle");
+		ALOGW("invalid camera config file hadle");
 		return ;
 	}
 	
-	LOGV("/*------------------------------------------------------*/");
-	LOGV("camrea id: %d", mCurCameraId);
-	LOGV("camera facing %s", (mCameraFacing == 0) ? "back" : "front");
-	LOGV("camera device %s", mCameraDevice);
+	ALOGV("/*------------------------------------------------------*/");
+	ALOGV("camrea id: %d", mCurCameraId);
+	ALOGV("camera facing %s", (mCameraFacing == 0) ? "back" : "front");
+	ALOGV("camera device %s", mCameraDevice);
 	DUMP_PARAMETERS(PREVIEW_SIZE, PreviewSize)
 	DUMP_PARAMETERS(PICTURE_SIZE, PictureSize)
 	DUMP_PARAMETERS(FLASH_MODE, FlashMode)
@@ -242,7 +242,7 @@ void CCameraConfig::dumpParameters()
 	_DUMP_PARAMETERS(kZOOM_RATIOS, mZoomRatios)
 	_DUMP_PARAMETERS(kMAX_ZOOM, mMaxZoom)
 	_DUMP_PARAMETERS(kDEFAULT_ZOOM, mDefaultZoom)
-	LOGV("/*------------------------------------------------------*/");
+	ALOGV("/*------------------------------------------------------*/");
 }
 
 void CCameraConfig::getValue(char *line, char *value)
@@ -278,13 +278,13 @@ bool CCameraConfig::readKey(char *key, char *value)
 
 	if (key == 0 || value == 0)
 	{
-		LOGV("error input para");
+		ALOGV("error input para");
 		return false;
 	}
 
 	if (mhKeyFile == 0)
 	{
-		LOGV("error key file handle");
+		ALOGV("error key file handle");
 		return false;
 	}
 
