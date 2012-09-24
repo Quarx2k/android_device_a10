@@ -79,6 +79,7 @@ COMMON_GLOBAL_CFLAGS += -DICS_CAMERA_BLOB #temporary
 
 ENABLE_WEBGL := true
 # Extra : to build external modules sources
+TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.4.3
 TARGET_KERNEL_SOURCE := $(ANDROID_BUILD_TOP)/kernel/
 TARGET_KERNEL_CONFIG := sun4i_aurora_defconfig
 TARGET_KERNEL_MODULES_EXT := $(ANDROID_BUILD_TOP)/device/allwinner/a10/prebuilt/lib/modules
