@@ -1951,11 +1951,11 @@ static int hwc_set(hwc_composer_device_t *dev,
     //    dump_layer(&list->hwLayers[i]);
     //}
     EGLBoolean sucess = eglSwapBuffers((EGLDisplay)dpy, (EGLSurface)sur);
-    if (!sucess)
+    if (unlikely(!sucess))
         return HWC_EGL_ERROR;
 
     //don't continue if layer list is NULL
-    if (list == NULL)
+    if (unlikely(list == NULL))
         return 0;
 
     return hwc_set_layer(dev,list);

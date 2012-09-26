@@ -69,4 +69,12 @@ typedef struct hwc_context_t
     bool                    wait_layer_open;
 }sun4i_hwc_context_t;
 
+#ifdef __GNUC__
+#define likely(x)       __builtin_expect(!!(x),1)
+#define unlikely(x)     __builtin_expect(!!(x),0)
+#else
+#define likely(x)       (x)
+#define unlikely(x)     (x)
+#endif
+
 #endif
