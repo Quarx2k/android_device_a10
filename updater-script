@@ -1,5 +1,5 @@
 show_progress(0.1, 0);
-ui_print("Installing CyanogenMod 9 By Quarx...");
+ui_print("Installing CyanogenMod 10...");
 ui_print("Formatting SYSTEM...");
 package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
 package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
