@@ -22,13 +22,13 @@ on fs
         symlink /dev/block/nandg /dev/block/recovery
         symlink /dev/block/nandh /dev/block/cache
 
-        #exec /system/bin/e2fsck -y /dev/block/system 
-        #exec /system/bin/e2fsck -y /dev/block/data 
-        #exec /system/bin/e2fsck -y /dev/block/cache
+        #exec /system/bin/e2fsck -y /dev/block/system
+        exec /system/bin/e2fsck -y /dev/block/data
+        exec /system/bin/e2fsck -y /dev/block/cache
 
-        mount ext4 /dev/block/system /system wait ro noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
-        mount ext4 /dev/block/data /data wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
-        mount ext4 /dev/block/cache /cache wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc
+        mount ext4 /dev/block/system /system wait ro noatime nodev barrier=0 nobh
+        mount ext4 /dev/block/data /data wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc commit=30
+        mount ext4 /dev/block/cache /cache wait noatime nodev barrier=0 nobh data=writeback noauto_da_alloc commit=30
 
 on post-fs
 
