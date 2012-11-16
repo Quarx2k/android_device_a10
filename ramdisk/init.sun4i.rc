@@ -66,6 +66,30 @@ on boot
         insmod /system/lib/modules/ft5x_ts.ko #Ft5x Touchscreen 
         insmod /system/lib/modules/goodix_touch.ko #Goodix Touchscreen
 
+        chown system system /sys/class/timed_output/sun4i-vibrator/enable
+
+        # Enable interactive governor
+        write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+
+        # Lower maximum frequency when screen is off
+        write /sys/devices/system/cpu/cpu0/cpufreq/screen_off_max_freq 700000
+
+        # cpufreq interactive governor: timer 20ms, min sample 20ms, hispeed 700MHz
+        write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 20000
+        write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 20000
+        write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 700000
+
+        # chown adequately for power HAL
+        chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/input_boost
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+        chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+
+
 # wifi related service
 service wpa_supplicant /system/bin/wpa_supplicant -D wext -i wlan0 \
 	-c /data/misc/wifi/wpa_supplicant.conf -e /data/misc/wifi/entropy.bin
