@@ -43,6 +43,7 @@ PRODUCT_COPY_FILES += \
 # will be removed in future
 PRODUCT_COPY_FILES += \
 	$(DEVICE_PREBUILT)/lib/hw/gps.sun4i.so:system/lib/hw/gps.sun4i.so \
+	$(DEVICE_PREBUILT)/lib/modules/goodix_touch.ko:system/lib/modules/goodix_touch.ko \
 
 # OTG/3G stuff
 PRODUCT_COPY_FILES += \
