@@ -18,7 +18,7 @@
 
 typedef struct sun4i_hwc_layer
 {
-    hwc_layer_t            base;
+    hwc_layer_1_t            base;
 
     uint32_t            dispW;
     uint32_t            dispH;
@@ -49,14 +49,14 @@ typedef struct sun4i_hwc_layer
     uint32_t            screen;
     uint32_t            currenthandle;
     uint32_t            cur_frameid;
-} sun4i_hwc_layer_t;
+} sun4i_hwc_layer_1_t;
 
 typedef struct hwc_context_t
 {
-    hwc_composer_device_t     device;
+    hwc_composer_device_1_t     device;
     hwc_procs_t             *procs;
     int                        dispfd;
-    sun4i_hwc_layer_t        hwc_layer;
+    sun4i_hwc_layer_1_t        hwc_layer;
     uint32_t                hwc_screen;
     bool                    hwc_layeropen;
     bool                    hwc_frameset;  /*is frame set*/

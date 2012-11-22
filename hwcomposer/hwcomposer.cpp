@@ -236,10 +236,10 @@ static int hwc_requestlayer(sun4i_hwc_context_t *ctx,uint32_t screenid)
     return  0;
 }
 
-static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
+static void hwc_computerlayerdisplayframe(hwc_composer_device_1_t *dev)
 {
     sun4i_hwc_context_t           *ctx = (sun4i_hwc_context_t *)dev;
-    sun4i_hwc_layer_t            *curlayer = (sun4i_hwc_layer_t *)&ctx->hwc_layer;
+    sun4i_hwc_layer_1_t            *curlayer = (sun4i_hwc_layer_1_t *)&ctx->hwc_layer;
     int                         temp_x = curlayer->posX_org;
     int                         temp_y = curlayer->posY_org;
     int                         temp_w = curlayer->posW_org;
@@ -431,7 +431,7 @@ static void hwc_computerlayerdisplayframe(hwc_composer_device_t *dev)
      }
 }
 
-static bool hwc_can_render_layer(hwc_layer_t *layer)
+static bool hwc_can_render_layer(hwc_layer_1_t *layer)
 {
     if((layer->format == HWC_FORMAT_MBYUV420)
         ||(layer->format == HWC_FORMAT_MBYUV422)
@@ -497,7 +497,7 @@ static int hwc_setrect(sun4i_hwc_context_t *ctx,hwc_rect_t *croprect,hwc_rect_t 
             ctx->hwc_layer.posW_org = displayframe->right - displayframe->left;
             ctx->hwc_layer.posH_org = displayframe->bottom - displayframe->top;
 
-            hwc_computerlayerdisplayframe((hwc_composer_device_t *)ctx);
+            hwc_computerlayerdisplayframe((hwc_composer_device_1_t *)ctx);
 
             tmpLayerAttr.scn_win.x            = ctx->hwc_layer.posX;
             tmpLayerAttr.scn_win.y            = ctx->hwc_layer.posY;
@@ -537,8 +537,9 @@ static int hwc_setrect(sun4i_hwc_context_t *ctx,hwc_rect_t *croprect,hwc_rect_t 
 }
 
 /*****************************************************************************/
-static int hwc_prepare(hwc_composer_device_t *dev, hwc_layer_list_t* list)
+static int hwc_prepare(hwc_composer_device_1_t *dev, size_t numDisplays, hwc_display_contents_1_t** lists)
 {
+    hwc_display_contents_1_t* list = lists[0];
     //ALOGV("hwc_prepare list->numHwLayers = %d\n",list->numHwLayers);
     //list is null on HWComposer->disable() on surfaceflinger
     if (list && (list->flags & HWC_GEOMETRY_CHANGED))
@@ -566,7 +567,7 @@ static int hwc_prepare(hwc_composer_device_t *dev, hwc_layer_list_t* list)
     return 0;
 }
 
-static int hwc_startset(hwc_composer_device_t *dev)
+static int hwc_startset(hwc_composer_device_1_t *dev)
 {
     sun4i_hwc_context_t           *ctx = (sun4i_hwc_context_t *)dev;
 
@@ -586,7 +587,7 @@ static int hwc_startset(hwc_composer_device_t *dev)
     return ioctl(ctx->dispfd,DISP_CMD_START_CMD_CACHE,(void*)args);//disable the global alpha, use the pixel's alpha
 }
 
-static int hwc_endset(hwc_composer_device_t *dev)
+static int hwc_endset(hwc_composer_device_1_t *dev)
 {
     sun4i_hwc_context_t           *ctx = (sun4i_hwc_context_t *)dev;
 
@@ -1240,7 +1241,7 @@ static int hwc_setscreen(sun4i_hwc_context_t *ctx,uint32_t value)
     ctx->hwc_layer.dispH            = g_lcd_height;
     ALOGV("ctx->hwc_layer.dispW = %d,ctx->hwc_layer.dispH = %d\n",ctx->hwc_layer.dispW,ctx->hwc_layer.dispH);
 
-    hwc_computerlayerdisplayframe((hwc_composer_device_t *)ctx);
+    hwc_computerlayerdisplayframe((hwc_composer_device_1_t *)ctx);
     layer_info.scn_win.x             = ctx->hwc_layer.posX;
     layer_info.scn_win.y             = ctx->hwc_layer.posY;
     layer_info.scn_win.width         = ctx->hwc_layer.posW;
@@ -1803,7 +1804,7 @@ static int hwc_set3dmode(sun4i_hwc_context_t *ctx,int para)
     return 0;
 }
 
-static int hwc_setparameter(hwc_composer_device_t *dev,uint32_t param,uint32_t value)
+static int hwc_setparameter(hwc_composer_device_1_t *dev,uint32_t param,uint32_t value)
 {
     int                         ret = 0;
     sun4i_hwc_context_t           *ctx = (sun4i_hwc_context_t *)dev;
@@ -1911,12 +1912,12 @@ static int hwc_setparameter(hwc_composer_device_t *dev,uint32_t param,uint32_t v
     return ( ret );
 }
 
-static uint32_t hwc_getparameter(hwc_composer_device_t *dev,uint32_t cmd)
+static uint32_t hwc_getparameter(hwc_composer_device_1_t *dev,uint32_t cmd)
 {
     return  0;
 }
 
-static int hwc_set_layer(hwc_composer_device_t *dev,hwc_layer_list_t* list)
+static int hwc_set_layer(hwc_composer_device_1_t *dev, hwc_display_contents_1_t* list)
 {
     int                         ret = 0;
     sun4i_hwc_context_t           *ctx = (sun4i_hwc_context_t *)dev;
@@ -1942,15 +1943,15 @@ static int hwc_set_layer(hwc_composer_device_t *dev,hwc_layer_list_t* list)
     return ret;
 }
 
-static int hwc_set(hwc_composer_device_t *dev,
-        hwc_display_t dpy,
-        hwc_surface_t sur,
-        hwc_layer_list_t* list)
+static int hwc_set(hwc_composer_device_1_t *dev,
+        size_t numDisplays,
+        hwc_display_contents_1_t** lists)
 {
+    hwc_display_contents_1_t* list = lists[0];
     //for (size_t i=0 ; i<list->numHwLayers ; i++) {
     //    dump_layer(&list->hwLayers[i]);
     //}
-    EGLBoolean sucess = eglSwapBuffers((EGLDisplay)dpy, (EGLSurface)sur);
+    EGLBoolean sucess = eglSwapBuffers((EGLDisplay)list->dpy, (EGLSurface)list->sur);
     if (unlikely(!sucess))
         return HWC_EGL_ERROR;
 
