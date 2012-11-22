@@ -1340,12 +1340,12 @@ static uint32_t out_get_channels(const struct audio_stream *stream)
     return AUDIO_CHANNEL_OUT_STEREO;
 }
 
-static int out_get_format(const struct audio_stream *stream)
+static audio_format_t out_get_format(const struct audio_stream *stream)
 {
     return AUDIO_FORMAT_PCM_16_BIT;
 }
 
-static int out_set_format(struct audio_stream *stream, int format)
+static int out_set_format(struct audio_stream *stream, audio_format_t format)
 {
     return 0;
 }
@@ -1667,12 +1667,12 @@ static uint32_t in_get_channels(const struct audio_stream *stream)
     }
 }
 
-static int in_get_format(const struct audio_stream *stream)
+static audio_format_t in_get_format(const struct audio_stream *stream)
 {
     return AUDIO_FORMAT_PCM_16_BIT;
 }
 
-static int in_set_format(struct audio_stream *stream, int format)
+static int in_set_format(struct audio_stream *stream, audio_format_t format)
 {
     return 0;
 }
@@ -2382,6 +2382,16 @@ static int adev_set_master_volume(struct audio_hw_device *dev, float volume)
     return -ENOSYS;
 }
 
+static int adev_set_master_mute(struct audio_hw_device *dev, bool muted)
+{
+    return -ENOSYS;
+}
+
+static int adev_get_master_mute(struct audio_hw_device *dev, bool *muted)
+{
+    return -ENOSYS;
+}
+
 static int adev_set_mode(struct audio_hw_device *dev, int mode)
 {
     struct tuna_audio_device *adev = (struct tuna_audio_device *)dev;
@@ -2580,7 +2590,7 @@ static int adev_open(const hw_module_t* module, const char* name,
         return -ENOMEM;
 
     adev->hw_device.common.tag = HARDWARE_DEVICE_TAG;
-    adev->hw_device.common.version = AUDIO_DEVICE_API_VERSION_1_0;
+    adev->hw_device.common.version = AUDIO_DEVICE_API_VERSION_2_0;
     adev->hw_device.common.module = (struct hw_module_t *) module;
     adev->hw_device.common.close = adev_close;
 
@@ -2588,6 +2598,8 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->hw_device.init_check = adev_init_check;
     adev->hw_device.set_voice_volume = adev_set_voice_volume;
     adev->hw_device.set_master_volume = adev_set_master_volume;
+    adev->hw_device.set_master_mute = adev_set_master_mute;
+    adev->hw_device.get_master_mute = adev_get_master_mute;
     adev->hw_device.set_mode = adev_set_mode;
     adev->hw_device.set_mic_mute = adev_set_mic_mute;
     adev->hw_device.get_mic_mute = adev_get_mic_mute;
@@ -2599,7 +2611,7 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->hw_device.open_input_stream = adev_open_input_stream;
     adev->hw_device.close_input_stream = adev_close_input_stream;
     adev->hw_device.dump = adev_dump;
-	
+
 /*
     adev->mixer = mixer_open(0);
     if (!adev->mixer) {
