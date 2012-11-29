@@ -121,4 +121,7 @@
       <item>usb0</item>
     </string-array> -->
 
+    <!-- Separate software navigation bar required on this device. -->
+    <bool name="config_showNavigationBar">true</bool>
+
 </resources>
