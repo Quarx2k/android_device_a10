@@ -3,15 +3,18 @@ import init.sun4i.usb.rc
 on early-init
 
         export EXTERNAL_STORAGE /storage/sdcard0
-        export SECONDARY_STORAGE /storage/sdcard1
+
         mkdir /storage 0050 system sdcard_r
-        mkdir /storage/sdcard0 0000 system system
+        mkdir /storage/sdcard 0000 system system
         mkdir /storage/sdcard1 0000 system system
-        mkdir /storage/sdcard2 0000 system system
-        symlink /storage/sdcard1 /extsd
-        symlink /storage/sdcard2 /usbdisk
-        symlink /storage/sdcard0 /sdcard
-        symlink /storage/sdcard0 /mnt/sdcard
+        mkdir /storage/usbdisk0 0000 system system
+        mkdir /mnt/shell/sdcard 0700 shell shell
+
+        # Support legacy paths
+        symlink /storage/sdcard/legacy /sdcard
+        symlink /storage/sdcard/legacy /mnt/sdcard
+        symlink /storage/sdcard/legacy /storage/sdcard0
+        symlink /mnt/shell/sdcard/0 /storage/sdcard/legacy
 
 on fs
 
