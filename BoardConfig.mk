@@ -76,6 +76,7 @@ WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/8192cu.ko"
 TARGET_CUSTOM_WIFI := ../../hardware/realtek/wlan/wifi_realtek.c
 
 COMMON_GLOBAL_CFLAGS += -DICS_CAMERA_BLOB #temporary
+BOARD_USES_LEGACY_RIL := true
 
 ENABLE_WEBGL := true
 # Extra : to build external modules sources
