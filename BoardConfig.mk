@@ -28,7 +28,6 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_GLOBAL_CFLAGS += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
 ARCH_ARM_HAVE_TLS_REGISTER := true
-TARGET_CPU_SMP := true
 
 TARGET_CUSTOM_RELEASETOOL := ./device/allwinner/a10/releasetools/squisher
 
