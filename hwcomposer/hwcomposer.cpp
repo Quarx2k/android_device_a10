@@ -20,6 +20,12 @@
 
 #include <fcntl.h>
 #include <errno.h>
+#include <time.h>
+#include <signal.h>
+#include <pthread.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <sys/ioctl.h>
 
 #include <cutils/log.h>
 #include <cutils/atomic.h>
@@ -2015,6 +2021,61 @@ static int hwc_device_close(struct hw_device_t *dev)
     return 0;
 }
 
+static void *hwc_vsync_thread(void *data)
+{
+    int arg;
+    #define HZ 90
+    struct timespec ts = {0, 1000000000/HZ}, tt = {0, 0};
+    hwc_context_t *ctx = (hwc_context_t *)data;
+    int fb = open("/dev/graphics/fb0", O_RDWR);
+    if(fb < 0) {
+        ALOGE("failed to open fb0\n");
+        return NULL;
+    }
+
+    setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
+
+    while (true) {
+        arg = 0;
+        //ioctl(fb, FBIO_WAITFORVSYNC, &arg);
+        if (nanosleep(&ts, &tt) == -1 && errno == EINTR)
+            nanosleep(&tt, NULL);
+
+        if (ctx->vsync_enabled)
+            ctx->procs->vsync(ctx->procs, 0, time(NULL));
+    }
+
+    close(fb);
+
+    return NULL;
+}
+
+static int hwc_blank(hwc_composer_device_1* a, int b, int c)
+{
+    /* STUB */
+    return 0;
+}
+
+static int hwc_eventControl(hwc_composer_device_1* dev, int dpy, int event,
+                            int enabled)
+{
+    struct hwc_context_t* ctx = (sun4i_hwc_context_t*) dev;
+
+    switch (event) {
+    case HWC_EVENT_VSYNC:
+        ctx->vsync_enabled = !!enabled;
+        return 0;
+    }
+    return -EINVAL;
+}
+
+static void hwc_registerProcs(struct hwc_composer_device_1* dev,
+        hwc_procs_t const* procs)
+{
+    struct hwc_context_t* ctx = (struct hwc_context_t*)dev;
+    ctx->procs = const_cast<hwc_procs_t *>(procs);
+}
+
 /*****************************************************************************/
 
 static int hwc_device_open(const struct hw_module_t* module, const char* name,
@@ -2031,16 +2092,23 @@ static int hwc_device_open(const struct hw_module_t* module, const char* name,
 
         /* initialize the procs */
         dev->device.common.tag      = HARDWARE_DEVICE_TAG;
-        dev->device.common.version  = 0;
+        dev->device.common.version  = HWC_DEVICE_API_VERSION_1_0;
         dev->device.common.module   = const_cast<hw_module_t*>(module);
         dev->device.common.close    = hwc_device_close;
 
         dev->device.prepare         = hwc_prepare;
         dev->device.set             = hwc_set;
+        dev->device.blank           = hwc_blank;
+        dev->device.eventControl    = hwc_eventControl;
+        dev->device.registerProcs   = hwc_registerProcs;
         dev->device.setparameter    = hwc_setparameter;
         dev->device.getparameter    = hwc_getparameter;
 
         *device = &dev->device.common;
+
+        dev->vsync_enabled = false;
+        pthread_create(&dev->vsync_thread, NULL, hwc_vsync_thread, dev);
+
         status = 0;
     }
     return status;

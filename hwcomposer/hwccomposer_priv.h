@@ -67,6 +67,8 @@ typedef struct hwc_context_t
     bool                    cur_3denable;
     /* our private state goes below here */
     bool                    wait_layer_open;
+    bool                    vsync_enabled;
+    pthread_t               vsync_thread;
 }sun4i_hwc_context_t;
 
 #ifdef __GNUC__
