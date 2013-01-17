@@ -30,6 +30,8 @@
 #include <cutils/log.h>
 #include <cutils/atomic.h>
 
+#include <utils/Timers.h>
+
 #include <hardware/hwcomposer.h>
 #include <sunxi_disp_ioctl.h>
 #include <fb.h>
@@ -2027,9 +2029,10 @@ static int hwc_device_close(struct hw_device_t *dev)
 
 static void *hwc_vsync_thread(void *data)
 {
-    int arg;
-    #define HZ 90
-    struct timespec ts = {0, 1000000000/HZ}, tt = {0, 0};
+    #define HZ 60
+    struct timespec spec;
+    int err = 0;
+    nsecs_t period, now, next_vsync, sleep, next_fake_vsync = 0;
     hwc_context_t *ctx = (hwc_context_t *)data;
     int fb = open("/dev/graphics/fb0", O_RDWR);
     if(fb < 0) {
@@ -2040,13 +2043,29 @@ static void *hwc_vsync_thread(void *data)
     setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
 
     while (true) {
-        arg = 0;
-        //ioctl(fb, FBIO_WAITFORVSYNC, &arg);
-        if (nanosleep(&ts, &tt) == -1 && errno == EINTR)
-            nanosleep(&tt, NULL);
+        period = 1000000000/HZ;
+        now = systemTime(CLOCK_MONOTONIC);
+        next_vsync = next_fake_vsync;
+        sleep = next_vsync - now;
+        if (sleep < 0) {
+            // we missed, find where the next vsync should be
+            sleep = (period - ((now - next_vsync) % period));
+            next_vsync = now + sleep;
+        }
+        next_fake_vsync = next_vsync + period;
 
+        spec.tv_sec  = next_vsync / 1000000000;
+        spec.tv_nsec = next_vsync % 1000000000;
+
+        do {
+            err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &spec, NULL);
+        } while (err < 0 && errno == EINTR);
+
+/*      arg = 0;
+        //ioctl(fb, FBIO_WAITFORVSYNC, &arg);
+*/
         if (ctx->vsync_enabled)
-            ctx->procs->vsync(ctx->procs, 0, time(NULL));
+            ctx->procs->vsync(ctx->procs, 0, next_vsync);
     }
 
     close(fb);

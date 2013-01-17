@@ -79,4 +79,8 @@ typedef struct hwc_context_t
 #define unlikely(x)     (x)
 #endif
 
+extern "C" int clock_nanosleep(clockid_t clock_id, int flags,
+                           const struct timespec *request,
+                           struct timespec *remain);
+
 #endif
