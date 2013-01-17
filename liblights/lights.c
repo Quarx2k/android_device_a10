@@ -55,6 +55,7 @@ static int set_light_backlight(struct light_device_t *dev,
 {
 	int err = 0;
 	int fd;
+	int tmp;
 	int brightness = rgb_to_brightness(state);
 
 	unsigned long  args[3];
@@ -70,6 +71,18 @@ static int set_light_backlight(struct light_device_t *dev,
 		ALOGE("Failed to open display device fd = %x\n", fd);
 		pthread_mutex_unlock(&g_lock);
 		return -1;
+	}
+
+	/* check version */
+	tmp = SUNXI_DISP_VERSION;
+	err = ioctl(fd, DISP_CMD_VERSION, &tmp);
+	if (err == -1) {
+		printf("Warning: kernel sunxi disp driver does not support "
+		       "versioning.\n");
+	} else if (err < 0) {
+		fprintf(stderr, "Error: ioctl(VERSION) failed: %s\n",
+		       strerror(-err));
+		return err;
 	}
 
 	err = ioctl(fd, DISP_CMD_LCD_SET_BRIGHTNESS, args);
