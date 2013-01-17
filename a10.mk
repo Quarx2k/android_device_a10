@@ -73,6 +73,9 @@ PRODUCT_PACKAGES += libCedarA libCedarX libcedarv libcedarxbase libcedarxosal li
 PRODUCT_PACKAGES += libcedarv_adapter libve libfacedetection libaw_audio libaw_audioa libcedarv_base
 PRODUCT_PACKAGES += libstagefright_soft_cedar_h264dec librtmp
 
+# NAND tends to be slow, lets preload some things
+PRODUCT_COPY_FILES += device/allwinner/common/preload.sh:system/etc/init.d/01preload
+
 $(call inherit-product, build/target/product/full_base.mk)
 
 # Should be after the full_base include, which loads languages_full
