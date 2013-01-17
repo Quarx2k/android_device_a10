@@ -31,7 +31,7 @@
 #include <cutils/atomic.h>
 
 #include <hardware/hwcomposer.h>
-#include <drv_display_sun4i.h>
+#include <sunxi_disp_ioctl.h>
 #include <fb.h>
 #include <EGL/egl.h>
 

@@ -25,7 +25,7 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <hardware/lights.h>
-#include <drv_display_sun4i.h>
+#include <sunxi_disp_ioctl.h>
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;

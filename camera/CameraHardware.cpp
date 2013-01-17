@@ -27,7 +27,7 @@
 #include "CameraDebug.h"
 
 #include <ui/Rect.h>
-#include <drv_display_sun4i.h>
+#include <sunxi_disp_ioctl.h>
 #include <videodev2.h>
 #include "CameraHardware.h"
 #include "V4L2CameraDevice.h"

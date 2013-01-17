@@ -30,7 +30,7 @@
 #include <sys/mman.h>
 
 #include <hardware/display.h>
-#include <drv_display_sun4i.h>
+#include <sunxi_disp_ioctl.h>
 #include <g2d_driver.h>
 #include <fb.h>
 
