@@ -124,4 +124,7 @@
     <!-- Separate software navigation bar required on this device. -->
     <bool name="config_showNavigationBar">true</bool>
 
+    <!-- Enable multi-user -->
+    <integer name="config_multiuserMaximumUsers">8</integer>
+
 </resources>
